@@ -1,0 +1,210 @@
+/* ==========================================================================
+   PREMIUM MENTION CARD
+
+   The existing colour system is retained unchanged: Document360 purple
+   (--brand) for brand accents, --pos/--neg/--neu for sentiment, --ink-* for
+   text. What changes is hierarchy, spacing and weight — the things that make a
+   card read as considered rather than dense.
+
+   Platform marks are the one exception and use each platform's OWN brand colour,
+   because a Reddit orange or LinkedIn blue is what makes a source identifiable
+   in a fraction of a second. That is information, not decoration.
+   ========================================================================== */
+
+.card.mention.premium {
+  padding: 15px 17px 13px;
+  border-radius: 14px;
+  border: 1px solid var(--hair);
+  background: var(--surface);
+  /* Two-layer shadow: a tight contact shadow plus a wide soft one. That pairing
+     is what reads as "lifted" rather than "outlined". */
+  box-shadow: 0 1px 2px rgba(20, 18, 31, .04), 0 8px 24px -14px rgba(20, 18, 31, .18);
+  transition: box-shadow .16s ease, border-color .16s ease, transform .16s ease;
+}
+.card.mention.premium:hover {
+  border-color: var(--hair-2);
+  box-shadow: 0 1px 2px rgba(20, 18, 31, .05), 0 14px 34px -16px rgba(20, 18, 31, .28);
+  transform: translateY(-1px);
+}
+:root[data-theme="dark"] .card.mention.premium,
+.card.mention.premium { }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .card.mention.premium {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 10px 28px -16px rgba(0, 0, 0, .7);
+  }
+}
+:root[data-theme="dark"] .card.mention.premium {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 10px 28px -16px rgba(0, 0, 0, .7);
+}
+
+/* ---------------------------------------------------------------- header */
+.pm-head { display: flex; align-items: flex-start; gap: 10px; }
+
+.pmark {
+  flex: 0 0 auto; display: inline-grid; place-items: center;
+  width: 30px; height: 30px; border-radius: 9px;
+  /* currentColor is the platform brand colour, set inline. A 10% tint of it
+     gives every platform a consistent chip weight without a hardcoded palette. */
+  background: color-mix(in srgb, currentColor 11%, transparent);
+}
+.pmark svg { display: block; }
+
+.pm-title {
+  flex: 1; min-width: 0;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 5px;
+  font-size: 13px; line-height: 1.45; padding-top: 4px;
+}
+.pm-lead { color: var(--ink-3); font-weight: 400; }
+.pm-brand {
+  color: var(--brand); font-weight: 650;
+  background: var(--brand-soft); padding: 1px 7px; border-radius: 6px;
+}
+.pm-plat { font-weight: 650; }
+.pm-dot { color: var(--ink-4); }
+.pm-time { color: var(--ink-3); font-size: 12px; white-space: nowrap; }
+.pm-author { color: var(--ink-2); font-size: 12px; }
+.pm-foll { color: var(--ink-4); }
+
+.pm-icon {
+  flex: 0 0 auto; width: 28px; height: 28px; display: inline-grid; place-items: center;
+  border-radius: 8px; border: 1px solid transparent; background: transparent;
+  color: var(--ink-4); transition: background .12s, color .12s, border-color .12s;
+}
+.pm-icon:hover { background: var(--surface-3); color: var(--brand); border-color: var(--hair); }
+
+/* ------------------------------------------------------------------ body */
+.pm-body {
+  margin: 11px 0 0;
+  font-size: 14px; line-height: 1.6; color: var(--ink);
+  /* Cap the body so a long excerpt cannot dominate the feed; the full text is
+     one click away in the provenance panel. */
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The brand highlight. A tint of the product's own purple rather than a
+   highlighter yellow, so it belongs to the design system. */
+mark.bmark {
+  background: var(--brand-soft2);
+  color: var(--brand-deep);
+  font-weight: 600;
+  padding: 0 3px; border-radius: 4px;
+}
+:root[data-theme="dark"] mark.bmark { color: var(--brand); }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) mark.bmark { color: var(--brand); }
+}
+
+/* The provider's own relevance note — supporting context, visibly secondary. */
+.pm-note {
+  margin: 9px 0 0;
+  font-size: 12.5px; line-height: 1.55; color: var(--ink-3);
+  padding-left: 10px; border-left: 2px solid var(--hair-2);
+}
+
+/* ------------------------------------------------------------------ footer */
+.pm-foot {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--hair);
+}
+.pm-spacer { flex: 1 1 auto; }
+
+.pm-sent {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 650; padding: 3px 9px; border-radius: 999px;
+}
+.pm-sent.s-positive { color: var(--pos); background: var(--pos-soft); }
+.pm-sent.s-negative { color: var(--neg); background: var(--neg-soft); }
+.pm-sent.s-neutral { color: var(--neu); background: var(--neu-soft); }
+.pm-sent.s-unclassified { color: var(--ink-4); background: var(--surface-3); }
+
+.pm-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11.5px; font-weight: 500; color: var(--ink-2);
+  padding: 3px 9px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--hair);
+}
+.pm-tag::before {
+  /* A small tag glyph, drawn in CSS so no icon asset is needed. */
+  content: ""; width: 9px; height: 9px; flex: 0 0 auto;
+  background: currentColor; opacity: .45;
+  clip-path: polygon(0 35%, 55% 0, 100% 0, 100% 45%, 45% 100%, 0 65%);
+}
+.pm-tag.intent { color: var(--warn); background: rgba(232, 163, 23, .1); border-color: rgba(232, 163, 23, .28); }
+.pm-tag.cmp { color: var(--brand); background: var(--brand-soft); border-color: var(--brand-soft2); }
+
+.pm-src {
+  display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  font-size: 11px; color: var(--ink-3);
+}
+.pm-src > a { color: var(--ink-3); font-weight: 500; }
+.pm-src > a:hover { color: var(--brand); }
+
+/* Provenance chips in the footer are intentionally quiet: needed for trust,
+   never competing with the mention itself. */
+.pm-src .chip { font-size: 10px; padding: 1px 6px; }
+
+/* ---------------------------------------------------------------- feed rhythm */
+.mentions { display: flex; flex-direction: column; gap: 11px; }
+
+@media (max-width: 640px) {
+  .card.mention.premium { padding: 13px 14px 11px; }
+  .pm-body { font-size: 13.5px; -webkit-line-clamp: 5; }
+  .pm-title { font-size: 12.5px; }
+}
+
+/* ---------------------------------------------------------- New Competitors */
+.comp-cat { margin-bottom: 20px; }
+.comp-cat-h {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--ink-3); margin-bottom: 10px;
+}
+.comp-cat-h .pc {
+  font-size: 10.5px; font-weight: 700; color: var(--brand);
+  background: var(--brand-soft); padding: 1px 7px; border-radius: 999px; letter-spacing: 0;
+}
+.comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(288px, 1fr)); gap: 11px; }
+
+.card.comp {
+  padding: 15px 16px 13px; border-radius: 14px;
+  border: 1px solid var(--hair); background: var(--surface);
+  box-shadow: 0 1px 2px rgba(20,18,31,.04), 0 8px 24px -16px rgba(20,18,31,.16);
+  transition: box-shadow .16s, border-color .16s, transform .16s;
+  display: flex; flex-direction: column;
+}
+.card.comp:hover {
+  border-color: var(--hair-2); transform: translateY(-1px);
+  box-shadow: 0 1px 2px rgba(20,18,31,.05), 0 14px 32px -16px rgba(20,18,31,.26);
+}
+
+.comp-head { display: flex; align-items: flex-start; gap: 10px; }
+.comp-fav {
+  flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px;
+  display: inline-grid; place-items: center;
+  background: var(--brand-grad); color: #fff;
+  font-weight: 700; font-size: 15px;
+}
+.comp-id { flex: 1; min-width: 0; }
+.comp-id h3 { margin: 0; font-size: 14.5px; font-weight: 650; letter-spacing: -.01em; }
+.comp-id h3 a { color: var(--ink); }
+.comp-id h3 a:hover { color: var(--brand); }
+.comp-dom { font-size: 11.5px; color: var(--ink-4); }
+
+.comp-desc {
+  margin: 11px 0 0; font-size: 12.8px; line-height: 1.55; color: var(--ink-2);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.comp-meta { margin-top: 9px; font-size: 11px; color: var(--ink-4); }
+.comp-meta .sep { margin: 0 5px; }
+.comp-meta .cat-ok { color: var(--pos); }
+
+.comp-foot {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 5px;
+  margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--hair);
+}
+.comp-foot .pm-tag { font-size: 10.5px; padding: 2px 7px; }
+.comp-visit {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 600; color: var(--brand);
+}

@@ -1,0 +1,273 @@
+{
+  "_comment": [
+    "Market keyword taxonomy for NEW-COMPETITOR DISCOVERY.",
+    "",
+    "These are category terms, not brand names. They are used to find products",
+    "entering the space — not to count mentions of the 7 tracked products.",
+    "",
+    "PRIORITY drives the rotation. A full sweep of every keyword is far more",
+    "queries than the rate-limited search backend can serve in one run, so the",
+    "collector walks a persisted cursor and covers the list over successive runs.",
+    "Higher-priority categories are visited more often because they surface",
+    "product lists directly:",
+    "",
+    "  3 = surfaces named products almost every time ('best X', 'X alternative')",
+    "  2 = surfaces products often, mixed with editorial",
+    "  1 = mostly editorial; scanned least frequently",
+    "",
+    "`discovery_value` records WHY a category earns its priority, so the weighting",
+    "is auditable rather than arbitrary."
+  ],
+  "categories": [
+    {
+      "id": "competitor_intent",
+      "label": "Competitor / Alternative Intent",
+      "priority": 3,
+      "discovery_value": "Highest-yield: alternative and 'best' queries return curated product lists, which is exactly where a new entrant first appears.",
+      "keywords": [
+        "documentation platform alternative", "documentation software alternative",
+        "knowledge base alternative", "knowledge management alternative",
+        "Confluence alternative", "GitBook alternative", "Mintlify alternative",
+        "Guru alternative", "Bloomfire alternative", "KnowledgeOwl alternative",
+        "Document360 alternative", "documentation tools comparison",
+        "knowledge base comparison", "best documentation platform",
+        "best documentation software", "best knowledge base software",
+        "best AI documentation tool", "best AI knowledge base",
+        "best developer documentation platform", "best API documentation platform"
+      ]
+    },
+    {
+      "id": "ai_documentation",
+      "label": "AI Documentation",
+      "priority": 3,
+      "discovery_value": "Where most genuinely new entrants are launching. AI-native docs tools are the fastest-moving segment.",
+      "keywords": [
+        "AI documentation", "AI documentation platform", "AI documentation tool",
+        "AI documentation generator", "AI technical documentation",
+        "AI documentation software", "AI documentation automation",
+        "automated documentation", "documentation AI", "AI-powered documentation",
+        "AI-generated documentation", "AI documentation assistant",
+        "AI writing for documentation", "AI technical writer", "AI technical writing",
+        "AI knowledge management", "AI knowledge management platform"
+      ]
+    },
+    {
+      "id": "video_to_docs",
+      "label": "Video → Documentation",
+      "priority": 3,
+      "discovery_value": "A brand-new category with almost no incumbents, so nearly every hit is an entrant rather than an established player.",
+      "keywords": [
+        "video to documentation", "video to docs", "video-to-docs",
+        "video to documentation AI", "convert video to documentation",
+        "turn video into documentation", "video documentation generator",
+        "video documentation tool", "video to SOP", "video to knowledge base",
+        "video to help article", "video to user guide", "video to tutorial",
+        "screen recording to documentation", "screen recording to docs",
+        "screen recording to SOP", "recording to documentation",
+        "walkthrough to documentation", "product demo to documentation",
+        "demo video to documentation", "video to technical documentation",
+        "video to knowledge base article", "AI video documentation"
+      ]
+    },
+    {
+      "id": "knowledge_base",
+      "label": "Knowledge Base",
+      "priority": 2,
+      "discovery_value": "Core adjacent category; mixes incumbents with new arrivals.",
+      "keywords": [
+        "knowledge base software", "knowledge base platform",
+        "knowledge management software", "knowledge management platform",
+        "AI knowledge base", "intelligent knowledge base", "enterprise knowledge base",
+        "customer knowledge base", "internal knowledge base",
+        "self-service knowledge base", "searchable knowledge base", "knowledge hub",
+        "knowledge management automation", "knowledge base automation",
+        "knowledge base generator", "knowledge base builder", "knowledge base management"
+      ]
+    },
+    {
+      "id": "api_documentation",
+      "label": "API Documentation",
+      "priority": 2,
+      "discovery_value": "Developer-docs segment where Mintlify and GitBook compete; new entrants appear regularly.",
+      "keywords": [
+        "API documentation", "API documentation platform", "API documentation tool",
+        "API documentation software", "API docs generator",
+        "API documentation generator", "automated API documentation",
+        "AI API documentation", "AI API docs", "API reference generator",
+        "API reference documentation", "developer portal",
+        "developer documentation platform", "developer portal software",
+        "API portal", "API reference generator AI", "OpenAPI documentation",
+        "Swagger documentation platform", "interactive API documentation"
+      ]
+    },
+    {
+      "id": "llm_ready_docs",
+      "label": "LLM / AI-Ready Documentation",
+      "priority": 2,
+      "discovery_value": "Emerging positioning (llms.txt, MCP, RAG). Products here are almost all new.",
+      "keywords": [
+        "AI-ready documentation", "LLM-ready documentation",
+        "documentation for AI agents", "documentation for LLMs",
+        "documentation for ChatGPT", "documentation for Claude",
+        "documentation for Gemini", "documentation for Perplexity",
+        "AI-readable documentation", "machine-readable documentation",
+        "documentation for AI assistants", "documentation for AI search",
+        "documentation for RAG", "documentation RAG",
+        "documentation retrieval augmented generation", "knowledge base RAG",
+        "documentation MCP", "MCP documentation", "documentation MCP server"
+      ]
+    },
+    {
+      "id": "sop_process",
+      "label": "SOP / Process Documentation",
+      "priority": 2,
+      "discovery_value": "Adjacent category converging on our space, with many AI-native arrivals.",
+      "keywords": [
+        "SOP software", "SOP documentation", "SOP platform", "SOP generator",
+        "AI SOP generator", "AI SOP documentation", "automated SOP creation",
+        "SOP from video", "SOP from screen recording", "process documentation software",
+        "process documentation platform", "process documentation automation",
+        "workflow documentation", "workflow documentation software",
+        "procedure documentation", "employee documentation",
+        "operational documentation", "training documentation",
+        "onboarding documentation", "AI process documentation"
+      ]
+    },
+    {
+      "id": "ai_search_answers",
+      "label": "AI Search / Answers",
+      "priority": 2,
+      "discovery_value": "Where docs meets support automation; heavy new-entrant activity.",
+      "keywords": [
+        "AI documentation search", "AI knowledge search", "AI search for documentation",
+        "AI search knowledge base", "AI-powered knowledge search",
+        "AI answers from documentation", "AI answers from knowledge base",
+        "grounded AI answers", "cited AI answers", "documentation chatbot",
+        "AI documentation chatbot", "knowledge base chatbot", "AI knowledge assistant",
+        "AI knowledge agent", "documentation AI agent", "customer AI assistant",
+        "AI support assistant", "AI self-service support"
+      ]
+    },
+    {
+      "id": "core_documentation",
+      "label": "Core Documentation",
+      "priority": 1,
+      "discovery_value": "Broadest terms. High volume, low precision — mostly editorial rather than product pages.",
+      "keywords": [
+        "documentation platform", "documentation software", "documentation tool",
+        "documentation management", "product documentation", "technical documentation",
+        "technical writing platform", "developer documentation",
+        "customer documentation", "customer-facing documentation",
+        "documentation portal", "documentation website",
+        "documentation management platform", "documentation automation",
+        "documentation workflow", "documentation publishing",
+        "documentation authoring", "documentation generator", "documentation builder"
+      ]
+    },
+    {
+      "id": "help_center",
+      "label": "Help Center",
+      "priority": 1,
+      "discovery_value": "Support-side adjacency, dominated by established support suites.",
+      "keywords": [
+        "help center software", "help center platform", "help center builder",
+        "customer help center", "AI help center", "help center automation",
+        "help center knowledge base", "self-service support platform",
+        "customer self-service software", "support documentation platform",
+        "customer support knowledge base", "AI customer support knowledge base"
+      ]
+    },
+    {
+      "id": "docs_maintenance",
+      "label": "Documentation Maintenance",
+      "priority": 1,
+      "discovery_value": "Narrow but strategically relevant — the stale-content problem competitors are targeting.",
+      "keywords": [
+        "documentation maintenance", "automated documentation maintenance",
+        "AI documentation maintenance", "documentation freshness", "documentation sync",
+        "documentation synchronization", "auto-update documentation",
+        "documentation update automation", "documentation drift",
+        "stale documentation detection", "documentation quality monitoring",
+        "documentation governance", "documentation governance platform",
+        "documentation lifecycle management", "documentation version control",
+        "documentation audit", "documentation verification", "AI documentation verification"
+      ]
+    },
+    {
+      "id": "developer_experience",
+      "label": "Developer Experience",
+      "priority": 1,
+      "discovery_value": "DevEx adjacency; surfaces developer-portal products.",
+      "keywords": [
+        "developer experience documentation", "developer hub",
+        "developer knowledge base", "developer self-service",
+        "developer onboarding documentation", "developer onboarding platform",
+        "developer enablement platform", "developer education platform",
+        "technical content platform", "engineering documentation",
+        "engineering knowledge base"
+      ]
+    },
+    {
+      "id": "docs_analytics",
+      "label": "Documentation Analytics",
+      "priority": 1,
+      "discovery_value": "Niche tooling segment; occasional point-solution entrants.",
+      "keywords": [
+        "documentation analytics", "documentation performance", "documentation insights",
+        "knowledge base analytics", "help center analytics",
+        "documentation search analytics", "documentation usage analytics",
+        "documentation engagement", "documentation feedback",
+        "documentation gap analysis", "AI documentation analytics",
+        "knowledge gap detection", "documentation gap detection"
+      ]
+    },
+    {
+      "id": "localization",
+      "label": "Localization / Global Docs",
+      "priority": 1,
+      "discovery_value": "Translation-side adjacency; mostly localisation vendors rather than docs platforms.",
+      "keywords": [
+        "documentation localization", "AI documentation translation",
+        "documentation translation", "multilingual documentation",
+        "multilingual knowledge base", "AI localization documentation",
+        "automated documentation translation"
+      ]
+    }
+  ],
+
+  "_exclusions_comment": [
+    "Products that are NOT new entrants. Two lists, because they mean different",
+    "things: `tracked` are the 7 products this dashboard already monitors, and",
+    "`incumbents` are established players that would otherwise flood the results",
+    "and bury the genuinely new arrivals we are looking for."
+  ],
+  "exclude_incumbents": [
+    "notion", "slab", "nuclino", "helpjuice", "zendesk", "intercom", "freshworks",
+    "freshdesk", "atlassian", "jira", "sharepoint", "microsoft", "google",
+    "salesforce", "hubspot", "servicenow", "glean", "coveo", "elastic", "algolia",
+    "readme", "archbee", "proprofs", "knowmax", "slite", "tettra", "docusaurus",
+    "mkdocs", "sphinx", "readthedocs", "gitlab", "github", "bitbucket", "asana",
+    "monday", "clickup", "trello", "basecamp", "slack", "teams", "zoom",
+    "madcap", "paligo", "author-it", "adobe", "oxygenxml", "heretto", "docsie",
+    "stoplight", "redocly", "swagger", "postman", "apiary", "scribe", "guidde",
+    "loom", "whatfix", "walkme", "userguiding", "pendo", "appcues", "tango",
+    "wordpress", "webflow", "hugo", "jekyll", "gatsby", "vercel", "netlify",
+    "openai", "anthropic", "gemini", "perplexity", "copilot", "wikipedia",
+    "stackoverflow", "reddit", "medium", "substack", "linkedin", "youtube",
+    "capterra", "g2", "trustradius", "gartner", "forrester", "getapp",
+    "softwareadvice", "producthunt", "crunchbase", "techcrunch", "venturebeat"
+  ],
+
+  "product_page_signals": {
+    "_comment": "Signals that a page is a PRODUCT's own site rather than an article about products. A candidate must show at least two.",
+    "positive": [
+      "get started", "start free", "free trial", "book a demo", "request a demo",
+      "sign up", "pricing", "our platform", "our product", "try it free",
+      "start building", "join the waitlist", "early access", "watch demo"
+    ],
+    "negative": [
+      "top 10", "top 15", "best 10", "listicle", "in this article",
+      "we compared", "our review of", "editor's note", "affiliate"
+    ]
+  }
+}

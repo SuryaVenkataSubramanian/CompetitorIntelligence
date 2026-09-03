@@ -1,0 +1,157 @@
+# Daily collection.
+#
+# WHY THIS EXISTS
+# ---------------
+# The Vercel deployment cannot collect. Collectors are child processes that run
+# for minutes and query SearXNG on localhost; a serverless function has neither
+# a process budget nor that service. So the hosted dashboard is a reader of
+# whatever data/ is committed.
+#
+# This workflow is the writer. It runs SearXNG as a service container, runs the
+# collectors, rebuilds data/, and commits the result — which triggers a fresh
+# Vercel deploy carrying the new data.
+#
+# WHAT IT CANNOT DO
+# -----------------
+# The Claude-dependent steps (sentiment classification, recommendation
+# generation) need an interactive Claude Code session and are deliberately not
+# automated here: they are the steps where a wrong answer would be a fabricated
+# one. Run `/refresh-intel` locally for those.
+
+name: Collect competitive intelligence
+
+on:
+  schedule:
+    # 06:00 UTC daily — before the working day in both IST and CET.
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "What to collect"
+        required: true
+        default: "daily"
+        type: choice
+        options: [daily, mentions-only, directories-only, full]
+
+concurrency:
+  # Two runs would race on the shared cursor and seen-products state files.
+  group: collect
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+
+    services:
+      searxng:
+        image: searxng/searxng:latest
+        ports: ["8888:8080"]
+        env:
+          # JSON output is off by default; the client needs it and says so.
+          SEARXNG_SETTINGS_PATH: /etc/searxng/settings.yml
+          BASE_URL: http://localhost:8888/
+          INSTANCE_NAME: d360ci
+
+    env:
+      SEARXNG_URL: http://localhost:8888
+      SERP_PROVIDER: auto
+      OCTOLENS_API_KEY: ${{ secrets.OCTOLENS_API_KEY }}
+      NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+      BRIGHTDATA_API_KEY: ${{ secrets.BRIGHTDATA_API_KEY }}
+      DATAFORSEO_B64: ${{ secrets.DATAFORSEO_B64 }}
+      WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+      DIGEST_TO: ${{ secrets.DIGEST_TO }}
+      SMTP_HOST: ${{ secrets.SMTP_HOST }}
+      SMTP_PORT: ${{ secrets.SMTP_PORT }}
+      SMTP_USER: ${{ secrets.SMTP_USER }}
+      SMTP_PASS: ${{ secrets.SMTP_PASS }}
+      SMTP_FROM: ${{ secrets.SMTP_FROM }}
+      # Keep the scheduled job inside a predictable spend.
+      DATAFORSEO_MAX_PROBE_COST: "0.10"
+      DATAFORSEO_MIN_BALANCE: "0.05"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Enable SearXNG JSON output
+        # The image ships with `formats: [html]`. Without json the client gets
+        # HTML and reports "instance returned non-JSON", which reads as a
+        # broken collector rather than a missing setting.
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf "http://localhost:8888/" >/dev/null; then break; fi
+            sleep 2
+          done
+          docker ps --filter "ancestor=searxng/searxng:latest" --format '{{.ID}}' > /tmp/cid || true
+          CID=$(cat /tmp/cid | head -1)
+          if [ -n "$CID" ]; then
+            docker exec "$CID" sh -c "grep -q 'json' /etc/searxng/settings.yml || sed -i 's/^\( *\)- html/\1- html\n\1- json/' /etc/searxng/settings.yml" || true
+            docker restart "$CID" || true
+          fi
+          for i in $(seq 1 30); do
+            if curl -sf "http://localhost:8888/search?q=test&format=json" >/dev/null; then
+              echo "SearXNG JSON API is up"; exit 0
+            fi
+            sleep 2
+          done
+          echo "::warning::SearXNG JSON API did not come up. Search-dependent collectors will report a coverage gap rather than a false zero."
+
+      - name: API health
+        # Non-fatal: a degraded source is a reported coverage limit, not a
+        # reason to abandon the run.
+        run: npm run api:health || true
+
+      - name: Collect mentions
+        if: ${{ github.event.inputs.scope != 'directories-only' }}
+        run: |
+          DAYS=90
+          if [ "${{ github.event.inputs.scope }}" = "full" ]; then DAYS=365; fi
+          node collectors/collect.js --days=$DAYS || echo "::warning::mention collection reported errors; see the log"
+
+      - name: Discover new competitors
+        if: ${{ github.event.inputs.scope == 'daily' || github.event.inputs.scope == 'full' || github.event_name == 'schedule' }}
+        run: node collectors/discover-competitors.js --keywords=24 --recent || echo "::warning::web discovery reported errors"
+
+      - name: Audit review directories
+        if: ${{ github.event.inputs.scope != 'mentions-only' }}
+        run: node collectors/directory-audit.js --resolve || echo "::warning::directory audit reported errors"
+
+      - name: Rebuild data
+        run: node collectors/build.js
+
+      - name: Audit accuracy
+        # Fails the run: a structural accuracy problem must not be committed
+        # and then served to the team as fact.
+        run: node collectors/audit-mentions.js
+
+      - name: Daily digest
+        run: node collectors/daily-digest.js run --no-discover || echo "::warning::digest generation reported errors"
+
+      - name: Tests
+        run: npm test
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ collectors/store/mentions.json collectors/store/competitors.json \
+                  collectors/store/directory-listings.json collectors/store/api-health.json \
+                  collectors/store/discover-cursor.json collectors/store/digest-state.json \
+                  collectors/store/*-capabilities.json collectors/store/*-audit.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No data changed — nothing to commit."
+            exit 0
+          fi
+          RECORDS=$(node -e "try{console.log(require('./data/meta.json').integrity.verified_records)}catch(e){console.log('?')}")
+          NEWDIR=$(node -e "try{console.log((require('./data/directory-listings.json').totals||{}).new||0)}catch(e){console.log(0)}")
+          git commit -m "data: refresh ($RECORDS verified records, $NEWDIR new directory listings)" \
+                     -m "Automated collection. Vercel redeploys from this commit."
+          git push

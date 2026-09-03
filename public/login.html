@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in — Document360 Competitive Intelligence</title>
+  <link rel="icon" href="/assets/logo.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/v2.css" />
+  <link rel="stylesheet" href="/css/login.css" />
+</head>
+<body class="login-body">
+  <main class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand">
+        <span class="logo-mark" role="img" aria-label="Document360"></span>
+        <span class="brand-div"></span>
+        <span class="brand-sub">Competitive<br>Intelligence</span>
+      </div>
+
+      <h1>Sign in</h1>
+      <p class="login-sub">Access is restricted to authorised Kovai.co accounts.</p>
+
+      <form id="loginForm" autocomplete="on" novalidate>
+        <label class="lf">
+          <span>Work email</span>
+          <input type="email" id="email" name="email" required autocomplete="username"
+                 placeholder="name@kovai.co" spellcheck="false" autofocus />
+        </label>
+        <label class="lf">
+          <span>Password</span>
+          <input type="password" id="password" name="password" required
+                 autocomplete="current-password" placeholder="XXXX-XXXX-XXXX-XXXX" />
+        </label>
+        <button type="submit" id="submitBtn" class="login-btn">Sign in</button>
+      </form>
+
+      <div class="login-msg" id="msg" role="alert" aria-live="polite"></div>
+
+      <p class="login-foot">
+        Passwords are generated per account and shown once at provisioning. If you
+        do not have one, ask the dashboard owner to run <code>npm run auth:init</code>.
+      </p>
+    </div>
+  </main>
+  <script src="/js/login.js"></script>
+</body>
+</html>

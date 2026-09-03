@@ -1,0 +1,255 @@
+{
+  "checked_at": "2026-09-01T15:08:34.800Z",
+  "paid_calls": false,
+  "summary": {
+    "WORKING": 2,
+    "DEGRADED": 6,
+    "SKIPPED": 1
+  },
+  "sources": [
+    {
+      "name": "SearXNG",
+      "state": "WORKING",
+      "detail": "58 results from 7 engines (5 unresponsive: 360search, abcnyheter, boardreader, duckduckgo, fynd)",
+      "engines": {
+        "naver": 15,
+        "yahoo": 7,
+        "google cse": 20,
+        "seznam": 10,
+        "privacywall": 10,
+        "yandex": 15,
+        "searchch": 6
+      },
+      "unresponsive": [
+        [
+          "360search",
+          "Suspended: HTTP connection error"
+        ],
+        [
+          "abcnyheter",
+          "Suspended: HTTP connection error"
+        ],
+        [
+          "boardreader",
+          "parsing error"
+        ],
+        [
+          "duckduckgo",
+          "CAPTCHA"
+        ],
+        [
+          "fynd",
+          "Suspended: HTTP connection error"
+        ]
+      ]
+    },
+    {
+      "name": "Octolens",
+      "state": "DEGRADED",
+      "detail": "50 mentions on page 1; watches [Mintlify, document360, Gitbook]; NO coverage for 4/7: Confluence, Guru, Bloomfire, KnowledgeOwl",
+      "tracked_keywords": [
+        "Mintlify",
+        "document360",
+        "Gitbook"
+      ],
+      "uncovered_products": [
+        "Confluence",
+        "Guru",
+        "Bloomfire",
+        "KnowledgeOwl"
+      ],
+      "fix": "Add these products as keywords in the Octolens dashboard — the API cannot do it."
+    },
+    {
+      "name": "NewsAPI",
+      "state": "DEGRADED",
+      "detail": "1 total results for \"Document360\", 1 returned",
+      "total_results": 1,
+      "note": "Developer plan: only page 1 is retrievable (page 2 returns HTTP 426), and article content is a ~200-char snippet. Both bound coverage."
+    },
+    {
+      "name": "Bright Data",
+      "state": "DEGRADED",
+      "detail": "Web Scraper API works (snapshot sd_mtisxoop4n82iryfj); /request API UNAVAILABLE — no zone provisioned",
+      "customer": "hl_0f7485db",
+      "scraper_ok": true,
+      "request_api": false,
+      "fix": "Create a SERP API or Web Unlocker zone in the Bright Data control panel, then: npm run brightdata:probe"
+    },
+    {
+      "name": "DataForSEO",
+      "state": "DEGRADED",
+      "detail": "balance $0.3719; models: ChatGPT=46, Claude=13, Gemini=10, Perplexity=3; ~1 full 6-surface probe(s) left at $0.1805 each",
+      "balance": 0.37194400000000005,
+      "per_probe_cost": 0.1805,
+      "probes_remaining": 1,
+      "spend": {
+        "total": 0.374721,
+        "calls": 15,
+        "by_day": {
+          "2026-09-01": 0.374721
+        },
+        "recent": [
+          {
+            "at": "2026-09-01T12:41:42.408Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "Document360 vs GitBook"
+          },
+          {
+            "at": "2026-09-01T12:41:39.764Z",
+            "endpoint": "serp/google/ai_mode/live/advanced",
+            "cost": 0.004,
+            "keyword": "Document360 vs GitBook"
+          },
+          {
+            "at": "2026-09-01T12:41:30.916Z",
+            "endpoint": "perplexity/llm_responses/live",
+            "cost": 0.006151,
+            "model": "sonar",
+            "prompt": "Document360 vs GitBook"
+          },
+          {
+            "at": "2026-09-01T12:41:23.486Z",
+            "endpoint": "gemini/llm_responses/live",
+            "cost": 0.03829,
+            "model": "gemini-2.5-flash",
+            "prompt": "Document360 vs GitBook"
+          },
+          {
+            "at": "2026-09-01T12:41:13.834Z",
+            "endpoint": "claude/llm_responses/live",
+            "cost": 0.050674,
+            "model": "claude-sonnet-4-5",
+            "prompt": "Document360 vs GitBook"
+          },
+          {
+            "at": "2026-09-01T12:40:42.387Z",
+            "endpoint": "chat_gpt/llm_responses/live",
+            "cost": 0.004883,
+            "model": "gpt-4o",
+            "prompt": "Document360 vs GitBook"
+          },
+          {
+            "at": "2026-09-01T12:03:04.691Z",
+            "endpoint": "gemini/llm_responses/live",
+            "cost": 0.038077,
+            "model": "gemini-2.5-flash",
+            "prompt": "What are the best knowledge base software platforms in 2026?"
+          },
+          {
+            "at": "2026-09-01T12:02:53.473Z",
+            "endpoint": "claude/llm_responses/live",
+            "cost": 0.050206,
+            "model": "claude-sonnet-4-5",
+            "prompt": "What are the best knowledge base software platforms in 2026?"
+          },
+          {
+            "at": "2026-09-01T12:02:31.115Z",
+            "endpoint": "chat_gpt/llm_responses/live",
+            "cost": 0.07684,
+            "model": "gpt-4o",
+            "prompt": "What are the best knowledge base software platforms in 2026?"
+          },
+          {
+            "at": "2026-09-01T11:31:29.959Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "What are the best knowledge base software platforms in 2026?"
+          },
+          {
+            "at": "2026-09-01T11:31:24.340Z",
+            "endpoint": "serp/google/ai_mode/live/advanced",
+            "cost": 0.004,
+            "keyword": "What are the best knowledge base software platforms in 2026?"
+          },
+          {
+            "at": "2026-09-01T11:31:18.679Z",
+            "endpoint": "perplexity/llm_responses/live",
+            "cost": 0.006304,
+            "model": "sonar",
+            "prompt": "What are the best knowledge base software platforms in 2026?"
+          },
+          {
+            "at": "2026-09-01T11:31:09.146Z",
+            "endpoint": "gemini/llm_responses/live",
+            "cost": 0.035844,
+            "model": "gemini-2.5-flash-lite",
+            "prompt": "What are the best knowledge base software platforms in 2026?"
+          },
+          {
+            "at": "2026-09-01T11:31:03.658Z",
+            "endpoint": "claude/llm_responses/live",
+            "cost": 0.024296,
+            "model": "claude-haiku-4-5",
+            "prompt": "What are the best knowledge base software platforms in 2026?"
+          },
+          {
+            "at": "2026-09-01T11:30:55.444Z",
+            "endpoint": "chat_gpt/llm_responses/live",
+            "cost": 0.027156,
+            "model": "gpt-4o-mini",
+            "prompt": "What are the best knowledge base software platforms in 2026?"
+          }
+        ]
+      },
+      "fix": "Top up the DataForSEO account to keep measuring AI visibility."
+    },
+    {
+      "name": "DataForSEO live call",
+      "state": "SKIPPED",
+      "detail": "billable — re-run with --paid to verify the LLM path end to end"
+    },
+    {
+      "name": "Windsor.ai",
+      "state": "WORKING",
+      "detail": "GA4: 3476 AI-assistant session(s) of 366492 (0.95%) — ChatGPT=2578, Claude=443, Gemini=302, Perplexity=116, Copilot=37",
+      "ai_sessions": 3476,
+      "total_sessions": 366492,
+      "ai_share_pct": 0.95,
+      "surfaces": [
+        {
+          "id": "chatgpt",
+          "label": "ChatGPT",
+          "sessions": 2578
+        },
+        {
+          "id": "claude",
+          "label": "Claude",
+          "sessions": 443
+        },
+        {
+          "id": "gemini",
+          "label": "Gemini",
+          "sessions": 302
+        },
+        {
+          "id": "perplexity",
+          "label": "Perplexity",
+          "sessions": 116
+        },
+        {
+          "id": "copilot",
+          "label": "Copilot",
+          "sessions": 37
+        }
+      ],
+      "note": "First-party only — enriches Document360, says nothing about competitors. Free to query, so this layer survives an exhausted DataForSEO balance."
+    },
+    {
+      "name": "Claude (local runtime)",
+      "state": "DEGRADED",
+      "detail": "sentiment classified on 105/1274 records (8%); queue files present",
+      "classified": 105,
+      "total": 1274,
+      "pct": 8,
+      "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
+    },
+    {
+      "name": "SMTP (digest email)",
+      "state": "DEGRADED",
+      "detail": "not configured (missing SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_FROM (or SMTP_USER)) — digests are stored, not sent",
+      "fix": "Add SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_FROM to .env"
+    }
+  ]
+}

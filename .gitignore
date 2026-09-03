@@ -1,0 +1,64 @@
+# ============================================================================
+# SECRETS — never commit. Verified by `npm test` (the credential-leak check
+# scans every tracked file for the literal value of each key in .env).
+# ============================================================================
+.env
+.env.local
+.env.*.local
+
+# Provisioned accounts: scrypt password hashes + per-user salts.
+collectors/store/auth-users.json
+# Webhook config holds the HMAC signing secret.
+collectors/store/webhook-config.json
+
+# ============================================================================
+# THIRD-PARTY CHECKOUT — 6,575 files of upstream SearXNG source. It is a
+# runtime dependency of local collection, not our code, and `npm run
+# searxng:local` fetches it.
+# ============================================================================
+vendor/
+
+# ============================================================================
+# CACHES — regenerable, and large. windsor-cache.json alone is 26 MB (a cache
+# of 136,615 GA4 rows), which would dominate the repository and go stale
+# immediately. Both rebuild on demand.
+# ============================================================================
+collectors/store/windsor-cache.json
+collectors/store/dataforseo-cache.json
+
+# ============================================================================
+# LLM QUEUE FILES — the request/response scratch space between the collectors
+# and the Claude Code session. Machine-specific and rewritten every run.
+# ============================================================================
+collectors/store/pending-*.json
+collectors/store/claude-answers.json
+collectors/store/claude-ai-answers.json
+collectors/store/claude-rec-answers.json
+collectors/store/claude-rank-assets.json
+collectors/store/.x_cookies.json
+
+# ============================================================================
+# LOCAL RUNTIME
+# ============================================================================
+node_modules/
+.scratch/
+collectors/python/.venv/
+collectors/searxng/searxng-src/
+*.log
+.DS_Store
+Thumbs.db
+.vercel
+
+# ============================================================================
+# COMMITTED ON PURPOSE — do NOT add these to the ignore list:
+#
+#   data/*.json                 the dashboard's rendered data. Vercel has no
+#                               filesystem to collect into, so the hosted app
+#                               serves what is committed here.
+#   collectors/store/mentions.json   the evidence store the build reads from.
+#   collectors/store/*-capabilities.json, api-health.json, *-audit.json
+#                               probe receipts and audit trails. They are the
+#                               provenance record: without them a claim in the
+#                               dashboard cannot be traced back to what was
+#                               actually measured.
+# ============================================================================

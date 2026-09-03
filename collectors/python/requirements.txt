@@ -1,0 +1,13 @@
+# Python sidecar for the credential-gated collectors.
+# Install:  npm run setup:python
+#   (creates collectors/python/.venv, installs these, then `playwright install chromium`)
+
+# X / Twitter — https://github.com/d60/twikit
+# Scraping-based, no API key; authenticates with a real account.
+twikit>=2.0.0
+
+# LinkedIn — https://github.com/joeyism/linkedin_scraper
+# v3+ is Playwright-based and async, and exposes CompanyPostsScraper,
+# which is the surface used for mention tracking.
+linkedin-scraper>=3.0.0
+playwright>=1.44.0

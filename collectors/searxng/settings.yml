@@ -1,0 +1,64 @@
+# SearXNG settings for the Document360 competitive-intelligence collectors.
+#
+# The one change that matters: `formats` includes `json`. SearXNG ships with JSON
+# output disabled, and without it every collector request returns an HTML page
+# and the adapter correctly refuses to invent data from it.
+
+use_default_settings: true
+
+general:
+  instance_name: "D360 Competitive Intel"
+  # Keep the metrics endpoint off; this instance is a private collector.
+  enable_metrics: false
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  default_lang: "en"
+  # THIS is the critical line — enables the /search?format=json API.
+  formats:
+    - html
+    - json
+
+server:
+  # Overridden by SEARXNG_SECRET in docker-compose.yml.
+  secret_key: "change-me-d360-competitive-intel"
+  limiter: false          # no rate limiting for a single-user private collector
+  public_instance: false
+  image_proxy: false
+  method: "GET"           # the adapter issues GET /search
+
+ui:
+  static_use_hash: true
+
+outgoing:
+  request_timeout: 10.0
+  max_request_timeout: 20.0
+  pool_connections: 100
+  pool_maxsize: 20
+  enable_http2: true
+
+# Engine selection. Kept broad so a single engine being blocked or rate-limited
+# degrades coverage instead of zeroing it. Engines that habitually CAPTCHA
+# headless traffic are disabled so their failures don't mask real results.
+engines:
+  - name: google
+    disabled: false
+  - name: duckduckgo
+    disabled: false
+  - name: bing
+    disabled: false
+  - name: brave
+    disabled: false
+  - name: startpage
+    disabled: false
+  - name: qwant
+    disabled: false
+  - name: mojeek
+    disabled: false
+  - name: wikipedia
+    disabled: true
+  - name: currency
+    disabled: true
+  - name: wikidata
+    disabled: true

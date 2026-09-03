@@ -1,0 +1,384 @@
+{
+  "generated_at": "2026-08-10T13:09:22.114Z",
+  "method": "Claude Code, constrained to the verified evidence store. Every recommendation cites record ids that were resolved against the store; uncited or unresolvable ones were rejected.",
+  "audit": {
+    "submitted": 12,
+    "accepted": 12,
+    "rejected": 0,
+    "rejections": []
+  },
+  "recommendations": [
+    {
+      "title": "Ship a Document360 MCP server and llms.txt, then publish retrieval coverage stats",
+      "detail": "Mintlify now routes agent queries through its own hosted retrieval layer and reports MCP traffic as a separate channel it can measure. Stand up an official Document360 MCP server plus auto-generated /llms.txt for every hosted help centre, and instrument how often agents retrieve customer docs so we can report the same number back to customers as a feature.",
+      "type": "accelerate_llm",
+      "owner": "Product",
+      "priority": "high",
+      "competitor": "Mintlify",
+      "reasoning": "Mintlify is building both the retrieval plumbing and the measurement narrative for agent-era docs. Matching the plumbing without the measurement leaves them owning the category story.",
+      "evidence": [
+        {
+          "id": "mintlify::blog::https://www.mintlify.com/blog/mintlify-index",
+          "brand": "Mintlify",
+          "channel": "blog",
+          "date": "2026-08-06",
+          "url": "https://www.mintlify.com/blog/mintlify-index",
+          "domain": "mintlify.com",
+          "title": "Introducing Mintlify Index",
+          "excerpt": "…All other queries, which are routed to a standard external provider. Developer gives an agent an implementation task ↓ Agent calls search or context ↓ Mintlify Index routes each query ├─ product in Mintlify's hosted corpus → all public Mintlify-powered docs └─ other query → web search ↓ Index returns ranked sources or token-budgeted context ↓ Agent can call contents to inspect a selected source ↓ Agent uses the evidence to answer or plan the change Each search or context request routes the query to a retrieval source.…",
+          "sentiment": null,
+          "link_verified": true
+        },
+        {
+          "id": "mintlify::blog::https://www.mintlify.com/blog/state-of-docs-traffic",
+          "brand": "Mintlify",
+          "channel": "blog",
+          "date": "2026-07-29",
+          "url": "https://www.mintlify.com/blog/state-of-docs-traffic",
+          "domain": "mintlify.com",
+          "title": "The state of docs traffic: a 2026 midyear report",
+          "excerpt": "…Because those calls travel through a different channel from direct agent web requests, we track them as a separate event stream outside our web-traffic totals. Most MCP activity comes from either site visitors querying the docs assistant or developer teams retrieving information from their internal Mintlify powered knowledge base. Across our hosted docs sites in July so far, docs assistants have returned 1.18 million responses, while our hosted MCP servers have handled 1.42 million tool calls across the three exposed types.…",
+          "sentiment": null,
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Close the median-rank gap in AI answers by publishing governance-anchored comparison pages",
+      "detail": "Document360 is named in 9 of 10 buyer prompts but sits at median rank 5, while Mintlify holds median rank 1 in the prompts where it appears. Publish structured, directly answerable comparison pages for the governance and regulated-industry queries where Document360 already ranks first, so the model has canonical text to lift rather than a generic listicle.",
+      "type": "accelerate_llm",
+      "owner": "Content/SEO",
+      "priority": "high",
+      "competitor": "Mintlify",
+      "reasoning": "Measured this run: 90% share of answers but median position 5. Presence is solved; prominence is not, and prominence is what a buyer acts on.",
+      "evidence": [
+        {
+          "id": "mintlify::blog::https://www.mintlify.com/blog/mintlify-index",
+          "brand": "Mintlify",
+          "channel": "blog",
+          "date": "2026-08-06",
+          "url": "https://www.mintlify.com/blog/mintlify-index",
+          "domain": "mintlify.com",
+          "title": "Introducing Mintlify Index",
+          "excerpt": "…All other queries, which are routed to a standard external provider. Developer gives an agent an implementation task ↓ Agent calls search or context ↓ Mintlify Index routes each query ├─ product in Mintlify's hosted corpus → all public Mintlify-powered docs └─ other query → web search ↓ Index returns ranked sources or token-budgeted context ↓ Agent can call contents to inspect a selected source ↓ Agent uses the evidence to answer or plan the change Each search or context request routes the query to a retrieval source.…",
+          "sentiment": null,
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Put transparent three-year pricing on the site before the next review cycle",
+      "detail": "Two independent third-party pages now criticise the move to quote-only pricing, the discontinued free tier and feature gating, with one quoting a user calling it expensive for what it offers. Publish a plain pricing page with worked three-year totals at one and three projects including the AI add-on, so the comparison content stops being written for us by pages that rank on our name.",
+      "type": "defend_position",
+      "owner": "Product Marketing",
+      "priority": "high",
+      "competitor": null,
+      "reasoning": "Both negative signals on Document360 in this window are about pricing opacity, not product capability. That is the cheapest category of criticism to remove.",
+      "evidence": [
+        {
+          "id": "document360::blog::https://happysupport.ai/blog/document360-pricing",
+          "brand": "Document360",
+          "channel": "blog",
+          "date": "2026-05-19",
+          "url": "https://happysupport.ai/blog/document360-pricing",
+          "domain": "happysupport.ai",
+          "title": "Document360 Pricing 2026: All Plans and TCO Math",
+          "excerpt": "…And the published number, whatever the quote ends up being, is the cheaper half of what you actually pay over three years, because Document360 has a great editor and a maintenance gap identical to every other help-center tool on the market. This article walks through every Document360 plan as it exists in 2026, what each tier includes, what the historical Document360 pricing looked like before the shift to quotes, the AI Suite cost on top, the true total cost of ownership at 1 and 3 projects over three years, and what to verify before you sign.…",
+          "sentiment": "negative",
+          "link_verified": true
+        },
+        {
+          "id": "document360::blog::https://www.glitter.io/blog/knowledge-sharing/best-document360-alternatives",
+          "brand": "Document360",
+          "channel": "blog",
+          "date": "2026-05-14",
+          "url": "https://www.glitter.io/blog/knowledge-sharing/best-document360-alternatives",
+          "domain": "glitter.io",
+          "title": "Best Document360 Alternatives for 2026 | Top 8 Tools Compared",
+          "excerpt": "…But the pricing approach raises concerns. The shift to “contact sales” pricing, discontinued free tier, and aggressive feature gating frustrate many users. One Reddit user: “I’m using Document360 as my knowledge base provider and I really don’t enjoy them and they are very expensive for what they offer.” . SSO and API access being Enterprise-only, plus add-on costs for workspaces, languages, and team seats piling up, push many teams toward document360 alternatives with transparent pricing.…",
+          "sentiment": "negative",
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Build stale-content detection into the product roadmap and name a ship date",
+      "detail": "Bloomfire has published a full guide positioning conflicting-content detection as a category expectation, and one third-party pricing analysis already describes Document360 as having a maintenance gap identical to every other help-centre tool. Commit a detection capability that flags contradictory and stale articles, and give Sales Enablement a dated roadmap slide they can use in competitive deals now.",
+      "type": "capitalize_competitor",
+      "owner": "Product",
+      "priority": "high",
+      "competitor": "Bloomfire",
+      "reasoning": "A competitor is defining the requirement while a neutral third party names it as our gap. That combination turns a feature request into a deal risk.",
+      "evidence": [
+        {
+          "id": "bloomfire::blog::https://bloomfire.com/blog/conflicting-content-detection-guide",
+          "brand": "Bloomfire",
+          "channel": "blog",
+          "date": "2026-08-10",
+          "url": "https://bloomfire.com/blog/conflicting-content-detection-guide/",
+          "domain": "bloomfire.com",
+          "title": "How Conflicting Content Detection Protects Answer Accuracy",
+          "excerpt": "…Organizations that get the most value from conflicting content detection also invest in the habits that keep knowledge current, including clear content ownership, regular review cadences, and easy paths for employees to flag something that looks wrong. Bloomfire’s knowledge management platform features and its guide to navigating the new era of knowledge management both point to the same conclusion: automated detection and human accountability work best together.…",
+          "sentiment": null,
+          "link_verified": true
+        },
+        {
+          "id": "document360::blog::https://happysupport.ai/blog/document360-pricing",
+          "brand": "Document360",
+          "channel": "blog",
+          "date": "2026-05-19",
+          "url": "https://happysupport.ai/blog/document360-pricing",
+          "domain": "happysupport.ai",
+          "title": "Document360 Pricing 2026: All Plans and TCO Math",
+          "excerpt": "…And the published number, whatever the quote ends up being, is the cheaper half of what you actually pay over three years, because Document360 has a great editor and a maintenance gap identical to every other help-center tool on the market. This article walks through every Document360 plan as it exists in 2026, what each tier includes, what the historical Document360 pricing looked like before the shift to quotes, the AI Suite cost on top, the true total cost of ownership at 1 and 3 projects over three years, and what to verify before you sign.…",
+          "sentiment": "negative",
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Publish a connector coverage matrix against Bloomfire's five categories",
+      "detail": "Bloomfire is marketing connector breadth across five content categories and a specific Salesforce Einstein integration path into CRM. Produce a side-by-side connector matrix showing what Document360 syncs today and what is on the roadmap, and prioritise the two or three connectors that appear in lost-deal notes rather than trying to match the full list.",
+      "type": "capitalize_competitor",
+      "owner": "Competitive Intel",
+      "priority": "medium",
+      "competitor": "Bloomfire",
+      "reasoning": "Connector breadth is becoming a checklist item in knowledge-management evaluations, and an honest matrix is more defensible than silence on it.",
+      "evidence": [
+        {
+          "id": "bloomfire::blog::https://bloomfire.com/blog/knowledge-connectors-101",
+          "brand": "Bloomfire",
+          "channel": "blog",
+          "date": "2026-08-10",
+          "url": "https://bloomfire.com/blog/knowledge-connectors-101/",
+          "domain": "bloomfire.com",
+          "title": "Knowledge Connectors 101: Syncing Business Applications into One Source of Truth",
+          "excerpt": "…Bloomfire supports connectors across all five of these categories, which is part of what makes it a practical example to point to. A single organization might sync file storage from SharePoint, support content from Zendesk, and CRM articles from Salesforce Knowledge all into the same Bloomfire instance, without asking any of those teams to change the tool they use day to day. Rather than forcing every team to change how or where they work, this approach meets content where it already lives and brings it into a shared layer that both people and AI systems can search.…",
+          "sentiment": null,
+          "link_verified": true
+        },
+        {
+          "id": "bloomfire::blog::https://bloomfire.com/blog/salesforce-einstein-and-bloomfire",
+          "brand": "Bloomfire",
+          "channel": "blog",
+          "date": "2026-08-10",
+          "url": "https://bloomfire.com/blog/salesforce-einstein-and-bloomfire/",
+          "domain": "bloomfire.com",
+          "title": "Salesforce Einstein + Bloomfire: Smarter Answers Inside the CRM",
+          "excerpt": "…You can see this described in more depth in Bloomfire’s data sheet on connecting knowledge to your CRM , along with a video walkthrough of the Salesforce integration if you’d rather see it in action. Beyond the Einstein connector, Bloomfire also offers a native Salesforce app that puts search and Synapse (Bloomfire’s conversational AI) directly onto any Salesforce object, so reps and agents can pull up relevant content without ever leaving a Case, Opportunity, or Account record.…",
+          "sentiment": null,
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Counter Atlassian's Knowledge Context narrative with a data-residency and audit brief",
+      "detail": "Atlassian used its Q4 FY26 shareholder letter to position Rovo's Knowledge Context as reading decisions teams documented in Confluence. Write a one-page brief for regulated buyers covering where Document360 content is stored, who can retrieve it, and what the audit trail records when AI answers draw on it — the questions a compliance reviewer asks about exactly that capability.",
+      "type": "capitalize_competitor",
+      "owner": "Sales Enablement",
+      "priority": "high",
+      "competitor": "Confluence",
+      "reasoning": "Atlassian is making AI-reads-your-knowledge an investor-level story. Regulated buyers respond to that with governance questions, which is where Document360 already ranks first in AI answers.",
+      "evidence": [
+        {
+          "id": "confluence::blog::https://www.atlassian.com/blog/company-news/shareholder-letter-q4fy26",
+          "brand": "Confluence",
+          "channel": "blog",
+          "date": "2026-08-06",
+          "url": "https://www.atlassian.com/blog/company-news/shareholder-letter-q4fy26",
+          "domain": "atlassian.com",
+          "title": "Our Q4 FY26 letter to shareholders",
+          "excerpt": "…Without Knowledge Context: Here’s a generic project plan template based on best practices. With Knowledge Context: Based on the architecture decision your team documented in Confluence last quarter, the constraints in your migration RFC, and the technical spec your team shared in the Google Drive folder, here’s a plan that accounts for the dependencies you’ve already identified.…",
+          "sentiment": null,
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Add AI review rules to the approval workflow rather than as a separate checker",
+      "detail": "GitBook is shipping AI-enforced style guides as part of its docs review flow. Document360 already owns the approval workflow, so extend it with configurable AI review rules that run as a reviewer step and record their verdict in the audit trail, which is a differentiator GitBook's standalone checker cannot match.",
+      "type": "capitalize_competitor",
+      "owner": "Product",
+      "priority": "medium",
+      "competitor": "GitBook",
+      "reasoning": "The same capability inside a governed workflow is a stronger product than the capability alone, and governance is our established strength.",
+      "evidence": [
+        {
+          "id": "gitbook::video::https://www.youtube.com/watch?v=pqRPS9sIeK8",
+          "brand": "GitBook",
+          "channel": "video",
+          "date": "2026-08-03",
+          "url": "https://www.youtube.com/watch?v=pqRPS9sIeK8",
+          "domain": "youtube.com",
+          "title": "How to use style guides for AI docs reviews in GitBook",
+          "excerpt": "How to use style guides for AI docs reviews in GitBook - YouTube . About Press Copyright Contact us Creators Advertise Developers Terms Privacy Policy & Safety How YouTube works Test new features &copy; 2026 Google LLC.",
+          "sentiment": null,
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Take the comparison-page initiative back on the queries competitors already contest",
+      "detail": "GitBook is publishing head-to-head alternatives content targeting Mintlify, showing the docs category now competes openly on comparison SEO. Audit which Document360 comparison queries currently surface only competitor-authored pages, and publish first-party comparisons for the top five, leading with governance, multi-language and combined internal plus external knowledge.",
+      "type": "defend_position",
+      "owner": "Content/SEO",
+      "priority": "medium",
+      "competitor": "GitBook",
+      "reasoning": "Competitor-authored comparison pages already rank on our brand name. Ceding that surface means the buyer's first structured comparison is written by someone selling against us.",
+      "evidence": [
+        {
+          "id": "mintlify::blog::https://www.gitbook.com/blog/best-mintlify-alternatives",
+          "brand": "Mintlify",
+          "channel": "blog",
+          "date": "2026-08-04",
+          "url": "https://www.gitbook.com/blog/best-mintlify-alternatives",
+          "domain": "gitbook.com",
+          "title": "7 best Mintlify alternatives for developer documentation in 2026",
+          "excerpt": "…This guide evaluates seven alternatives, such as GitBook, ReadMe, and Redocly, helping teams find platforms that better accommodate non-technical contributors, enterprise compliance needs, and more robust API documentation features. Mintlify has carved out a strong niche as a documentation platform, and for small developer teams shipping reference docs fast, it works well. The Pro plan starts at $450/month and includes 10,000 AI credits, with overages billed at $0.01 per credit.…",
+          "sentiment": null,
+          "link_verified": true
+        },
+        {
+          "id": "document360::blog::https://www.glitter.io/blog/knowledge-sharing/best-document360-alternatives",
+          "brand": "Document360",
+          "channel": "blog",
+          "date": "2026-05-14",
+          "url": "https://www.glitter.io/blog/knowledge-sharing/best-document360-alternatives",
+          "domain": "glitter.io",
+          "title": "Best Document360 Alternatives for 2026 | Top 8 Tools Compared",
+          "excerpt": "…But the pricing approach raises concerns. The shift to “contact sales” pricing, discontinued free tier, and aggressive feature gating frustrate many users. One Reddit user: “I’m using Document360 as my knowledge base provider and I really don’t enjoy them and they are very expensive for what they offer.” . SSO and API access being Enterprise-only, plus add-on costs for workspaces, languages, and team seats piling up, push many teams toward document360 alternatives with transparent pricing.…",
+          "sentiment": "negative",
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Match KnowledgeOwl's frictionless trial entry on the self-serve path",
+      "detail": "KnowledgeOwl is advertising a free start with no card, a free trial extension and free one-to-one migration support. Given the criticism of our discontinued free tier, define a self-serve entry path with a genuine no-card trial and a migration-assist offer, even if it is capped to a single project, so evaluation does not require a sales conversation.",
+      "type": "capitalize_competitor",
+      "owner": "Growth",
+      "priority": "medium",
+      "competitor": "KnowledgeOwl",
+      "reasoning": "A smaller competitor removes every barrier to trying the product while our own funnel added one. That asymmetry is decided before a rep is involved.",
+      "evidence": [
+        {
+          "id": "knowledgeowl::web::https://www.knowledgeowl.com/blog/posts/support-queue-as-docs-audit",
+          "brand": "KnowledgeOwl",
+          "channel": "web",
+          "date": "2026-08-06",
+          "url": "https://www.knowledgeowl.com/blog/posts/support-queue-as-docs-audit",
+          "domain": "knowledgeowl.com",
+          "title": "Support queue is a documentation audit; here's how to read it.",
+          "excerpt": "…Easily update and share your docs with your team and customers . Start for free. Request demo. Extend your trial for free - no card required. Free 1:1 migration support from. maker. Get started with KnowledgeOwl in 3 easy steps. 1. Create your knowledge base for free in just a few minutes . 2. Migrate your articles with 1:1 help from the KnowledgeOwl team . 3. Easily update and share your docs with your team and customers .…",
+          "sentiment": null,
+          "link_verified": true
+        },
+        {
+          "id": "document360::blog::https://www.glitter.io/blog/knowledge-sharing/best-document360-alternatives",
+          "brand": "Document360",
+          "channel": "blog",
+          "date": "2026-05-14",
+          "url": "https://www.glitter.io/blog/knowledge-sharing/best-document360-alternatives",
+          "domain": "glitter.io",
+          "title": "Best Document360 Alternatives for 2026 | Top 8 Tools Compared",
+          "excerpt": "…But the pricing approach raises concerns. The shift to “contact sales” pricing, discontinued free tier, and aggressive feature gating frustrate many users. One Reddit user: “I’m using Document360 as my knowledge base provider and I really don’t enjoy them and they are very expensive for what they offer.” . SSO and API access being Enterprise-only, plus add-on costs for workspaces, languages, and team seats piling up, push many teams toward document360 alternatives with transparent pricing.…",
+          "sentiment": "negative",
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Instrument support-ticket deflection as a reportable customer metric",
+      "detail": "KnowledgeOwl is publishing content framing the support queue as a documentation audit, turning ticket data into a documentation workflow. Ship a dashboard that links help-centre article performance to ticket volume on the same topics, so customers can quantify deflection — the number a documentation lead needs to defend budget.",
+      "type": "capitalize_competitor",
+      "owner": "Product",
+      "priority": "medium",
+      "competitor": "KnowledgeOwl",
+      "reasoning": "Deflection is the ROI argument for a knowledge base, and whoever measures it for the customer owns the renewal conversation.",
+      "evidence": [
+        {
+          "id": "knowledgeowl::web::https://www.knowledgeowl.com/blog/posts/support-queue-as-docs-audit",
+          "brand": "KnowledgeOwl",
+          "channel": "web",
+          "date": "2026-08-06",
+          "url": "https://www.knowledgeowl.com/blog/posts/support-queue-as-docs-audit",
+          "domain": "knowledgeowl.com",
+          "title": "Support queue is a documentation audit; here's how to read it.",
+          "excerpt": "…Easily update and share your docs with your team and customers . Start for free. Request demo. Extend your trial for free - no card required. Free 1:1 migration support from. maker. Get started with KnowledgeOwl in 3 easy steps. 1. Create your knowledge base for free in just a few minutes . 2. Migrate your articles with 1:1 help from the KnowledgeOwl team . 3. Easily update and share your docs with your team and customers .…",
+          "sentiment": null,
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Brief Sales on the open-source Confluence-replacement trend before it reaches deals",
+      "detail": "An open-source Confluence alternative built on Git and an open knowledge format is now visible on GitHub. This is a low-cost, high-effort substitute rather than a direct threat, so the play is a short internal brief covering where self-hosting genuinely costs less and where governance, multi-language and support obligations make it more expensive — not a public response.",
+      "type": "defend_position",
+      "owner": "Competitive Intel",
+      "priority": "low",
+      "competitor": "Confluence",
+      "reasoning": "Worth monitoring rather than acting on publicly. Recording it now means Sales is not hearing about it first from a prospect.",
+      "evidence": [
+        {
+          "id": "confluence::web::https://github.com/commonplace-wiki/commonplace",
+          "brand": "Confluence",
+          "channel": "web",
+          "date": "2026-08-02",
+          "url": "https://github.com/commonplace-wiki/commonplace",
+          "domain": "github.com",
+          "title": "Show HN: Commonplace Wiki – A Confluence Alternative Based on Git and OKF",
+          "excerpt": ". Commonplace is an open-source wiki, knowledge base and Confluence alternative, based on a Git repository following Open Knowledge Format , with a nice UI. Documentation: commonplace.wiki (itself a Commonplace wiki for its knowledgebase ).…",
+          "sentiment": null,
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    },
+    {
+      "title": "Fix the two Document360 prompts where AI answers describe us less favourably than the product warrants",
+      "detail": "Measured this run, Document360 draws neutral rather than positive framing in the internal-knowledge-base and enterprise-search prompts, where answers position it as a secondary option. Publish reference content covering internal KB deployments and permissions-aware search so the model has specific, citable material for those two use cases instead of inferring from help-centre positioning.",
+      "type": "accelerate_llm",
+      "owner": "Product Marketing",
+      "priority": "medium",
+      "competitor": "Guru",
+      "reasoning": "Guru is measured positive in 4 of the 5 prompts where it appears, against Document360's neutral framing on internal knowledge. The gap is in available reference content, not capability.",
+      "evidence": [
+        {
+          "id": "mintlify::blog::https://www.mintlify.com/blog/state-of-docs-traffic",
+          "brand": "Mintlify",
+          "channel": "blog",
+          "date": "2026-07-29",
+          "url": "https://www.mintlify.com/blog/state-of-docs-traffic",
+          "domain": "mintlify.com",
+          "title": "The state of docs traffic: a 2026 midyear report",
+          "excerpt": "…Because those calls travel through a different channel from direct agent web requests, we track them as a separate event stream outside our web-traffic totals. Most MCP activity comes from either site visitors querying the docs assistant or developer teams retrieving information from their internal Mintlify powered knowledge base. Across our hosted docs sites in July so far, docs assistants have returned 1.18 million responses, while our hosted MCP servers have handled 1.42 million tool calls across the three exposed types.…",
+          "sentiment": null,
+          "link_verified": true
+        }
+      ],
+      "unknown_evidence_ids_dropped": 0,
+      "generated_by": "claude-code (grounded in verified evidence store)"
+    }
+  ]
+}

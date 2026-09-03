@@ -1,0 +1,163 @@
+{
+  "_comment": [
+    "The 7 tracked products. Every endpoint here was PROVEN by fetching it during",
+    "`node collectors/resolve-feeds.js` — see collectors/store/resolved-feeds.json for",
+    "the receipts. Endpoints that could not be resolved are null, not guessed.",
+    "",
+    "MATCHING RULES (this is the accuracy-critical part):",
+    "  aliases          - any literal occurrence in fetched page text confirms a mention",
+    "  require_context  - for ambiguous names ('Confluence', 'Guru'), at least ONE of",
+    "                     these must ALSO appear on the page, or the match is rejected.",
+    "                     Without this, 'a confluence of factors' and 'SEO guru' would",
+    "                     inflate the mention counts and corrupt share-of-voice.",
+    "  negative_context - if present, the match is rejected outright."
+  ],
+  "primary": "document360",
+  "brand_order": ["document360", "mintlify", "gitbook", "confluence", "guru", "bloomfire", "knowledgeowl"],
+  "brands": {
+    "document360": {
+      "name": "Document360",
+      "domain": "document360.com",
+      "vendor": "Kovai.co",
+      "primary": true,
+      "aliases": ["Document360", "Document 360"],
+      "require_context": [],
+      "negative_context": [],
+      "blog_feed": "https://document360.com/blog/feed",
+      "youtube_channel_id": "UCSTM-T1Ephlh4utlz2l27Jg",
+      "youtube_feed": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSTM-T1Ephlh4utlz2l27Jg",
+      "linkedin_slug": "document360",
+      "linkedin_verified": true,
+      "x_handle": "document360",
+      "x_verified": true,
+      "github_org": null
+    },
+    "mintlify": {
+      "name": "Mintlify",
+      "domain": "mintlify.com",
+      "vendor": "Mintlify, Inc.",
+      "aliases": ["Mintlify"],
+      "require_context": [],
+      "negative_context": [],
+      "blog_feed": "https://mintlify.com/feed.xml",
+      "youtube_channel_id": "UC0LsSxHB7zaKHcN6tiNYiFQ",
+      "youtube_feed": "https://www.youtube.com/feeds/videos.xml?channel_id=UC0LsSxHB7zaKHcN6tiNYiFQ",
+      "linkedin_slug": "mintlify",
+      "linkedin_verified": true,
+      "x_handle": "mintlify",
+      "x_verified": true,
+      "github_org": "mintlify"
+    },
+    "gitbook": {
+      "name": "GitBook",
+      "domain": "gitbook.com",
+      "vendor": "GitBook",
+      "aliases": ["GitBook", "Git Book"],
+      "require_context": [],
+      "negative_context": [],
+      "blog_feed": null,
+      "blog_feed_note": "No discoverable RSS/Atom feed — probed 8 candidate paths plus <head> autodiscovery, all 404. Blog coverage for GitBook comes from SearXNG + GDELT web discovery instead.",
+      "youtube_channel_id": "UCH_gKu7HCrjF6aCVu67iMwA",
+      "youtube_feed": "https://www.youtube.com/feeds/videos.xml?channel_id=UCH_gKu7HCrjF6aCVu67iMwA",
+      "linkedin_slug": "gitbook",
+      "linkedin_verified": true,
+      "x_handle": "GitBookIO",
+      "x_verified": true,
+      "github_org": "GitbookIO"
+    },
+    "confluence": {
+      "name": "Confluence",
+      "domain": "atlassian.com",
+      "vendor": "Atlassian",
+      "aliases": ["Confluence"],
+      "require_context": [
+        "atlassian", "wiki", "knowledge base", "documentation", "jira", "rovo",
+        "confluence cloud", "confluence server", "confluence data center", "intranet"
+      ],
+      "negative_context": ["confluence of", "confluence river", "at the confluence"],
+      "ambiguous": true,
+      "ambiguity_note": "'Confluence' is a common English noun. require_context prevents 'a confluence of factors' from being counted as a product mention.",
+      "blog_feed": "https://atlassian.com/blog/rss",
+      "blog_feed_note": "Atlassian's corporate blog covers all products; records are still gated on a confirmed Confluence mention in the fetched text.",
+      "youtube_channel_id": "UCmM5yxBJKu-JMJ3Js2wE6vw",
+      "youtube_feed": "https://www.youtube.com/feeds/videos.xml?channel_id=UCmM5yxBJKu-JMJ3Js2wE6vw",
+      "youtube_note": "Atlassian's corporate channel — video records require a confirmed Confluence mention in the title or description.",
+      "linkedin_slug": "atlassian",
+      "linkedin_verified": false,
+      "linkedin_verified_note": "HTTP 429 (rate limited) during config verification — existence not proven, treat as unconfirmed.",
+      "x_handle": "Atlassian",
+      "x_verified": true,
+      "github_org": "atlassian"
+    },
+    "guru": {
+      "name": "Guru",
+      "domain": "getguru.com",
+      "vendor": "Guru Technologies",
+      "aliases": ["Guru", "getguru", "Guru.com"],
+      "require_context": [
+        "getguru", "knowledge management", "enterprise search", "knowledge base",
+        "wiki", "intranet", "guru cards", "knowledge agent", "documentation"
+      ],
+      "negative_context": ["seo guru", "marketing guru", "tech guru", "growth guru", "guru meditation", "sales guru", "fitness guru"],
+      "ambiguous": true,
+      "ambiguity_note": "'Guru' is a common English noun. require_context plus negative_context keeps 'SEO guru' out of the counts.",
+      "blog_feed": null,
+      "blog_feed_note": "No discoverable RSS/Atom feed — probed 6 candidate paths plus <head> autodiscovery, all 404. Blog coverage comes from SearXNG + GDELT.",
+      "youtube_channel_id": "UCo7YCbKTdp1zvEV-SfTpLZQ",
+      "youtube_feed": "https://www.youtube.com/feeds/videos.xml?channel_id=UCo7YCbKTdp1zvEV-SfTpLZQ",
+      "linkedin_slug": "getguru",
+      "linkedin_verified": true,
+      "x_handle": "guru_hq",
+      "x_verified": true,
+      "github_org": null
+    },
+    "bloomfire": {
+      "name": "Bloomfire",
+      "domain": "bloomfire.com",
+      "vendor": "Bloomfire",
+      "aliases": ["Bloomfire", "Bloom fire"],
+      "require_context": [],
+      "negative_context": [],
+      "blog_feed": "https://bloomfire.com/blog/feed",
+      "youtube_channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
+      "youtube_feed": "https://www.youtube.com/feeds/videos.xml?channel_id=UCMM30a-zh0zRYdzvCsCo6Qw",
+      "linkedin_slug": "bloomfire",
+      "linkedin_verified": true,
+      "x_handle": "Bloomfire",
+      "x_verified": true,
+      "github_org": null
+    },
+    "knowledgeowl": {
+      "name": "KnowledgeOwl",
+      "domain": "knowledgeowl.com",
+      "vendor": "KnowledgeOwl",
+      "aliases": ["KnowledgeOwl", "Knowledge Owl"],
+      "require_context": [],
+      "negative_context": [],
+      "blog_feed": null,
+      "blog_feed_note": "No discoverable RSS/Atom feed — probed 9 candidate paths plus <head> autodiscovery, all 404 (one 200 returned HTML, not a feed). Blog coverage comes from SearXNG + GDELT.",
+      "youtube_channel_id": null,
+      "youtube_feed": null,
+      "youtube_note": "No YouTube channel resolved for any tried handle. The Videos channel for KnowledgeOwl is populated by SearXNG site:youtube.com discovery instead of an owned-channel feed.",
+      "linkedin_slug": "knowledgeowl",
+      "linkedin_verified": true,
+      "x_handle": "KnowledgeOwl",
+      "x_verified": true,
+      "github_org": null
+    }
+  },
+  "event_sources": {
+    "_comment": "Event-sponsorship detection. Sponsorship is rarely in an API, so it is evidence-based: a page must contain the brand name AND a sponsorship term, and the excerpt is retained for audit. Terms are deliberately narrow to avoid counting mere attendance as sponsorship.",
+    "sponsor_terms": [
+      "sponsor", "sponsored by", "sponsorship", "platinum sponsor", "gold sponsor",
+      "silver sponsor", "bronze sponsor", "exhibitor", "booth", "our sponsors",
+      "title sponsor", "presenting sponsor", "diamond sponsor"
+    ],
+    "search_templates": [
+      "\"{brand}\" sponsor conference 2026",
+      "\"{brand}\" sponsors event",
+      "\"{brand}\" exhibitor booth conference",
+      "\"{brand}\" \"gold sponsor\" OR \"platinum sponsor\""
+    ]
+  }
+}

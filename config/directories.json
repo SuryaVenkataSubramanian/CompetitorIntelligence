@@ -1,0 +1,234 @@
+{
+  "_comment": [
+    "Software review directories, audited for NEW product listings in the six",
+    "categories Document360 competes in.",
+    "",
+    "WHY THESE ARE READ THROUGH A SEARCH INDEX",
+    "-----------------------------------------",
+    "Five of the seven return HTTP 403 to a direct fetch (Cloudflare / bot",
+    "protection). Their robots.txt files do NOT forbid category or product pages",
+    "— TrustRadius even says `Allow: /`, and the Disallow rules target query-string",
+    "noise, /search, /api and compare permutations. So the pages are permitted to",
+    "crawlers; it is a WAF that refuses us, not a policy.",
+    "",
+    "Rather than defeat the WAF, this collector reads Google's and Bing's public",
+    "index via SearXNG using `site:` queries. Those engines crawled the pages",
+    "legitimately, the query costs nothing, and we never touch the bot wall.",
+    "That makes a daily audit sustainable, which a paid SERP API at $0.002 per",
+    "query would not be on the current balance.",
+    "",
+    "THE PRECISION PROBLEM THIS CONFIG SOLVES",
+    "----------------------------------------",
+    "A category-scoped search does not prove category membership. Measured:",
+    "`site:trustradius.com/products customer self service` returned Paycom,",
+    "BambooHR and ADP Workforce Now — payroll and HR products that merely rank",
+    "for the phrase. So each entry below carries the patterns needed to decide,",
+    "from the URL and the result title, (a) whether this is a product page at all",
+    "and (b) whether the product's own listing places it in the category.",
+    "A candidate that fails (b) is recorded with category_confirmed:false and",
+    "never counted as a category entrant."
+  ],
+
+  "directories": [
+    {
+      "id": "g2",
+      "label": "G2",
+      "host": "g2.com",
+      "search_scope": "site:g2.com/products",
+      "product_url": "^https?://(?:www\\.)?g2\\.com/products/([a-z0-9][a-z0-9-]*)(?:/|$)",
+      "reject_url": "/competitors/|/compare/|/reviews/\\d|learn\\.g2\\.com|/categories/|/sponsored",
+      "title_strip": [
+        " Reviews \\d{4}:.*$", " Reviews & Ratings.*$", " Pros and Cons.*$",
+        "^Top \\d+ ", " Alternatives & Competitors.*$", " Reviews.*$",
+        " Pricing.*$", " Features.*$", "\\s*[-|]\\s*G2\\s*$"
+      ],
+      "note": "Product slug lives at /products/<slug>. Alternatives and compare pages are rejected: they name a product without listing it."
+    },
+    {
+      "id": "capterra",
+      "label": "Capterra",
+      "host": "capterra.com",
+      "search_scope": "site:capterra.com/p",
+      "product_url": "^https?://(?:www\\.)?capterra\\.com/p/\\d+/([A-Za-z0-9][A-Za-z0-9-]*)(?:/|$)",
+      "reject_url": "/compare/|/alternatives/|-vs-",
+      "title_strip": [
+        " Software Pricing, Alternatives & More.*$", " Reviews \\d{4}\\..*$",
+        " Pricing \\d{4}.*$", " Reviews.*$", " Pricing.*$", " Software Pricing.*$",
+        "\\s*[-|]\\s*Capterra\\s*$"
+      ],
+      "note": "Product pages are /p/<numeric id>/<Name>/. The Name segment is already close to the display name."
+    },
+    {
+      "id": "getapp",
+      "label": "GetApp",
+      "host": "getapp.com",
+      "search_scope": "site:getapp.com",
+      "product_url": "^https?://(?:www\\.)?getapp\\.com/[a-z-]+/a/([a-z0-9][a-z0-9-]*)(?:/|$)",
+      "reject_url": "/compare/|-vs-|/all-software/|/categories/",
+      "title_strip": [
+        " Reviews.*$", " Pricing.*$", " \\d{4} Pricing.*$",
+        " Features, Reviews.*$", "\\s*[-|]\\s*GetApp.*$"
+      ],
+      "note": "GetApp product pages are /<category>/a/<slug>. It is the one directory that answers a direct fetch, so listings can be corroborated on-page."
+    },
+    {
+      "id": "trustradius",
+      "label": "TrustRadius",
+      "host": "trustradius.com",
+      "search_scope": "site:trustradius.com/products",
+      "product_url": "^https?://(?:www\\.)?trustradius\\.com/products/([a-z0-9][a-z0-9-]*)(?:/|$)",
+      "reject_url": "compare-products|solutions\\.trustradius|media\\.trustradius|/categories/",
+      "title_strip": [
+        " Reviews from Real Users.*$", " Reviews & Ratings.*$", " Reviews.*$",
+        " Pricing.*$", "\\s*[-|]\\s*TrustRadius\\s*$"
+      ],
+      "note": "robots.txt says Allow: /. Category searches here are the noisiest — payroll and HR products rank for support phrasing — so category confirmation matters most on this source."
+    },
+    {
+      "id": "gartner",
+      "label": "Gartner Peer Insights",
+      "host": "gartner.com",
+      "search_scope": "site:gartner.com/reviews/product",
+      "product_url": "^https?://(?:www\\.)?gartner\\.com/reviews/product/([a-z0-9][a-z0-9-]*?)(?:-\\d+)?(?:\\?|/|$)",
+      "reject_url": "/reviews/market/|external\\.pi\\.gpi|/compare",
+      "title_strip": [
+        " Reviews & Ratings \\d{4}.*$", " Reviews & Ratings.*$", " Reviews.*$",
+        "\\s*[-|]\\s*Gartner Peer Insights.*$", "\\s*[-|]\\s*Gartner.*$"
+      ],
+      "note": "Product URLs often carry a numeric suffix (guru-1380120009) which is stripped. `marketSeoName` in the query string is a reliable category signal when present."
+    },
+    {
+      "id": "softwareadvice",
+      "label": "SoftwareAdvice",
+      "host": "softwareadvice.com",
+      "search_scope": "site:softwareadvice.com",
+      "product_url": "^https?://(?:www\\.)?softwareadvice\\.com/[a-z-]+/([a-z0-9][a-z0-9-]*?)-profile(?:/|$)",
+      "reject_url": "-comparison/|/compare/|-vs-|/resources/",
+      "title_strip": [
+        " Reviews, Ratings.*$", " Software \\d{4} Reviews.*$", " Reviews.*$",
+        " Pricing.*$", "\\s*[-|]\\s*Software Advice.*$", "\\s*[-|]\\s*SoftwareAdvice.*$"
+      ],
+      "note": "Product pages end in -profile. This is the only directory publishing an accessible XML sitemap, kept as a corroboration path."
+    },
+    {
+      "id": "softwaresuggest",
+      "label": "SoftwareSuggest",
+      "host": "softwaresuggest.com",
+      "search_scope": "site:softwaresuggest.com",
+      "product_url": "^https?://(?:www\\.)?softwaresuggest\\.com/([a-z0-9][a-z0-9-]*)(?:/|$)",
+      "reject_url": "-software$|-system$|-tools$|/compare|-vs-|/blog|/categories|/pricing-guide|/alternatives",
+      "title_strip": [
+        " Reviews, Pricing.*$", " Pricing, Features.*$", " Reviews.*$",
+        " Pricing.*$", "\\s*[-|]\\s*SoftwareSuggest.*$"
+      ],
+      "note": "Flat URL space: /<slug> is used for BOTH products and categories, so the reject_url list drops category-shaped slugs (-software, -system, -tools). This is the least reliable of the seven and its candidates carry lower confidence."
+    }
+  ],
+
+  "_categories_comment": [
+    "The six categories to audit, each with the search terms used to find",
+    "listings and the CONFIRM patterns that decide whether a product's own",
+    "listing actually places it in that category.",
+    "",
+    "`confirm` is matched against the result title and snippet — the product's",
+    "own listing text — not against the query. That is the same rule the",
+    "web-discovery collector uses: the search term that surfaced a product is",
+    "never evidence about it."
+  ],
+  "_confirm_strictness": [
+    "Each `confirm` must evidence that the product IS a knowledge/documentation",
+    "product in that niche — not merely that it is adjacent to the topic.",
+    "",
+    "Measured why this matters: a first pass used `\\bAPI\\b` for API",
+    "Documentation and admitted CoinGecko API, Equifax API Developer Portal,",
+    "PandaDoc API, Legalesign API and Kong Konnect — an API gateway, a credit",
+    "bureau feed, an e-signature API and a crypto price feed. All have 'API' in",
+    "the name; none is a documentation platform. So a bare topic word is never",
+    "sufficient: the pattern requires the documentation noun itself."
+  ],
+  "categories": [
+    {
+      "id": "knowledge_base",
+      "label": "Knowledge Base",
+      "terms": ["knowledge base software", "knowledge management software", "knowledge base platform"],
+      "confirm": "\\bknowledge ?base\\b|\\bknowledge management\\b|\\bknowledge sharing\\b|\\bknowledge hub\\b|\\b(?:internal |company |team )?wiki\\b|\\bdocumentation (?:platform|software|tool)\\b",
+      "reject": "\\bpayroll\\b|\\bapplicant\\b|\\brecruit|\\bHRIS\\b|\\btime (?:tracking|clock)\\b|\\baccounting\\b|\\binvoic|\\be-?signature\\b|\\bcrypto|\\bcredit (?:report|bureau)\\b|\\bpoint of sale\\b|\\bLMS\\b|\\blearning management\\b"
+    },
+    {
+      "id": "customer_self_service",
+      "label": "Customer Self-Service",
+      "terms": ["customer self service software", "self service portal software", "help center software"],
+      "_comment": [
+        "`self-service` alone is NOT sufficient and was the single biggest source",
+        "of false positives here. Measured admissions from a bare match: Paylocity",
+        "(payroll — 'a straightforward self-service portal'), Zoho Analytics",
+        "('self-service BI'), Invoiced ('self-service portal' for invoice payment),",
+        "Axual ('self-service ... for your Kafka implementation'), PROS Smart CPQ",
+        "and Infor CRM. Every one of those genuinely says self-service; none is a",
+        "customer-support knowledge product.",
+        "",
+        "So the phrase now has to co-occur with a knowledge/support-content anchor",
+        "within the same sentence. Help centre, knowledge base, ticket deflection",
+        "and FAQ stand alone because they are already specific."
+      ],
+      "confirm": "\\bhelp ?cent(?:er|re)\\b|\\bknowledge ?base\\b|\\bticket deflection\\b|\\bFAQs?\\b|\\bself[- ]service\\b[^.]{0,70}\\b(?:knowledge|article|FAQ|help ?cent|support ?cent|documentation|guide|support portal|customer support)\\b|\\b(?:knowledge|article|FAQ|help ?cent|support ?cent|documentation)\\b[^.]{0,70}\\bself[- ]service\\b",
+      "reject": "\\bpayroll\\b|\\bapplicant\\b|\\brecruit|\\bHRIS\\b|\\bHCM\\b|\\bbenefits administration\\b|\\bworkforce (?:management|now)\\b|\\bpoint of sale\\b|\\bemployee self[- ]service\\b|\\bbanking\\b|\\binsurance claims\\b|\\bbusiness intelligence\\b|\\bBI (?:platform|tool|and analytics)\\b|\\banalytics platform\\b|\\binvoic|\\bpayment (?:portal|processing)\\b|\\bKafka\\b|\\bCPQ\\b|\\bquoting\\b|\\bCRM\\b|\\btime (?:off|tracking|clock)\\b|\\bexpense\\b|\\bprocurement\\b"
+    },
+    {
+      "id": "contact_center_kb",
+      "label": "Contact Center Knowledge Base",
+      "terms": ["contact center knowledge base software", "call center knowledge base software", "agent knowledge base software"],
+      "confirm": "(?:contact|call) ?cent(?:er|re)\\b(?=[^.]{0,60}\\b(?:knowledge|script|article|self[- ]service|agent assist))|\\bagent (?:assist|knowledge|desktop)\\b|\\bknowledge ?base\\b(?=[^.]{0,60}\\b(?:agent|contact cent|call cent|support team))",
+      "reject": "\\bpayroll\\b|\\brecruit|\\bpredictive dialer\\b|\\btelecom billing\\b|\\bIVR only\\b|\\bworkforce management\\b|\\bcall recording\\b"
+    },
+    {
+      "id": "sop",
+      "label": "Standard Operating Procedures",
+      "terms": ["standard operating procedure software", "SOP software", "process documentation software"],
+      "confirm": "\\bSOPs?\\b|\\bstandard operating procedure\\b|\\bprocess documentation\\b|\\bwork instruction\\b|\\bprocedure (?:manag|document|librar)|\\bprocess (?:document|librar)|\\bemployee handbook\\b|\\bonboarding (?:doc|guide|manual)",
+      "reject": "\\bpayroll\\b|\\brecruit|\\baccounting\\b|\\bCRM\\b|\\bproject management\\b(?![^.]{0,40}\\bSOP\\b)|\\bERP\\b|\\bfield service\\b"
+    },
+    {
+      "id": "ai_doc_generator",
+      "label": "AI Documentation Generators",
+      "terms": ["AI documentation generator", "AI documentation software", "automated documentation software"],
+      "_comment": [
+        "The discriminator is DOCUMENTATION (authoring) versus DOCUMENT (a file).",
+        "Measured admissions from conflating them: Azure AI Document Intelligence",
+        "and Lido ('AI powered document processing platform that automates data",
+        "extraction') — both are OCR / intelligent document processing, the",
+        "opposite end of the lifecycle from writing documentation.",
+        "",
+        "So `document` on its own no longer confirms; the pattern requires the",
+        "-ation form or an explicit authoring verb."
+      ],
+      "confirm": "\\bAI\\b[^.]{0,40}\\bdocumentation\\b|\\bdocumentation\\b[^.]{0,40}\\bAI\\b|\\bdocumentation (?:generator|automation|assistant)\\b|\\b(?:auto|automat\\w+|AI)[- ]?generat\\w+\\b[^.]{0,30}\\b(?:documentation|article|guide|knowledge ?base|help ?cent)|\\bAI (?:writer|writing assistant)\\b[^.]{0,50}\\b(?:documentation|article|knowledge|help ?cent)|\\b(?:write|writes|writing|author\\w*|draft\\w*)\\b[^.]{0,30}\\bdocumentation\\b",
+      "reject": "\\bpayroll\\b|\\brecruit|\\bdocument (?:scanning|storage|imaging|management|processing|extraction|intelligence|capture|parsing|understanding)\\b|\\bintelligent document processing\\b|\\bIDP\\b|\\bdata extraction\\b|\\be-?signature\\b|\\bOCR\\b|\\bform (?:recognition|processing)\\b|\\bcontract (?:analysis|lifecycle)\\b|\\bdocument (?:generation|assembly)\\b[^.]{0,30}\\b(?:contract|invoice|proposal)|\\binvoice processing\\b"
+    },
+    {
+      "id": "api_documentation",
+      "label": "API Documentation",
+      "terms": ["API documentation software", "API documentation tool", "developer portal software"],
+      "_comment": [
+        "`developer portal` alone admitted Kong Konnect, whose own snippet is",
+        "about 'mutual TLS (mTLS), traffic policies, and observability' — an API",
+        "gateway that happens to ship a portal. So the portal phrase now has to",
+        "co-occur with a docs noun, and gateway/mesh vocabulary is rejected."
+      ],
+      "confirm": "\\bAPI (?:documentation|docs|reference)\\b|\\bdocument(?:ation|s)?\\b[^.]{0,30}\\bAPIs?\\b|\\bdeveloper (?:portal|hub)\\b[^.]{0,60}\\b(?:doc|documentation|reference|guide|tutorial|SDK)\\b|\\b(?:doc|documentation|reference|guide|tutorial)\\b[^.]{0,60}\\bdeveloper (?:portal|hub)\\b|\\bdeveloper (?:docs|documentation)\\b|\\b(?:OpenAPI|Swagger)\\b[^.]{0,40}\\b(?:doc|spec|reference|portal)|\\bdocs[- ]as[- ]code\\b|\\bapi[- ]?docs\\b",
+      "reject": "\\bAPI (?:gateway|management platform|security|testing|monitoring|mocking)\\b|\\bmTLS\\b|\\bservice mesh\\b|\\btraffic polic|\\bobservability\\b|\\brate limiting\\b|\\bpayment\\b|\\be-?signature\\b|\\bcrypto|\\bprice (?:feed|data)\\b|\\bcredit (?:report|bureau)\\b|\\binternal developer platform\\b|\\bno[- ]?code\\b|\\biPaaS\\b|\\bintegration platform\\b|\\bservice catalog\\b"
+    }
+  ],
+
+  "_limits": {
+    "results_per_query": 30,
+    "query_gap_ms": 1400,
+    "max_website_resolutions_per_run": 12,
+    "comment": [
+      "Website resolution costs an extra search per product, so it is bounded and",
+      "spent only on genuinely new, category-confirmed candidates. Everything else",
+      "is stored with its directory listing URL as evidence and no vendor site,",
+      "which is reported as 'website not resolved' rather than guessed."
+    ]
+  }
+}

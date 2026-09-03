@@ -1,0 +1,262 @@
+/* ================================================================
+   v2 COMPONENTS — provenance, caveats, channels, integrity.
+
+   These exist for one reason: "unknown", "not connected" and "zero" are
+   three different business facts, and the old dashboard rendered all
+   three identically. Everything here keeps them visually distinct.
+   ================================================================ */
+:root { --ink-4: #A9A7BC; }
+:root[data-theme="dark"] { --ink-4: #6A6785; }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) { --ink-4: #6A6785; }
+}
+
+/* Safety net: styles.css declares `.view{display:none}` and only reveals
+   `.view.active`, a v1 pattern from when all views were in the DOM at once.
+   The app now renders one view at a time, so a missing `active` class silently
+   hid a fully-rendered page. Visible by default; the animation is preserved. */
+.view { display: block; }
+
+.muted { color: var(--ink-3); }
+.vdiv { width: 1px; height: 24px; background: var(--hair); margin: 0 2px; display: inline-block; }
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .88em; background: var(--surface-3); padding: 1px 5px; border-radius: 5px;
+}
+
+/* ---------- integrity strip ---------- */
+.istrip {
+  display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center;
+  padding: 10px 14px; margin: 0 0 14px;
+  background: var(--surface); border: 1px solid var(--hair);
+  border-radius: var(--radius-sm); font-size: 12px; color: var(--ink-2);
+}
+.istrip b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.istrip em { font-style: normal; color: var(--ink-3); }
+.istrip .amber b { color: var(--warn); }
+.linky { background: none; border: 0; color: var(--brand); font-size: 12px; padding: 0; text-decoration: underline; }
+
+/* ---------- caveat banners ---------- */
+.caveats { display: flex; flex-direction: column; gap: 6px; margin: 0 0 14px; }
+.cav {
+  display: flex; gap: 8px; align-items: flex-start; padding: 9px 12px;
+  border-radius: var(--radius-sm); font-size: 12px; line-height: 1.45; border: 1px solid;
+}
+.cav svg { flex: 0 0 auto; margin-top: 1px; }
+.cav.warn { background: rgba(232,163,23,.09); border-color: rgba(232,163,23,.3); color: var(--ink-2); }
+.cav.info { background: var(--brand-soft); border-color: var(--brand-soft2); color: var(--ink-2); }
+
+/* ---------- chips ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10.5px; font-weight: 600; letter-spacing: .02em;
+  padding: 2px 7px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap;
+}
+.chip.ok { background: var(--pos-soft); color: var(--pos); }
+.chip.bad { background: var(--neg-soft); color: var(--neg); }
+.chip.warn { background: rgba(232,163,23,.14); color: var(--warn); }
+.chip.nc { background: var(--surface-3); color: var(--ink-3); border-color: var(--hair-2); }
+.chip.zero { background: transparent; color: var(--ink-4); border-color: var(--hair); }
+.chip.src { background: var(--surface-3); color: var(--ink-3); font-weight: 500; }
+.badge.unc { background: var(--surface-3); color: var(--ink-4); }
+.badge.warn { background: rgba(232,163,23,.14); color: var(--warn); }
+.badge.xs { font-size: 9px; padding: 1px 5px; }
+
+/* ---------- channel grid ---------- */
+.chgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 9px; }
+.chcard {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  padding: 11px 12px; background: var(--surface-2); border: 1px solid var(--hair);
+  border-radius: var(--radius-sm); text-align: left; transition: border-color .12s, background .12s;
+}
+.chcard:hover { border-color: var(--hair-2); }
+.chcard.on { border-color: var(--brand); background: var(--brand-soft); }
+.chcard.dead { opacity: .6; }
+.chcard .chico { color: var(--ink-3); }
+.chcard.on .chico { color: var(--brand); }
+.chcard .chlab { font-size: 11.5px; color: var(--ink-2); font-weight: 600; }
+.chcard .chval { font-size: 20px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.chcard.dead .chval { color: var(--ink-4); }
+
+.chnotes { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.chnote {
+  display: flex; flex-direction: column; gap: 3px; padding: 9px 11px;
+  background: var(--surface-2); border: 1px solid var(--hair); border-radius: var(--radius-sm);
+  font-size: 11.5px; color: var(--ink-2); line-height: 1.45;
+}
+.chnote b { display: flex; align-items: center; gap: 5px; color: var(--ink); font-size: 11.5px; }
+.chnote .blk { color: var(--neg); }
+.chnote .how { color: var(--ink-3); }
+
+/* ---------- evidence + sentiment basis ---------- */
+blockquote.evidence {
+  margin: 10px 0 0; padding: 10px 12px; background: var(--surface-2);
+  border-left: 3px solid var(--brand-soft2); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 12.5px; line-height: 1.55; color: var(--ink-2);
+}
+.evlab {
+  display: block; font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--ink-4); font-weight: 700; margin-bottom: 4px;
+}
+.sentwhy { margin-top: 9px; font-size: 11.5px; color: var(--ink-2); line-height: 1.5; }
+.sentwhy b { color: var(--ink); }
+.sentwhy .rat { color: var(--ink-3); }
+.provchips { display: flex; gap: 5px; flex-wrap: wrap; }
+.m-act.ghost { background: transparent; border: 1px solid var(--hair-2); color: var(--ink-2); }
+.undated { color: var(--warn); font-style: normal; }
+
+/* ---------- mini mention rows ---------- */
+.minim { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--hair); }
+.minim:last-child { border-bottom: 0; }
+.minim-b { flex: 1; min-width: 0; }
+.minim-b > a { color: var(--ink); font-weight: 600; font-size: 13px; }
+.m-fav.sm { width: 26px; height: 26px; font-size: 11px; }
+
+/* ---------- tables ---------- */
+table.ptable.wide td, table.ptable.wide th { white-space: nowrap; }
+table.ptable tr.me { background: var(--brand-soft); }
+.sharebar {
+  display: inline-block; width: 64px; height: 6px; background: var(--surface-3);
+  border-radius: 3px; overflow: hidden; margin-right: 7px; vertical-align: middle;
+}
+.sharebar i { display: block; height: 100%; background: var(--brand); border-radius: 3px; }
+.absent { color: var(--neg); font-size: 11.5px; }
+.urlcell { max-width: 280px; overflow: hidden; text-overflow: ellipsis; }
+table.prov { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 8px; }
+table.prov td { padding: 6px 8px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+table.prov td:first-child { color: var(--ink-3); width: 150px; white-space: nowrap; }
+
+/* ---------- gate + caveat lists ---------- */
+ol.gate { margin: 0; padding-left: 20px; font-size: 12.5px; color: var(--ink-2); line-height: 1.65; }
+ol.gate li { margin-bottom: 7px; }
+ol.gate b { color: var(--ink); }
+ul.cavlist { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
+ul.cavlist li { margin-bottom: 6px; }
+ul.cavlist b { color: var(--ink); }
+
+/* ---------- dormant sources ---------- */
+.dormlist { display: flex; flex-direction: column; gap: 9px; }
+.dorm {
+  display: flex; flex-direction: column; gap: 3px; padding: 10px 12px;
+  background: var(--surface-2); border: 1px solid var(--hair);
+  border-radius: var(--radius-sm); font-size: 11.5px; line-height: 1.5;
+}
+.dorm b { color: var(--ink); font-size: 12.5px; }
+.dorm .blk { color: var(--neg); }
+.dorm .how { color: var(--ink-3); }
+
+/* ---------- recommendation evidence ---------- */
+.ev-list { margin-top: 12px; border-top: 1px solid var(--hair); padding-top: 10px; }
+.ev-h {
+  font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--ink-4); font-weight: 700; margin-bottom: 7px;
+}
+.ev-item { margin-bottom: 9px; font-size: 12px; }
+.ev-item > a { font-weight: 600; }
+.ev-meta { display: block; color: var(--ink-3); font-size: 11px; margin: 2px 0 3px; }
+.ev-item blockquote {
+  margin: 0; padding: 7px 10px; background: var(--surface-2); border-left: 2px solid var(--hair-2);
+  font-size: 11.5px; color: var(--ink-2); line-height: 1.5; border-radius: 0 6px 6px 0;
+}
+.reasoning { font-size: 12.5px; color: var(--ink-2); margin: 8px 0 0; line-height: 1.55; }
+.reasoning b { color: var(--ink); }
+.tag.type-def { background: rgba(232,163,23,.14); color: var(--warn); }
+
+/* ---------- empty states ---------- */
+.empty.mini { padding: 22px 14px; text-align: center; color: var(--ink-3); font-size: 12.5px; }
+.empty.big {
+  padding: 56px 24px; text-align: center; background: var(--surface);
+  border: 1px solid var(--hair); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+}
+.empty.big h3 { margin: 0 0 8px; font-size: 17px; color: var(--ink); }
+.empty.big p { margin: 0 auto 8px; max-width: 620px; color: var(--ink-2); font-size: 13px; line-height: 1.6; }
+.empty .sub { color: var(--ink-3); font-size: 12px; }
+.chart-note { font-size: 11px; color: var(--ink-3); margin: 11px 0 0; line-height: 1.5; }
+.railnote { font-size: 10.5px; color: var(--ink-3); line-height: 1.45; margin: 8px 0 10px; }
+.chk.plain { margin-bottom: 0; }
+.chk.dead { opacity: .55; }
+.pager .ell { color: var(--ink-3); padding: 0 4px; }
+
+/* ---------- menus ---------- */
+.menu button { display: flex; align-items: center; gap: 7px; width: 100%; }
+.menu .mcount { margin-left: auto; color: var(--ink-3); font-size: 11px; }
+.menunote { font-size: 10.5px; color: var(--ink-3); padding: 8px 12px 4px; margin: 0; line-height: 1.45; }
+
+/* ---------- provenance modal ---------- */
+.modal {
+  position: fixed; inset: 0; z-index: 200; background: rgba(20,18,31,.5);
+  backdrop-filter: blur(3px); display: none; align-items: flex-start;
+  justify-content: center; padding: 5vh 16px; overflow-y: auto;
+}
+.modal.open { display: flex; }
+.modal-card {
+  position: relative; width: 100%; max-width: 660px; background: var(--surface);
+  border: 1px solid var(--hair); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 22px 24px 26px;
+}
+.modal-card h2 { margin: 0 0 4px; font-size: 17px; }
+.modal-card h4 {
+  margin: 16px 0 4px; font-size: 11px; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--ink-3);
+}
+.modal-card .genby { font-size: 11.5px; color: var(--ink-3); margin: 0 0 10px; }
+.modal-card .close {
+  position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 8px;
+  border: 1px solid var(--hair); background: var(--surface-2); color: var(--ink-2);
+  font-size: 17px; line-height: 1;
+}
+
+.chan-tag { display: inline-flex; align-items: center; gap: 4px; }
+
+/* ---------- responsive top bar ----------
+   styles.css lays the header out as a single 62px non-wrapping flex row. Below
+   roughly 820px the brand block plus two dropdowns exceed the width and the
+   theme toggle is pushed off-screen entirely (observed at 733px). Let the row
+   wrap instead, and let the tab strip follow the header's real height. */
+@media (max-width: 860px) {
+  .top-in {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 62px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    row-gap: 10px;
+  }
+  .top-spacer { flex-basis: 100%; height: 0; order: 0; }
+  .brand { order: -1; }
+  nav.tabs { position: static; }        /* header height is no longer fixed */
+  header.top { position: static; }      /* so sticky offsets would be wrong */
+}
+
+@media (max-width: 520px) {
+  .control { height: 34px; padding: 0 9px; font-size: 12px; }
+  .iconbtn { width: 34px; height: 34px; }
+  .brandsel { max-width: 46vw; overflow: hidden; text-overflow: ellipsis; }
+}
+
+/* The base stylesheet is mobile-first: .ment-layout only becomes two columns at
+   min-width 920px. Below that the rail is full-width, so sticky positioning with
+   a hard 118px offset (tuned to the old fixed header) just makes it hover oddly. */
+@media (max-width: 919px) {
+  .rail { position: static; }
+}
+
+@media (max-width: 880px) {
+  .chgrid { grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); }
+  .istrip { font-size: 11px; gap: 5px 12px; }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
+
+/* ---------- SERP provider panel ---------- */
+.provline { margin: 0 0 4px; font-size: 13px; color: var(--ink); }
+.capgrid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.cap {
+  font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px;
+  border: 1px solid var(--hair-2); background: var(--surface-2); color: var(--ink-2);
+}
+.cap.yes { background: var(--pos-soft); color: var(--pos); border-color: transparent; }
+.cap.no { background: var(--neg-soft); color: var(--neg); border-color: transparent; }
+
+/* A discovery date is a weaker claim than a publication date and must look different. */
+.disc { color: var(--ink-3); font-style: italic; }
+.chall { font-size: 9.5px; color: var(--ink-4); font-weight: 600; }

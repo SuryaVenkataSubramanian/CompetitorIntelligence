@@ -1,0 +1,68 @@
+# Runs on every push and pull request.
+#
+# The accuracy audit is included deliberately: this project's whole claim is
+# that a number on the dashboard can be traced to fetched evidence. A change
+# that breaks that traceability should fail here, not be discovered by whoever
+# reads the dashboard next.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Syntax check every entry point
+        run: |
+          for f in server.js api/index.js collectors/*.js collectors/lib/*.js \
+                   collectors/adapters/*.js collectors/claude/*.js public/js/*.js; do
+            node --check "$f" || exit 1
+          done
+          echo "all files parse"
+
+      - name: The server handler must import without binding a port
+        # If this regresses, the Vercel function would hang on every cold start.
+        run: node -e "const h=require('./server.js'); if (typeof h!=='function') { throw new Error('server.js must export a request handler, got '+typeof h); } console.log('handler exported')"
+
+      - name: Tests
+        run: npm test
+
+      - name: Accuracy audit
+        run: node collectors/audit-mentions.js
+
+      - name: No secret in a tracked file
+        # A leaked key is the one failure that cannot be undone by a later
+        # commit, so it is checked on every push rather than trusted to review.
+        run: |
+          node -e "
+          const fs=require('fs');
+          const {execSync}=require('child_process');
+          const tracked=execSync('git ls-files',{encoding:'utf8'}).split('\n').filter(Boolean);
+          // Shapes of the credentials this project uses.
+          const PATTERNS=[
+            [/\bak_[A-Za-z0-9]{24,}\b/, 'Octolens API key'],
+            [/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/, 'UUID-shaped token (Bright Data)'],
+            [/DATAFORSEO_B64\s*=\s*[A-Za-z0-9+/=]{20,}/, 'DataForSEO credential'],
+            [/(OCTOLENS|NEWSAPI|BRIGHTDATA|WINDSOR)_API_KEY\s*=\s*\S{16,}/, 'assigned API key'],
+          ];
+          const hits=[];
+          for (const f of tracked) {
+            if (f==='.env.example'||f.endsWith('.md')) continue;
+            let t; try { if (fs.statSync(f).size>20*1024*1024) continue; t=fs.readFileSync(f,'utf8'); } catch(e) { continue; }
+            for (const [re,label] of PATTERNS) { const m=t.match(re); if (m) hits.push(label+' in '+f+': '+m[0].slice(0,12)+'...'); }
+          }
+          if (hits.length) { console.error('SECRET-SHAPED VALUES IN TRACKED FILES:'); hits.forEach(h=>console.error('  '+h)); process.exit(1); }
+          console.log('no secret-shaped value in '+tracked.length+' tracked files');
+          "

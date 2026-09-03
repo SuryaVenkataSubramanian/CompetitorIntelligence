@@ -1,0 +1,144 @@
+# SearXNG settings for the LOCAL (non-Docker) Windows run.
+#
+# Used by collectors/searxng/run-local.js, which sets SEARXNG_SETTINGS_PATH to
+# this file and starts searx.webapp with the project's Python venv.
+#
+# Differences from the Docker settings.yml in this folder:
+#   - `secret_key` is set here rather than injected via a container env var
+#   - the limiter is off (single local user, and the limiter wants Valkey/Redis)
+#   - engines that need a browser or habitually challenge headless traffic are
+#     disabled, so their failures don't masquerade as "no results"
+#
+# The critical line is still `formats: [html, json]` — SearXNG ships with the
+# JSON API DISABLED, and without it every collector request returns HTML.
+
+use_default_settings: true
+
+general:
+  instance_name: "D360 Competitive Intel (local)"
+  enable_metrics: false
+  debug: false
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  default_lang: "en"
+  # Enables /search?format=json — the whole reason this instance exists.
+  formats:
+    - html
+    - json
+
+server:
+  port: 8888
+  bind_address: "127.0.0.1"
+  secret_key: "d360-competitive-intel-local-only-not-a-shared-secret"
+  # Off: the rate limiter requires a Valkey/Redis instance, and this server is
+  # reachable only from localhost by a single collector process.
+  limiter: false
+  public_instance: false
+  image_proxy: false
+  method: "GET"
+
+ui:
+  static_use_hash: true
+
+outgoing:
+  request_timeout: 8.0
+  max_request_timeout: 20.0
+  pool_connections: 100
+  pool_maxsize: 20
+  enable_http2: true
+
+# ENGINE SELECTION — measured from this host on 2026-08-12, not assumed.
+#
+# Per-engine attribution for the query '"Bloomfire" site:youtube.com':
+#
+#   google cse   14 results, 14 relevant, all youtube.com   <- honours site:
+#   bing         10 results,  0 relevant (en.m.wikipedia.org, seekqatar.com, qnas.qa)
+#
+#   brave        Suspended: too many requests
+#   duckduckgo   CAPTCHA
+#   mojeek       Suspended: access denied
+#   qwant        CAPTCHA
+#   startpage    Suspended: CAPTCHA
+#
+# So `bing` is DISABLED here. It is not merely unhelpful — it returns confident,
+# well-formed, entirely unrelated results, which is the single worst failure mode
+# for this project. Five engines are blocked outright from this IP, which is why
+# the hand-rolled scraper in lib/serp.js could not work: it had no engine left
+# that honoured site:. SearXNG's value on this host is `google cse`.
+#
+# If this host's reputation changes, re-measure before re-enabling anything:
+#   curl "http://127.0.0.1:8888/search?q=%22Bloomfire%22+site%3Ayoutube.com&format=json"
+# and check per-engine relevance rather than result counts.
+# A failing engine and a lying engine are not equally bad:
+#   - An engine that errors or CAPTCHAs is HARMLESS. SearXNG marks it
+#     `unresponsive`, contributes nothing from it, and the adapter now turns that
+#     into an explicit coverage gap.
+#   - An engine that returns confident, well-formed, WRONG results is harmful,
+#     because it looks like data. Only `bing` did that from this host.
+#
+# So everything except bing is enabled: the blocked ones cost one failed request
+# each but spread load, and `google cse` alone gets rate-limited after ~40 queries
+# (which under-collected four of seven brands on the first full run).
+# THE RATE-LIMIT FIX.
+#
+# Only `google cse` was enabled and serving, and it suspends after ~40 queries.
+# Every "blocked by upstream engine rate limits" gap traced back to that single
+# point of failure.
+#
+# This build offers 61 general-category engines. Probing each one individually
+# against this host (`npm run searxng:engines`) found 13 that return ON-BRAND
+# results. Load now spreads across all 13, so no single provider is asked for
+# enough traffic to trip its limit.
+#
+# Engines are judged on RELEVANCE, not merely on responding. One that returns 20
+# unrelated results is worse than one that fails, because its output looks like
+# data — which is why bing stays off (0/10 on-brand here).
+engines:
+  - name: google cse
+    disabled: false          # 20/20 on-brand — strongest, and honours site:
+  - name: yandex
+    disabled: false          # 15/15
+  - name: naver
+    disabled: false          # 13/15
+  - name: duckduckgo
+    disabled: false          # 10/10 — works via SearXNG though it CAPTCHAs direct scraping
+  - name: fynd
+    disabled: false          # 10/10
+  - name: privacywall
+    disabled: false          # 10/10
+  - name: seznam
+    disabled: false          # 10/10
+  - name: searchch
+    disabled: false          # 8/10
+  - name: abcnyheter
+    disabled: false          # 7/7
+  - name: 360search
+    disabled: false          # 7/7
+  - name: yahoo
+    disabled: false          # 7/7
+  - name: boardreader
+    disabled: false          # 2/2 — forum coverage
+  - name: ddg definitions
+    disabled: false          # 2/2
+
+  # Off: responds, but returns nothing on-brand from this host.
+  - name: bing
+    disabled: true           # 0/10 on-brand
+  # Off: actively blocked from this host.
+  - name: brave
+    disabled: true           # Suspended: too many requests
+  - name: mojeek
+    disabled: true           # Suspended: access denied
+  - name: qwant
+    disabled: true           # CAPTCHA
+  - name: startpage
+    disabled: true           # CAPTCHA
+  # Off: not SERP sources.
+  - name: wikipedia
+    disabled: true
+  - name: wikidata
+    disabled: true           # engine init fails (403)
+  - name: currency
+    disabled: true

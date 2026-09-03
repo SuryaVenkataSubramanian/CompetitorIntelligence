@@ -1,0 +1,115 @@
+/* ================================================================
+   SIMPLE VIEW — the brand x channel matrix, filter chips and header.
+
+   Replaces the old Overview screen, which stacked KPI tiles, a bar chart, a
+   donut, a channel grid, a caveat banner, an integrity strip and a mention
+   list on one page. The matrix answers "who is mentioned where" in one glance;
+   the list answers "what was actually said". Nothing else earns the space.
+   ================================================================ */
+
+.mv-head { margin-bottom: 14px; }
+.mv-head .vh { margin-bottom: 2px; }
+.mv-head .vsub { margin: 0; }
+
+/* ---------- brand x channel matrix ---------- */
+.matrix-card { padding: 4px 6px 6px; margin-bottom: 14px; }
+
+table.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+table.matrix th,
+table.matrix td { padding: 7px 6px; text-align: center; }
+
+table.matrix thead tr:first-child th.mx-group {
+  font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--ink-4); font-weight: 700; padding-bottom: 2px;
+  border-bottom: 1px solid var(--hair);
+}
+table.matrix th.mx-ch {
+  font-weight: 600; color: var(--ink-3); font-size: 10.5px;
+  border-bottom: 1px solid var(--hair); padding-bottom: 8px;
+  white-space: nowrap;
+}
+table.matrix th.mx-ch svg { display: block; margin: 0 auto 3px; opacity: .75; }
+table.matrix th.mx-ch span { display: block; }
+
+table.matrix th.mx-brand,
+table.matrix td.mx-brand {
+  text-align: left; white-space: nowrap; padding-left: 10px;
+  font-size: 12.5px; color: var(--ink);
+}
+table.matrix th.mx-brand { color: var(--ink-3); font-size: 10.5px; font-weight: 600; }
+
+table.matrix tbody tr { border-top: 1px solid var(--hair); cursor: pointer; }
+table.matrix tbody tr:hover { background: var(--surface-2); }
+table.matrix tbody tr.me { background: var(--brand-soft); }
+table.matrix tbody tr.me td.mx-brand b { color: var(--brand); }
+
+table.matrix td.mx-n { color: var(--ink); font-weight: 600; }
+table.matrix td.mx-n.z { color: var(--ink-4); font-weight: 400; }
+
+table.matrix .mx-tot { white-space: nowrap; text-align: right; padding-right: 10px; }
+table.matrix .mx-bar {
+  display: inline-block; width: 46px; height: 5px; background: var(--surface-3);
+  border-radius: 3px; overflow: hidden; margin-right: 7px; vertical-align: middle;
+}
+table.matrix .mx-bar i { display: block; height: 100%; background: var(--brand); border-radius: 3px; }
+
+table.matrix tfoot tr { border-top: 2px solid var(--hair-2); }
+table.matrix tfoot td { color: var(--ink-2); font-weight: 600; font-size: 12px; }
+
+/* ---------- filter chips ---------- */
+.mv-filters {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 14px;
+}
+.fgroup { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.flab {
+  font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--ink-4); font-weight: 700; width: 62px; flex: 0 0 62px;
+}
+.fchip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--hair);
+  color: var(--ink-2); font-size: 12px; font-weight: 500;
+  transition: border-color .12s, background .12s, color .12s;
+}
+.fchip:hover { border-color: var(--hair-2); color: var(--ink); }
+.fchip svg { opacity: .7; }
+.fchip.on {
+  background: var(--brand-soft); border-color: var(--brand); color: var(--brand); font-weight: 600;
+}
+.fchip.on svg { opacity: 1; }
+.fchip.empty { opacity: .45; }
+.fchip .fn {
+  font-variant-numeric: tabular-nums; font-weight: 700;
+  color: var(--ink-3); font-size: 11px;
+}
+.fchip.on .fn { color: var(--brand); }
+.fchip.clear { border-style: dashed; color: var(--ink-3); }
+
+/* Sentiment chips carry their colour so the filter row reads at a glance. */
+.fchip.s-positive.on { background: var(--pos-soft); border-color: var(--pos); color: var(--pos); }
+.fchip.s-positive.on .fn { color: var(--pos); }
+.fchip.s-negative.on { background: var(--neg-soft); border-color: var(--neg); color: var(--neg); }
+.fchip.s-negative.on .fn { color: var(--neg); }
+.fchip.s-neutral.on { background: var(--neu-soft); border-color: var(--neu); color: var(--neu); }
+.fchip.s-neutral.on .fn { color: var(--neu); }
+
+@media (max-width: 700px) {
+  .flab { width: auto; flex: 0 0 auto; }
+  table.matrix th.mx-ch span { display: none; }   /* icons only when tight */
+  table.matrix { font-size: 12px; }
+}
+
+/* Provider + classification chips on the mention card. Same chip system as the
+   existing provenance chips so nothing about the card layout changes. */
+.chip.type { background: var(--brand-soft); color: var(--brand); }
+.chip.intent { background: rgba(232,163,23,.16); color: var(--warn); }
+.chip.cmp { background: var(--surface-3); color: var(--ink-2); }
+.chip.score { background: transparent; color: var(--ink-3); border-color: var(--hair); }
+.chip.prov { background: rgba(232,163,23,.12); color: var(--warn); }

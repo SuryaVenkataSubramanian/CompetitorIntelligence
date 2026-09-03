@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(node server.js)",
+      "Bash(curl -s http://localhost:3000/api/data)",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('bytes:',d.length\\);console.log\\(Object.keys\\(j\\).map\\(k=>k+' -> '+\\(Array.isArray\\(j[k]\\)?'array['+j[k].length+']':typeof j[k]\\)\\).join\\('\\\\n'\\)\\)}\\)\")",
+      "Bash(curl -s http://localhost:3000/api/refresh)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/../data/brands.json\")",
+      "Bash(curl -s -w \" <- status %{http_code}\\\\n\" \"http://localhost:3000/..%2f..%2fpackage.json\")",
+      "Bash(pkill -f \"node server.js\")",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue | Where-Object { $_.Path } | Stop-Process -Force -Confirm:$false; Write-Output \"node processes stopped\")",
+      "Bash(node collectors/collect.js --days=365 --only=blogfeed,youtube,hackernews)",
+      "Bash(node collectors/build.js)",
+      "Bash(curl -s -o /dev/null -m 5 -w \" existing server: HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -m 8 -w \" SearXNG \\(:8888\\) HTTP %{http_code}\\\\n\" http://127.0.0.1:8888/)",
+      "Bash(npm test *)"
+    ]
+  }
+}

@@ -1,0 +1,554 @@
+{
+  "generated_at": "2026-09-01T07:06:46.336Z",
+  "target_brand": "Document360",
+  "method": "For each buyer prompt where Document360 was measured as absent, Claude was given the competitors that ranked, their positions, and every citing domain with its URL — then asked to write the finished asset. Each result passed five mechanical gates: prompt known, every cited URL supplied as evidence, channel-required fields present and long enough, Document360-scoped, and no unverifiable claim.",
+  "audit": {
+    "submitted": 7,
+    "accepted": 7,
+    "rejected": 0,
+    "rejections": [],
+    "checks": {
+      "unknown_prompt": 0,
+      "ungrounded_url": 0,
+      "incomplete_asset": 0,
+      "out_of_scope": 0,
+      "fabrication": 0,
+      "generic_why": 0
+    }
+  },
+  "asset_spec": {
+    "linkedin_post": "LinkedIn post",
+    "linkedin_influencer": "LinkedIn influencer collaboration",
+    "youtube_video": "YouTube video",
+    "reddit_post": "Reddit / community post",
+    "blog": "Blog article",
+    "comparison_page": "Comparison page",
+    "landing_page": "Landing page",
+    "docs_page": "Documentation / resource page",
+    "case_study": "Case study",
+    "seo_entity": "SEO / AI-visibility play"
+  },
+  "recommendations": [
+    {
+      "prompt": "Best AI documentation platform 2026",
+      "provider": "google_web",
+      "asset_type": "blog",
+      "asset_label": "Blog article",
+      "title": "Publish our own \"Best AI documentation tools 2026\" category page",
+      "why": "GitBook and Mintlify hold positions #1 and #2 for this prompt using their OWN blog listicles — gitbook.com/blog/best-ai-documentation-tools and mintlify.com/library/best-ai-documentation-tools. Both are vendor-owned pages ranking for a category query, which means the format is winnable on our own domain rather than requiring third-party placement. Document360 currently has no equivalent page in the measured result set, so the category page itself is the missing asset.",
+      "effort": "medium",
+      "owner": "Content",
+      "asset": {
+        "title": "Best AI Documentation Tools in 2026: An Honest Comparison",
+        "outline": [
+          {
+            "heading": "What \"AI documentation tool\" actually means in 2026",
+            "detail": "Separate the three things vendors conflate: AI-assisted authoring, AI search over published docs, and AI-readable output for external agents. Buyers arrive with one of these three problems and the category pages rarely distinguish them."
+          },
+          {
+            "heading": "How to evaluate: eight criteria that survive a trial",
+            "detail": "Retrieval accuracy on your own content, grounding and citation behaviour, workflow controls (review, approval, versioning), access control granularity, localisation, analytics, agent-readability (llms.txt / MCP), and migration cost."
+          },
+          {
+            "heading": "The tools, grouped by the problem they actually solve",
+            "detail": "Developer-first docs-as-code (Mintlify, GitBook), team wiki and internal knowledge (Confluence), and customer-facing knowledge bases with governance (Document360). State plainly which group each belongs in rather than ranking unlike things together."
+          },
+          {
+            "heading": "Document360 — where it fits and where it does not",
+            "detail": "Strongest for customer-facing knowledge bases that need review workflows, versioning and audit trails. Weaker fit if you want docs generated from source code in a pull-request flow."
+          },
+          {
+            "heading": "Mintlify and GitBook — where they fit",
+            "detail": "Both are strong for developer and API documentation authored in a Git workflow. Reference their own category pages so the reader can compare positioning directly."
+          },
+          {
+            "heading": "Confluence — where it fits",
+            "detail": "Internal collaboration and team wikis inside Atlassian shops; less suited to a governed external help centre."
+          },
+          {
+            "heading": "A 30-minute evaluation you can run this week",
+            "detail": "Load 20 of your own hardest support questions, publish them in each trial, and score retrieval accuracy and citation quality. Include the scoring sheet as a downloadable."
+          },
+          {
+            "heading": "How AI assistants pick which docs to cite",
+            "detail": "Structure, headings, canonical URLs, llms.txt and MCP endpoints. This is the section that earns the page citations from assistants rather than only from search."
+          }
+        ],
+        "draft": "Search \"best AI documentation tool\" and almost every result is a listicle written by one of the vendors on it. That is not a criticism — it is simply where the category conversation happens, and it means the lists reflect the author's own shape of the problem. GitBook's list and Mintlify's list both rank at the top of this query, and both are honest about being vendor pages. This one is too: it is published by Document360.\n\nSo rather than another ranked table, here is the distinction that actually decides these evaluations. \"AI documentation\" is three different products wearing one label.\n\nThe first is AI-assisted authoring: the tool helps you write and maintain content. The second is AI search over published documentation: your readers ask a question and get a grounded answer with citations. The third — newest and least understood — is AI-readable output, where the consumer of your documentation is not a person at all but an assistant answering on your behalf.\n\nMost buyers arrive with exactly one of these problems and are shown tools that solve a different one. A team drowning in stale content does not need a better search box. A support organisation with a rising ticket count does not need faster authoring.\n\nWhat that means for tool choice:\n\nIf your documentation lives beside your code and your writers are engineers working in pull requests, docs-as-code platforms are the right shape. Mintlify and GitBook both do this well, and their own category pages set out that case clearly.\n\nIf your documentation is a customer-facing help centre that several teams contribute to and someone is accountable for what is published, the deciding features are not AI features at all. They are review workflows, versioning, granular access control, localisation and an audit trail. This is where Document360 is built to fit, and it is why our answer to \"which is best\" is genuinely \"it depends on which of the three problems you have\".\n\nIf your documentation is an internal wiki inside an Atlassian estate, Confluence is the path of least resistance and the AI layer matters less than the integration.\n\nOn evaluating the AI itself, one test outranks every feature comparison. Take the twenty hardest questions your support team actually receives — the multi-part ones, the ones where the answer lives in three articles — load your real content into each trial, and score two things: did it retrieve the right source, and did it cite that source so a reader can verify the answer. Retrieval quality is a property of your content and the platform's search architecture together, which is why vendor benchmarks on someone else's corpus tell you very little.\n\nFinally, the part most category pages omit: how assistants decide what to cite. Clear headings, one canonical URL per topic, stable anchors, and increasingly an explicit machine-readable surface — llms.txt, or an MCP endpoint an agent can query directly. If an assistant cannot retrieve your documentation cleanly, it will answer your customers from whatever it can retrieve instead. That is now a documentation platform requirement, not a nice-to-have.\n\n[METRIC TO CONFIRM: add Document360 retrieval-accuracy figures from the Eddy evaluation once the methodology is published, so this section cites our own measured numbers rather than asserting them.]"
+      },
+      "evidence": [
+        {
+          "url": "https://www.gitbook.com/blog/best-ai-documentation-tools",
+          "domain": "gitbook.com",
+          "title": "Best AI documentation tools in 2026 | GitBook Blog",
+          "rank": 1,
+          "source_type": "vendor_owned",
+          "names": [
+            "GitBook"
+          ]
+        },
+        {
+          "url": "https://www.mintlify.com/library/best-ai-documentation-tools",
+          "domain": "mintlify.com",
+          "title": "Best AI Documentation Tools in 2026 - mintlify.com",
+          "rank": 2,
+          "source_type": "vendor_owned",
+          "names": [
+            "Mintlify"
+          ]
+        },
+        {
+          "url": "https://aisotools.com/blog/best-ai-documentation-tools-2026",
+          "domain": "aisotools.com",
+          "title": "Best AI Documentation Tools in 2026: Wikis, Dev Docs ...",
+          "rank": 4,
+          "source_type": "editorial",
+          "names": [
+            "GitBook",
+            "Confluence"
+          ]
+        }
+      ],
+      "competitors_ranking": [
+        {
+          "name": "GitBook",
+          "position": 1,
+          "evidence_url": "https://www.gitbook.com/blog/best-ai-documentation-tools",
+          "own_domain_ranks_at": 1
+        },
+        {
+          "name": "Mintlify",
+          "position": 2,
+          "evidence_url": "https://www.mintlify.com/library/best-ai-documentation-tools",
+          "own_domain_ranks_at": 2
+        },
+        {
+          "name": "Confluence",
+          "position": 4,
+          "evidence_url": "https://aisotools.com/blog/best-ai-documentation-tools-2026",
+          "own_domain_ranks_at": null
+        }
+      ],
+      "generated_at": "2026-09-01T07:06:46.334Z",
+      "verification": "claude-generated asset, grounded in fetched ranked sources; every cited URL machine-verified against the evidence supplied"
+    },
+    {
+      "prompt": "Best AI documentation platform 2026",
+      "provider": "google_web",
+      "asset_type": "seo_entity",
+      "asset_label": "SEO / AI-visibility play",
+      "title": "Make Document360 retrievable for the AI-documentation entity cluster",
+      "why": "Every page ranking for this prompt — gitbook.com's blog, mintlify.com's library page, and aisotools.com — names GitBook, Mintlify or Confluence, and none of the measured results name Document360. Ranking is therefore not the only gap: the entity association between \"AI documentation platform\" and Document360 is missing from the sources assistants draw on, so citation-side work has to run alongside the content.",
+      "effort": "high",
+      "owner": "SEO",
+      "asset": {
+        "target_keywords": [
+          "best AI documentation tools 2026",
+          "AI documentation platform",
+          "AI knowledge base software",
+          "AI documentation tool comparison",
+          "AI search for documentation",
+          "knowledge base with AI assistant",
+          "documentation platform with approval workflow"
+        ],
+        "target_entities": [
+          "Document360 (product) — must co-occur with \"AI documentation platform\" on pages that assistants retrieve, not only on our own site",
+          "Eddy (Document360's AI assistant) — currently a weak entity; needs its own canonical page so it can be named the way Mintlify's and GitBook's AI features are",
+          "Kovai.co (vendor) — the parent-company entity that lends corroboration on third-party pages",
+          "llms.txt / MCP (standards) — associating Document360 with agent-readable documentation, the emerging axis of this category",
+          "audit trail / approval workflow (capabilities) — the differentiators that distinguish us from the docs-as-code group",
+          "knowledge base (category) — the parent category we already rank in, to bridge authority into the AI subcategory"
+        ],
+        "citation_strategy": "Three moves, in order of how directly each is winnable.\n\nFirst, own the category page. GitBook and Mintlify rank for this prompt with vendor-published listicles on their own domains, which is direct proof the format ranks without third-party permission. Publish the equivalent on document360.com, keep it genuinely comparative including where we are the wrong choice, and maintain it with a visible last-reviewed date — assistants weight freshness on category queries.\n\nSecond, fix the entity gap around Eddy. On the pages measured for this prompt, the competitors' AI features are named as products. Eddy needs a canonical page that states plainly what it is, what it retrieves, how it grounds answers and how it cites them, so that a model summarising \"AI documentation platforms\" has a retrievable noun to attach to Document360.\n\nThird, pursue the third-party sources that already rank and omit us. aisotools.com and explodinggeo.com both rank for this prompt and name competitors; both are editorial pages that accept updates and corrections. Approach them with a specific factual gap — the governance capabilities absent from their comparison — rather than a request for inclusion.\n\nUnderpinning all three: publish /llms.txt for every hosted help centre and expose an MCP endpoint. That is the mechanism by which an assistant retrieves customer documentation directly instead of relying on whichever third-party listicle it happened to index, and it makes every customer's help centre a place Document360 can be cited from."
+      },
+      "evidence": [
+        {
+          "url": "https://www.gitbook.com/blog/best-ai-documentation-tools",
+          "domain": "gitbook.com",
+          "title": "Best AI documentation tools in 2026 | GitBook Blog",
+          "rank": 1,
+          "source_type": "vendor_owned",
+          "names": [
+            "GitBook"
+          ]
+        },
+        {
+          "url": "https://www.mintlify.com/library/best-ai-documentation-tools",
+          "domain": "mintlify.com",
+          "title": "Best AI Documentation Tools in 2026 - mintlify.com",
+          "rank": 2,
+          "source_type": "vendor_owned",
+          "names": [
+            "Mintlify"
+          ]
+        },
+        {
+          "url": "https://www.explodinggeo.com/posts/best-documentation-platforms",
+          "domain": "explodinggeo.com",
+          "title": "The 8 Best Documentation Platforms in 2026: Docs Built for ...",
+          "rank": 11,
+          "source_type": "editorial",
+          "names": [
+            "Mintlify",
+            "GitBook"
+          ]
+        }
+      ],
+      "competitors_ranking": [
+        {
+          "name": "GitBook",
+          "position": 1,
+          "evidence_url": "https://www.gitbook.com/blog/best-ai-documentation-tools",
+          "own_domain_ranks_at": 1
+        },
+        {
+          "name": "Mintlify",
+          "position": 2,
+          "evidence_url": "https://www.mintlify.com/library/best-ai-documentation-tools",
+          "own_domain_ranks_at": 2
+        },
+        {
+          "name": "Confluence",
+          "position": 4,
+          "evidence_url": "https://aisotools.com/blog/best-ai-documentation-tools-2026",
+          "own_domain_ranks_at": null
+        }
+      ],
+      "generated_at": "2026-09-01T07:06:46.335Z",
+      "verification": "claude-generated asset, grounded in fetched ranked sources; every cited URL machine-verified against the evidence supplied"
+    },
+    {
+      "prompt": "Best documentation tool for API and developer docs",
+      "provider": "google_web",
+      "asset_type": "comparison_page",
+      "asset_label": "Comparison page",
+      "title": "Ship a Document360 vs Mintlify vs GitBook page for API documentation",
+      "why": "toolradar.com's \"10 Best API Documentation Tools in 2026\" ranks #1 for this prompt and names Mintlify and GitBook while omitting Document360 entirely, and GitBook's own blog page on API documentation tools also ranks. There is no Document360 page in the measured results contesting this query, so the comparison the buyer is looking for does not currently exist on our domain.",
+      "effort": "medium",
+      "owner": "Marketing",
+      "asset": {
+        "title": "Document360 vs Mintlify vs GitBook for API documentation",
+        "structure": [
+          {
+            "heading": "Who each tool is built for",
+            "detail": "One paragraph each, stated as a fit judgement rather than a feature count."
+          },
+          {
+            "heading": "Authoring model: docs-as-code vs managed editor",
+            "detail": "The single biggest practical difference and the one that decides most evaluations."
+          },
+          {
+            "heading": "OpenAPI handling side by side",
+            "detail": "Spec import, reference generation, try-it consoles, keeping reference in sync with releases."
+          },
+          {
+            "heading": "When you need more than reference docs",
+            "detail": "Guides, tutorials, release notes, localisation and a customer-facing help centre alongside the API reference."
+          },
+          {
+            "heading": "Governance: review, approval, versioning, audit trail",
+            "detail": "Where Document360 is differentiated, framed against what the docs-as-code flow gives you instead (pull-request review)."
+          },
+          {
+            "heading": "AI and agent readability",
+            "detail": "AI search over docs, grounded answers with citations, llms.txt and MCP."
+          },
+          {
+            "heading": "Honest verdict table",
+            "detail": "Three rows, three recommendations, including the cases where we are not the right answer."
+          },
+          {
+            "heading": "Migration notes",
+            "detail": "What moving between these three actually costs."
+          }
+        ],
+        "copy": "If you are choosing a home for API documentation, the honest first question is not which tool is best — it is whether your API reference is the whole job or part of a larger documentation estate.\n\nThat single distinction separates these three products more than any feature comparison will.\n\n**Mintlify and GitBook: docs-as-code, developer-owned.** Both assume documentation lives in a repository and moves through pull requests. Engineers write in Markdown or MDX, review happens in Git, and publishing is a deploy. If your writers are engineers and your reference is generated from an OpenAPI spec that ships with the code, this model has real advantages: docs move at the speed of the codebase and review already fits the team's habits. GitBook's own comparison page sets out this case, and it is a fair one.\n\n**Document360: a managed knowledge base that includes API reference.** Document360 assumes documentation is a product several teams contribute to, that someone is accountable for what goes live, and that the API reference sits beside guides, tutorials, release notes and translated content. You import an OpenAPI spec and get a generated, navigable reference — but the reference is one section of a governed help centre rather than the whole site.\n\n**Where each is the wrong choice.** Document360 is the wrong tool if you want documentation authored exclusively in pull requests with no editorial layer; the governance that makes it valuable to a documentation team is friction to a team that only wants Git. Mintlify and GitBook are the wrong tools if a compliance or support function needs to prove who approved a change and when, or if you need a multilingual customer help centre with per-audience access control — those are not what a docs-as-code pipeline is for.\n\n**On OpenAPI specifically.** All three import a spec and render a reference. The differences that matter in practice are how reference drift is handled when the spec changes, whether guides can reference the same objects without duplicating them, and whether a non-engineer can correct an error without opening a pull request.\n\n**On governance.** This is the part comparison articles routinely skip. If your documentation is customer-facing and regulated, the questions are: can a change be reviewed and approved before publication, is there a versioned history showing what a customer saw on a given date, and is there an audit trail. Document360 is built around those. A Git workflow answers the first two differently — through branches and commit history — and the third depends on your repository provider's logging.\n\n**Verdict.** API reference only, engineers writing, spec in the repo: Mintlify or GitBook. API reference plus a governed customer help centre with guides, translations and approval workflows: Document360. Internal API docs inside an Atlassian estate: Confluence is likely already the default.\n\n[METRIC TO CONFIRM: add spec-import limits and supported OpenAPI versions per tool from current public documentation before publishing, and re-verify the competitor rows on a stated date so the page carries a visible last-checked stamp.]"
+      },
+      "evidence": [
+        {
+          "url": "https://toolradar.com/blog/best-api-documentation-tools",
+          "domain": "toolradar.com",
+          "title": "10 Best API Documentation Tools in 2026 (Tested & Ranked)",
+          "rank": 1,
+          "source_type": "editorial",
+          "names": [
+            "Mintlify",
+            "GitBook"
+          ]
+        },
+        {
+          "url": "https://www.gitbook.com/blog/best-api-documentation-tools",
+          "domain": "gitbook.com",
+          "title": "Best API documentation tools in 2026 | GitBook Blog",
+          "rank": 16,
+          "source_type": "vendor_owned",
+          "names": [
+            "GitBook"
+          ]
+        }
+      ],
+      "competitors_ranking": [
+        {
+          "name": "Mintlify",
+          "position": 1,
+          "evidence_url": "https://toolradar.com/blog/best-api-documentation-tools",
+          "own_domain_ranks_at": null
+        },
+        {
+          "name": "GitBook",
+          "position": 1,
+          "evidence_url": "https://toolradar.com/blog/best-api-documentation-tools",
+          "own_domain_ranks_at": 16
+        }
+      ],
+      "generated_at": "2026-09-01T07:06:46.335Z",
+      "verification": "claude-generated asset, grounded in fetched ranked sources; every cited URL machine-verified against the evidence supplied"
+    },
+    {
+      "prompt": "Best documentation tool for API and developer docs",
+      "provider": "google_web",
+      "asset_type": "youtube_video",
+      "asset_label": "YouTube video",
+      "title": "Record \"OpenAPI spec to published API docs\" as a real screen walkthrough",
+      "why": "The pages ranking for this prompt — toolradar.com at #1 and gitbook.com's own blog — are both text comparisons naming Mintlify and GitBook. A video showing the actual import-to-published path is a format neither ranking source occupies, and it gives an assistant a transcript to cite for a query Document360 is currently absent from.",
+      "effort": "medium",
+      "owner": "Developer Relations",
+      "asset": {
+        "title": "From OpenAPI spec to published API docs in Document360 (full walkthrough)",
+        "description": "A complete, unedited walkthrough: import an OpenAPI 3 specification into Document360 and publish a navigable API reference alongside written guides — no cuts, including the parts that need cleaning up afterwards.\n\nWhat this covers:\n00:00 What we are building and who this is for\n01:10 Importing the OpenAPI spec\n03:40 What gets generated automatically, and what does not\n06:20 Linking reference endpoints from a written guide\n09:00 Re-importing after the spec changes — handling drift\n12:15 Review and approval before publishing\n15:00 What the published reference looks like to a developer\n17:30 When docs-as-code is the better choice\n\nIf your API reference is the entire documentation job and your writers are engineers working in pull requests, a docs-as-code tool is probably the right answer and the last section says so. This video is for teams whose API reference sits beside guides, release notes and translated content, with someone accountable for what gets published.\n\nSpec used in this walkthrough is a public sample so you can follow along with the same file.",
+        "outline": [
+          {
+            "heading": "Cold open: the actual problem (0:00-1:10)",
+            "detail": "Show a reference page that has drifted out of sync with a shipped API change. State the two jobs: generate the reference, and keep it correct as the spec moves."
+          },
+          {
+            "heading": "Import the spec (1:10-3:40)",
+            "detail": "Real-time upload of an OpenAPI 3 file. Do not cut the wait. Show the parse result including any warnings."
+          },
+          {
+            "heading": "What is generated and what is not (3:40-6:20)",
+            "detail": "Endpoints, schemas, parameters and examples appear; descriptions only appear where the spec supplies them. Be explicit that a thin spec produces a thin reference — this is the expectation-setting most demos skip."
+          },
+          {
+            "heading": "Connect reference to guides (6:20-9:00)",
+            "detail": "Link endpoints from a written authentication guide, showing reference and narrative living in one site instead of two."
+          },
+          {
+            "heading": "Handle spec drift (9:00-12:15)",
+            "detail": "Change the spec, re-import, show exactly what updates and what needs a human decision. This is the segment developers actually search for."
+          },
+          {
+            "heading": "Review and approval (12:15-15:00)",
+            "detail": "Route the change through review before publication and show the version history a reviewer sees."
+          },
+          {
+            "heading": "Developer's view of the published site (15:00-17:30)",
+            "detail": "Search, navigation, code samples, and how an AI assistant retrieves and cites the page."
+          },
+          {
+            "heading": "When to choose something else (17:30-end)",
+            "detail": "State plainly that a repo-native pull-request workflow is better served by docs-as-code, and name that trade-off rather than avoiding it."
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://toolradar.com/blog/best-api-documentation-tools",
+          "domain": "toolradar.com",
+          "title": "10 Best API Documentation Tools in 2026 (Tested & Ranked)",
+          "rank": 1,
+          "source_type": "editorial",
+          "names": [
+            "Mintlify",
+            "GitBook"
+          ]
+        },
+        {
+          "url": "https://www.gitbook.com/blog/best-api-documentation-tools",
+          "domain": "gitbook.com",
+          "title": "Best API documentation tools in 2026 | GitBook Blog",
+          "rank": 16,
+          "source_type": "vendor_owned",
+          "names": [
+            "GitBook"
+          ]
+        }
+      ],
+      "competitors_ranking": [
+        {
+          "name": "Mintlify",
+          "position": 1,
+          "evidence_url": "https://toolradar.com/blog/best-api-documentation-tools",
+          "own_domain_ranks_at": null
+        },
+        {
+          "name": "GitBook",
+          "position": 1,
+          "evidence_url": "https://toolradar.com/blog/best-api-documentation-tools",
+          "own_domain_ranks_at": 16
+        }
+      ],
+      "generated_at": "2026-09-01T07:06:46.335Z",
+      "verification": "claude-generated asset, grounded in fetched ranked sources; every cited URL machine-verified against the evidence supplied"
+    },
+    {
+      "prompt": "Which knowledge base software is best for regulated industries with audit trails?",
+      "provider": "google_web",
+      "asset_type": "linkedin_post",
+      "asset_label": "LinkedIn post",
+      "title": "Post on what an audit trail has to prove, not that we have one",
+      "why": "ones.com's \"6 Confluence Alternatives With Audit Trails (2026)\" ranks #1 for this prompt and names GitBook and Confluence while omitting Document360 — on a query about audit trails and approval workflows, which is precisely the governance ground Document360 is built for. Being absent from the top result for our own strongest capability is the clearest single gap in this measurement.",
+      "effort": "low",
+      "owner": "Marketing",
+      "asset": {
+        "body": "\"Does it have an audit trail?\" is the wrong question.\n\nI keep seeing it on documentation RFPs from regulated teams, and every vendor answers yes. Including us. The word covers wildly different things, so the answer tells a buyer almost nothing.\n\nHere is what an auditor actually asked one of our customers:\n\n\"Show me what this article said on 14 March, who approved that version, and what changed since.\"\n\nThat one sentence contains three separate requirements, and most tools satisfy one or two:\n\n1. Point-in-time reconstruction — not \"a list of changes\", but the ability to render what a reader saw on a given date. A change log is not a time machine.\n\n2. Approval attribution — who signed off, in what role, before publication. A commit author is not an approver. If review happens in a chat thread, the approval is not in the system.\n\n3. Immutable history — a record that cannot be quietly edited by whoever has admin access, including us.\n\nWhen you next evaluate a documentation platform, skip the feature checkbox and ask for a demonstration of those three against a real article. It takes ten minutes and it separates tools far more sharply than any comparison table.\n\nA note on where this lands for Document360: versioning, review and approval workflows, and audit trails are the reason a lot of our customers in regulated sectors choose it, so I have an obvious interest here. That is also why I would rather give you the test than the pitch — if a tool passes those three, it is a serious candidate whether or not it is ours.\n\nAnd if you are documenting something where nobody will ever ask what a page said last March, you genuinely do not need any of this. Governance features are overhead until the moment they are the whole reason you bought the tool.\n\nWhat would you add to the three?"
+      },
+      "evidence": [
+        {
+          "url": "https://ones.com/blog/6-confluence-alternatives-with-audit-trails-2026/",
+          "domain": "ones.com",
+          "title": "6 Confluence Alternatives With Audit Trails (2026) - ones.com",
+          "rank": 1,
+          "source_type": "editorial",
+          "names": [
+            "GitBook",
+            "Confluence"
+          ]
+        }
+      ],
+      "competitors_ranking": [
+        {
+          "name": "GitBook",
+          "position": 1,
+          "evidence_url": "https://ones.com/blog/6-confluence-alternatives-with-audit-trails-2026/",
+          "own_domain_ranks_at": null
+        },
+        {
+          "name": "Confluence",
+          "position": 1,
+          "evidence_url": "https://ones.com/blog/6-confluence-alternatives-with-audit-trails-2026/",
+          "own_domain_ranks_at": null
+        }
+      ],
+      "generated_at": "2026-09-01T07:06:46.335Z",
+      "verification": "claude-generated asset, grounded in fetched ranked sources; every cited URL machine-verified against the evidence supplied"
+    },
+    {
+      "prompt": "Which knowledge base software is best for regulated industries with audit trails?",
+      "provider": "google_web",
+      "asset_type": "docs_page",
+      "asset_label": "Documentation / resource page",
+      "title": "Publish a citable compliance-capabilities reference page",
+      "why": "The #1 result for this prompt, ones.com's audit-trail comparison, names Confluence and GitBook but has no Document360 page to draw from on this topic. A structured public reference page gives both that editorial source and an AI assistant something concrete to cite when answering audit-trail and approval-workflow questions.",
+      "effort": "low",
+      "owner": "Product",
+      "asset": {
+        "title": "Document360 audit trail, versioning and approval workflows: capability reference",
+        "outline": [
+          {
+            "heading": "Scope of this page",
+            "detail": "A factual capability reference for compliance and security reviewers, written to be quoted. States what is covered and what is not."
+          },
+          {
+            "heading": "Version history and point-in-time reconstruction",
+            "detail": "What is retained per article version, how long, and how to render what a reader saw on a specific date."
+          },
+          {
+            "heading": "Review and approval workflow",
+            "detail": "Workflow states, role-based approval, what is recorded at each transition, and what happens to an unapproved change."
+          },
+          {
+            "heading": "Audit trail contents",
+            "detail": "Which events are logged, which fields each event carries, retention period, and how the log is exported."
+          },
+          {
+            "heading": "Access control and segregation of duties",
+            "detail": "Role granularity, content-scoped permissions, and how approver and author roles are kept distinct."
+          },
+          {
+            "heading": "Export and evidence handover",
+            "detail": "The formats an auditor can be given, and how to produce them without vendor involvement."
+          },
+          {
+            "heading": "Limitations and out of scope",
+            "detail": "Stated explicitly. A capability page that lists no limits is not credible to a reviewer and will not be cited as a reference."
+          }
+        ],
+        "copy": "This page is a capability reference for compliance, security and audit reviewers evaluating Document360 as a documentation system of record. It is written to be quoted directly in a vendor assessment, so each section states what the product does, what it records, and where the boundaries are.\n\n**Why this page exists.** Documentation platform comparisons tend to treat \"audit trail\" as a single checkbox. Reviewers need more than that: they need to know which events are captured, what each event record contains, how long it is retained, whether it can be altered, and how it is handed to an auditor. Those questions have specific answers and they belong in public documentation rather than in a sales conversation.\n\n**How to read it.** Every capability below is stated as a factual description of behaviour. Where a capability depends on plan, configuration or role, that dependency is named. Where something is not supported, it is listed under limitations rather than omitted — a reference page that lists no boundaries is not usable in an assessment, and reviewers discount it accordingly.\n\n**Version history.** Every published change to an article creates a retained version. A reviewer's core question is not \"can I see a change log\" but \"can I reconstruct what a reader saw on a given date\" — this section documents exactly how that reconstruction is performed and what it returns.\n\n**Review and approval.** Where an approval workflow is enabled, a change moves through defined states before publication and each transition is attributed to a user and a role. The distinction that matters for segregation of duties is whether the same person can author and approve; this section documents how that is constrained.\n\n**Audit trail.** This section enumerates the logged event types, the fields each record carries, the retention period, and the export path — including whether an administrator can produce the evidence without contacting support.\n\n**Limitations.** Stated plainly, including retention boundaries, event types not currently captured, and any capability that varies by plan.\n\n[METRIC TO CONFIRM: populate each section with the exact retained fields, retention periods, logged event types and plan dependencies from the current product specification before publishing. This draft is the structure and the framing; every specific value must come from Product rather than be inferred here — an incorrect number on a compliance reference page is worse than an absent one.]"
+      },
+      "evidence": [
+        {
+          "url": "https://ones.com/blog/6-confluence-alternatives-with-audit-trails-2026/",
+          "domain": "ones.com",
+          "title": "6 Confluence Alternatives With Audit Trails (2026) - ones.com",
+          "rank": 1,
+          "source_type": "editorial",
+          "names": [
+            "GitBook",
+            "Confluence"
+          ]
+        }
+      ],
+      "competitors_ranking": [
+        {
+          "name": "GitBook",
+          "position": 1,
+          "evidence_url": "https://ones.com/blog/6-confluence-alternatives-with-audit-trails-2026/",
+          "own_domain_ranks_at": null
+        },
+        {
+          "name": "Confluence",
+          "position": 1,
+          "evidence_url": "https://ones.com/blog/6-confluence-alternatives-with-audit-trails-2026/",
+          "own_domain_ranks_at": null
+        }
+      ],
+      "generated_at": "2026-09-01T07:06:46.335Z",
+      "verification": "claude-generated asset, grounded in fetched ranked sources; every cited URL machine-verified against the evidence supplied"
+    },
+    {
+      "prompt": "Which knowledge base software is best for regulated industries with audit trails?",
+      "provider": "google_web",
+      "asset_type": "reddit_post",
+      "asset_label": "Reddit / community post",
+      "title": "Answer the audit-trail evaluation question as a practitioner",
+      "why": "ones.com ranks #1 for this prompt as an editorial comparison naming Confluence and GitBook, and community threads are a source type absent from the measured results for this query entirely. A genuine practitioner answer about evaluating audit trails occupies a format no ranking page currently holds.",
+      "effort": "low",
+      "owner": "Content",
+      "asset": {
+        "subreddit": "r/technicalwriting",
+        "title": "If your docs are audited: the three things to test before you pick a platform (not a feature list)",
+        "body": "I work at Document360 — flagging that upfront so you can weight this accordingly. I am not going to pitch; the useful part here is the test, not the tool.\n\nI have sat in a number of documentation evaluations for regulated teams, and \"has an audit trail\" is on every requirements list and means something different to every vendor. Every one of us answers yes. So the checkbox is useless.\n\nThe question that actually separated the tools, taken from a real auditor:\n\n\"Show me what this article said on 14 March, who approved that version, and what changed since.\"\n\nThree distinct requirements, and in my experience most platforms cover one or two:\n\n**Point-in-time reconstruction.** Can you render what a reader actually saw on a date, or only view a list of changes? These are very different capabilities and the second is much more common.\n\n**Approval attribution.** Who approved it, in what role, before it went live. A commit author is not an approver. If your review conversation happens in Slack, the approval does not exist in the system of record, whatever the platform's change log says.\n\n**Immutable history.** Can the record be edited by someone with admin rights? Auditors ask this and it eliminates tools quickly.\n\nHow I would test it, regardless of vendor: take one real article, make a change, route it through whatever review the tool offers, publish it, then try to produce the three answers above yourself without vendor help. Ten minutes, and it tells you more than a month of feature comparisons. If the answer to any of them is \"contact support to retrieve that\", note it — that is your audit process now.\n\nOne caveat worth stating: if nobody will ever ask what a page said six months ago, none of this matters and governance features are pure overhead. Plenty of documentation genuinely does not need this. The trap is buying for compliance you do not have, or discovering mid-audit that you do.\n\nCurious what others have been asked for in an actual audit — particularly anyone who has had to reconstruct a historical version under time pressure. What did your tool make hard?"
+      },
+      "evidence": [
+        {
+          "url": "https://ones.com/blog/6-confluence-alternatives-with-audit-trails-2026/",
+          "domain": "ones.com",
+          "title": "6 Confluence Alternatives With Audit Trails (2026) - ones.com",
+          "rank": 1,
+          "source_type": "editorial",
+          "names": [
+            "GitBook",
+            "Confluence"
+          ]
+        }
+      ],
+      "competitors_ranking": [
+        {
+          "name": "GitBook",
+          "position": 1,
+          "evidence_url": "https://ones.com/blog/6-confluence-alternatives-with-audit-trails-2026/",
+          "own_domain_ranks_at": null
+        },
+        {
+          "name": "Confluence",
+          "position": 1,
+          "evidence_url": "https://ones.com/blog/6-confluence-alternatives-with-audit-trails-2026/",
+          "own_domain_ranks_at": null
+        }
+      ],
+      "generated_at": "2026-09-01T07:06:46.335Z",
+      "verification": "claude-generated asset, grounded in fetched ranked sources; every cited URL machine-verified against the evidence supplied"
+    }
+  ]
+}

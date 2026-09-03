@@ -1,0 +1,445 @@
+/* ==========================================================================
+   AI Visibility additions, live competitor refresh, and produced assets.
+
+   Every colour here is an existing token (--brand, --ink-*, --pos/--neg/--neu,
+   --surface-*, --hair-*). No new palette is introduced, and the card / panel /
+   chip / table shapes match what the dashboard already uses — these panels are
+   additions to the existing design, not a redesign of it.
+   ========================================================================== */
+
+/* A secondary view heading, for the original tables now sitting below the new
+   panels. Slightly quieter than .vh so the hierarchy stays readable. */
+.vh2 {
+  margin: 26px 0 4px;
+  font-size: 15px; font-weight: 650; letter-spacing: -.01em; color: var(--ink);
+}
+
+/* ------------------------------------------------------------ prompt search */
+.aiq-row { display: flex; gap: 9px; align-items: stretch; margin-top: 14px; }
+
+.aiq-input {
+  flex: 1; min-width: 0;
+  height: 42px; padding: 0 14px;
+  font-size: 14px; color: var(--ink);
+  background: var(--surface-2);
+  border: 1px solid var(--hair-2); border-radius: 10px;
+  outline: none; transition: border-color .14s, box-shadow .14s, background .14s;
+}
+.aiq-input::placeholder { color: var(--ink-4); }
+.aiq-input:focus {
+  background: var(--surface);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+
+.aiq-go {
+  width: auto; margin: 0; padding: 0 20px; height: 42px;
+  flex: 0 0 auto; white-space: nowrap;
+}
+.aiq-go:disabled { opacity: .6; cursor: default; }
+
+.aiq-sugg { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.aiq-sugg .pill {
+  font-size: 11.5px; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Surface selection. Each call is billable, so the cost per surface is shown
+   inline rather than discovered after the fact. */
+.aiq-surf {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px;
+  margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--hair);
+}
+.aiq-surf-l {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--ink-3);
+}
+.aiq-cb {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--ink-2); cursor: pointer; user-select: none;
+}
+.aiq-cb input { margin: 0; cursor: pointer; }
+.aiq-cb em { font-style: normal; font-size: 10.5px; color: var(--ink-4); }
+
+/* ------------------------------------------------------------ probe results */
+.aip-head { margin-top: 16px; }
+
+/* The headline answer: in how many surfaces is the brand visible, and where. */
+.aip-score {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  margin-top: 12px; padding: 13px 15px;
+  background: var(--surface-2); border: 1px solid var(--hair); border-radius: 12px;
+}
+.aip-big { flex: 0 0 auto; display: flex; align-items: baseline; gap: 7px; }
+.aip-big b {
+  font-size: 27px; font-weight: 700; letter-spacing: -.03em; color: var(--brand);
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.aip-big span { font-size: 11.5px; color: var(--ink-3); }
+.aip-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.aip-chip {
+  font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+  border: 1px solid transparent;
+}
+/* Visible: the surface's own colour, so the row is scannable by platform. */
+.aip-chip.yes {
+  color: var(--sc, var(--pos)); background: color-mix(in srgb, var(--sc, var(--pos)) 12%, transparent);
+  border-color: color-mix(in srgb, var(--sc, var(--pos)) 28%, transparent);
+}
+.aip-chip.no { color: var(--neg); background: var(--neg-soft); }
+/* Not checked is grey and dashed — never red, which would read as a negative
+   finding rather than a missing one. */
+.aip-chip.nc {
+  color: var(--ink-4); background: transparent;
+  border: 1px dashed var(--hair-2);
+}
+
+/* A quiet secondary link to open the same query by hand. Deliberately not a
+   button: the full answer is now held locally and is the primary action. */
+.ais-ext {
+  font-size: 11px; color: var(--ink-4); font-weight: 500;
+  padding: 3px 6px; border-radius: 6px;
+}
+.ais-ext:hover { color: var(--brand); background: var(--surface-3); }
+.aip-prompt {
+  font-size: 15px; font-weight: 600; line-height: 1.45; color: var(--ink);
+}
+.aip-meta { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+
+/* One card per AI surface. */
+.ais-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 11px;
+}
+
+.card.ais {
+  padding: 14px 15px 12px; border-radius: 14px;
+  border: 1px solid var(--hair); background: var(--surface);
+  box-shadow: 0 1px 2px rgba(20,18,31,.04), 0 8px 24px -16px rgba(20,18,31,.16);
+  display: flex; flex-direction: column;
+}
+
+.ais-head { display: flex; align-items: flex-start; gap: 9px; }
+.ais-mark {
+  flex: 0 0 auto; width: 28px; height: 28px; border-radius: 8px;
+  display: inline-grid; place-items: center;
+  font-weight: 700; font-size: 13px;
+  /* currentColor is the surface's own brand colour, set inline — the same
+     convention the mention cards use for platform marks. */
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+.ais-id { flex: 1; min-width: 0; }
+.ais-id h3 { margin: 0; font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+.ais-when { font-size: 11px; color: var(--ink-4); }
+
+/* The verdict line. Three visually distinct states, because "not visible" and
+   "not measured" must never be mistaken for each other at a glance. */
+.ais-verdict {
+  margin-top: 11px; padding: 9px 11px; border-radius: 9px;
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+}
+.ais-verdict b { font-size: 13.5px; font-weight: 700; }
+.ais-verdict span { font-size: 11.5px; }
+.ais-verdict.yes { background: var(--pos-soft); }
+.ais-verdict.yes b { color: var(--pos); }
+.ais-verdict.yes span { color: var(--ink-2); }
+.ais-verdict.no { background: var(--neg-soft); }
+.ais-verdict.no b { color: var(--neg); }
+.ais-verdict.no span { color: var(--ink-2); }
+/* Deliberately grey, not red: an unmeasured surface is unknown, not negative. */
+.ais-verdict.unknown { background: var(--surface-3); }
+.ais-verdict.unknown b { color: var(--ink-3); }
+.ais-verdict.unknown span { color: var(--ink-4); }
+
+.ais-ev {
+  margin: 10px 0 0; padding: 8px 0 8px 10px;
+  border-left: 2px solid var(--hair-2);
+  font-size: 12px; line-height: 1.55; color: var(--ink-2);
+}
+.ais-ev a { font-size: 11px; color: var(--brand); margin-left: 6px; white-space: nowrap; }
+
+.ais-why {
+  margin: 10px 0 0; font-size: 12px; line-height: 1.55; color: var(--ink-3);
+}
+.ais-enable {
+  margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: var(--ink-3);
+  background: var(--surface-2); border: 1px solid var(--hair);
+  padding: 7px 9px; border-radius: 8px;
+}
+.ais-enable code { font-size: 11px; }
+
+.ais-sec { margin-top: 12px; }
+.ais-sec .ev-h { margin-bottom: 6px; }
+.ais-comps { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.ais-cites { margin: 0; padding-left: 20px; }
+.ais-cites li { font-size: 11.5px; line-height: 1.75; color: var(--ink-3); }
+.ais-cites a { color: var(--ink-2); font-weight: 500; }
+.ais-cites a:hover { color: var(--brand); }
+.ais-cm { color: var(--brand); font-weight: 500; margin-left: 5px; }
+
+.ais-foot {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--hair);
+}
+.ais-open {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 600; color: var(--brand);
+  background: var(--brand-soft); border: 1px solid var(--brand-soft2);
+  padding: 4px 10px; border-radius: 999px; cursor: pointer;
+  transition: background .12s;
+}
+.ais-open:hover { background: var(--brand-soft2); }
+
+/* A deselected surface stays legible but visibly off. */
+.aiq-cb.off { opacity: .5; }
+
+/* ------------------------------------------ first-party traffic (on a card) */
+.ais-fp {
+  margin-top: 11px; padding: 9px 11px; border-radius: 9px;
+  background: var(--surface-2); border: 1px solid var(--hair);
+}
+/* When the surface could not be queried, this block IS the answer, so it earns
+   a stronger frame than when it is merely corroborating a measured rank. */
+.ais-fp.primary { background: var(--brand-soft); border-color: var(--brand-soft2); }
+.ais-fp-h {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--ink-3);
+}
+.ais-fp.primary .ais-fp-h { color: var(--brand); }
+.ais-fp-n { font-size: 13px; margin-top: 4px; color: var(--ink); }
+.ais-fp-n b { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ais-fp-p { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.ais-fp-p span {
+  font-size: 10.5px; color: var(--ink-3);
+  background: var(--surface); border: 1px solid var(--hair);
+  padding: 1px 6px; border-radius: 999px;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ais-fp-c { margin: 6px 0 0; font-size: 10.5px; line-height: 1.5; color: var(--ink-4); }
+
+/* ------------------------------------------- first-party traffic (own panel) */
+.fp-grid { display: flex; flex-direction: column; gap: 7px; margin-top: 14px; }
+.fp-row { display: flex; align-items: center; gap: 10px; }
+.fp-l { flex: 0 0 128px; font-size: 12.5px; font-weight: 600; }
+.fp-bar {
+  flex: 1; height: 8px; border-radius: 4px;
+  background: var(--surface-3); overflow: hidden;
+}
+.fp-bar > i { display: block; height: 100%; border-radius: 4px; }
+.fp-n { flex: 0 0 62px; text-align: right; font-size: 12.5px; font-weight: 650; }
+.fp-p { flex: 0 0 46px; text-align: right; font-size: 11px; }
+
+/* Daily sessions. A sparkline rather than a chart library — it only has to show
+   shape, and a dependency for that would not be worth it. */
+.fp-spark {
+  display: flex; align-items: flex-end; gap: 1px;
+  height: 44px; margin-top: 8px; padding: 0 1px;
+  background: var(--surface-2); border: 1px solid var(--hair); border-radius: 8px;
+}
+.fp-spark > i {
+  flex: 1; min-width: 2px; border-radius: 1px 1px 0 0;
+  background: var(--brand); opacity: .8;
+}
+.fp-spark > i:hover { opacity: 1; }
+
+/* ------------------------------------------------------------ metrics strip */
+.aim-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px; margin-top: 14px;
+  background: var(--hair); border: 1px solid var(--hair); border-radius: 11px;
+  overflow: hidden;
+}
+.aim-cell { background: var(--surface); padding: 13px 14px; }
+.aim-v {
+  font-size: 21px; font-weight: 700; letter-spacing: -.02em; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.aim-l { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+.aim-n { font-size: 10.5px; color: var(--ink-4); margin-top: 3px; }
+
+/* A domain that ranks but never names us — the actionable row. */
+tr.gaprow td { background: color-mix(in srgb, var(--warn) 5%, transparent); }
+
+/* ------------------------------------------------------------ how-to-rank */
+.howto {
+  margin-top: 14px; border: 1px solid var(--hair-2); border-radius: 12px;
+  background: var(--surface-2); overflow: hidden;
+}
+.howto > summary {
+  padding: 12px 14px; cursor: pointer; list-style: none;
+  display: flex; align-items: center; gap: 10px;
+}
+.howto > summary::-webkit-details-marker { display: none; }
+.howto > summary::after {
+  content: "▾"; margin-left: auto; color: var(--ink-4); font-size: 11px;
+  transition: transform .16s;
+}
+.howto[open] > summary::after { transform: rotate(180deg); }
+.howto-t { font-size: 13px; font-weight: 650; color: var(--ink); }
+.howto-body { padding: 0 14px 14px; }
+.howto-assets { display: flex; flex-direction: column; gap: 11px; margin-top: 12px; }
+
+/* --------------------------------------------------------- produced assets */
+.card.asset {
+  padding: 14px 15px 12px; border-radius: 12px;
+  border: 1px solid var(--hair); background: var(--surface);
+}
+.as-head { display: flex; flex-wrap: wrap; gap: 5px; }
+.as-title {
+  margin: 9px 0 0; font-size: 14px; font-weight: 650;
+  letter-spacing: -.01em; color: var(--ink); line-height: 1.4;
+}
+.as-why {
+  margin: 8px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-2);
+  padding-left: 10px; border-left: 2px solid var(--brand-soft2);
+}
+.as-fields { margin-top: 12px; display: flex; flex-direction: column; gap: 11px; }
+.as-f { }
+.as-fl {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--ink-3); margin-bottom: 5px;
+  display: flex; align-items: center; gap: 8px;
+}
+.as-fv { font-size: 13px; line-height: 1.55; color: var(--ink); }
+.as-copy {
+  font-size: 10px; font-weight: 600; letter-spacing: 0; text-transform: none;
+  color: var(--brand); background: var(--brand-soft);
+  border: 1px solid var(--brand-soft2); border-radius: 999px;
+  padding: 1px 8px; cursor: pointer;
+}
+/* The asset copy itself. Monospace and pre-wrap because it is meant to be
+   selected and pasted verbatim, not read as prose. */
+.as-pre {
+  margin: 0; padding: 11px 12px;
+  font: 400 12.5px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap; word-break: break-word;
+  color: var(--ink); background: var(--surface-2);
+  border: 1px solid var(--hair); border-radius: 9px;
+  max-height: 340px; overflow: auto;
+}
+.as-ol { margin: 0; padding-left: 20px; }
+.as-ol li { font-size: 12.5px; line-height: 1.6; color: var(--ink); margin-bottom: 4px; }
+.as-sub { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+.as-ev { margin-top: 13px; padding-top: 11px; border-top: 1px solid var(--hair); }
+.as-evi { font-size: 11.5px; line-height: 1.7; }
+.as-evi a { color: var(--ink-2); font-weight: 500; }
+.as-evi a:hover { color: var(--brand); }
+
+/* ---------------------------------------------------- competitor refresher */
+.refresh-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-top: 4px;
+}
+.refresh-txt { flex: 1; min-width: 220px; }
+.refresh-txt b { display: block; font-size: 13px; color: var(--ink); }
+.refresh-txt span { font-size: 11.5px; line-height: 1.5; color: var(--ink-3); }
+.refresh-kw {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11.5px; color: var(--ink-3);
+}
+.refresh-go { width: auto; margin: 0; padding: 0 20px; height: 38px; flex: 0 0 auto; }
+.refresh-go:disabled { opacity: .6; cursor: default; }
+.refresh-log {
+  margin: 10px 0 0; padding: 10px 11px; max-height: 200px; overflow: auto;
+  font: 400 11px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap; color: var(--ink-3);
+  background: var(--surface-2); border: 1px solid var(--hair); border-radius: 9px;
+}
+
+/* --------------------------------------------------------- threat meter */
+.thr { flex: 0 0 auto; text-align: right; min-width: 46px; }
+.thr-n {
+  font-size: 19px; font-weight: 700; letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+/* "Not assessed" is grey and dashed, never a zero — a missing assessment is
+   not a low threat, and the two must not look alike. */
+.thr-n.na { color: var(--ink-4); }
+.thr-l {
+  font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--ink-4);
+}
+.thr-bar {
+  margin-top: 4px; height: 3px; width: 46px; border-radius: 2px;
+  background: var(--surface-3); overflow: hidden;
+}
+.thr-bar > i { display: block; height: 100%; border-radius: 2px; background: currentColor; }
+.thr.b-high { color: var(--neg); }
+.thr.b-high .thr-n { color: var(--neg); }
+.thr.b-medium { color: var(--warn); }
+.thr.b-medium .thr-n { color: var(--warn); }
+.thr.b-low { color: var(--ink-3); }
+.thr.b-low .thr-n { color: var(--ink-2); }
+.thr.b-minimal { color: var(--ink-4); }
+.thr.b-minimal .thr-n { color: var(--ink-4); }
+
+/* ------------------------------------------------ competitor card additions */
+.comp-class { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.comp-why {
+  margin: 10px 0 0; font-size: 12.3px; line-height: 1.6; color: var(--ink-2);
+  padding-left: 10px; border-left: 2px solid var(--brand-soft2);
+}
+.comp-basis {
+  margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: var(--ink-4);
+}
+.comp-sig { margin-top: 10px; }
+.comp-sig > summary {
+  cursor: pointer; list-style: none;
+  font-size: 11px; font-weight: 600; color: var(--brand);
+}
+.comp-sig > summary::-webkit-details-marker { display: none; }
+.comp-sig > summary::before { content: "▸ "; }
+.comp-sig[open] > summary::before { content: "▾ "; }
+.comp-sig .ptable { margin-top: 8px; }
+.comp-sig .ptable td { font-size: 11.5px; padding: 4px 6px; }
+
+/* -------------------------------------------------- review-directory section */
+.dir-sec { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--hair-2); }
+
+/* Which directories a product is listed on, each in its own brand colour so a
+   multi-directory listing is recognisable at a glance. */
+.dir-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 11px; }
+.dir-badge {
+  font-size: 10.5px; font-weight: 650; letter-spacing: .01em;
+  color: var(--dc, var(--ink-2));
+  background: color-mix(in srgb, var(--dc, var(--ink-3)) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--dc, var(--ink-3)) 26%, transparent);
+  padding: 2px 8px; border-radius: 999px;
+}
+.dir-badge:hover { background: color-mix(in srgb, var(--dc, var(--ink-3)) 20%, transparent); }
+
+.card.comp.dir-card { }
+/* A product whose directory categorisation and homepage assessment disagree.
+   Framed as a conflict to resolve, not as a verdict. */
+.card.comp.dir-card.conflict { border-color: color-mix(in srgb, var(--warn) 45%, var(--hair)); }
+.dir-conflict {
+  margin: 10px 0 0; padding: 8px 10px; border-radius: 8px;
+  font-size: 11.5px; line-height: 1.55; color: var(--ink-2);
+  background: color-mix(in srgb, var(--warn) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warn) 26%, transparent);
+}
+
+/* ------------------------------------------------------------ digest panel */
+.dg-row {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 8px 0; border-bottom: 1px solid var(--hair);
+  font-size: 12.5px;
+}
+.dg-row:last-child { border-bottom: 0; }
+.dg-row b { color: var(--ink); }
+.dg-row .muted { margin-left: auto; font-size: 11px; }
+.dg-pre {
+  margin: 12px 0 0; padding: 11px 12px; max-height: 300px; overflow: auto;
+  font: 400 11.5px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap; color: var(--ink-2);
+  background: var(--surface-2); border: 1px solid var(--hair); border-radius: 9px;
+}
+
+@media (max-width: 640px) {
+  .ais-grid { grid-template-columns: 1fr; }
+  .aiq-row { flex-direction: column; }
+  .aiq-go { width: 100%; }
+  .aim-v { font-size: 18px; }
+}
