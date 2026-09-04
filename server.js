@@ -63,6 +63,12 @@ function send(res, code, type, body, extraHeaders = {}) {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "no-referrer",
+    // Set here rather than in vercel.json: that file must use the
+    // filesystem-overriding "routes" field to keep the auth gate in front of
+    // public/, and Vercel rejects "routes" combined with "headers". Setting
+    // them in the handler also applies them identically when self-hosted.
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "Permissions-Policy": "geolocation=(), microphone=(), camera=()",
     ...extraHeaders,
   });
   res.end(body);

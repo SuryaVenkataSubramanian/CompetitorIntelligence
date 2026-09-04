@@ -94,12 +94,32 @@ to change — `vercel.json` handles routing, and there is nothing to compile.
 
 **Framework preset: Other. Build command: leave empty.**
 
+### Import settings
+
+| Field | Value |
+|---|---|
+| **Framework Preset** | **Other** |
+| Root Directory | `./` |
+| Build Command | leave empty |
+| Output Directory | leave empty |
+| Install Command | leave empty (no dependencies) |
+| Node.js Version | 20.x or 22.x |
+
 ### One thing to know about the routing
 
-`vercel.json` sends *every* path through the function, including CSS. That
-looks like a missed optimisation and is deliberate: the app is deny-by-default,
-so `index.html` and `app.js` require a session. Letting the CDN serve
-`public/` directly would hand the dashboard to anyone with the URL. See
+`vercel.json` uses `routes`, not `rewrites`, and sends *every* path through the
+function — including CSS. That looks like a missed CDN optimisation and is
+deliberate.
+
+Vercel checks the **filesystem before applying `rewrites`**, and with no build
+command it serves `public/` as the static root. A `rewrites` rule would
+therefore have let `/` and `/js/app.js` be served straight off the CDN,
+bypassing the deny-by-default auth gate. `routes` is evaluated *before* the
+filesystem, so the gate genuinely covers everything.
+
+Side effect: Vercel rejects `routes` alongside a `headers` block, so the
+security headers moved into `send()` in `server.js` — which is better, since
+they now apply when self-hosted too. Verified 5/5 present. See
 `VERCEL_NOTES.md`.
 
 ### Plan limits that will actually bite
