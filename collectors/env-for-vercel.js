@@ -97,9 +97,74 @@ for (const v of VERCEL_VARS) {
   rows.push({ ...v, value, note });
 }
 
+/* ------------------------------------------------------------- validation */
+
+/**
+ * Vercel rejects a value with: Environment variable "X" is invalid.
+ *
+ * The cause is almost always an EMPTY value, and the usual way to create one
+ * is bulk-pasting .env.example -- 24 of its 30 keys are deliberately blank
+ * placeholders. Vercel stores each as a variable with no value, then refuses
+ * to deploy. The message names the variable but not the reason, and the first
+ * symptom is a DIFFERENT error ("already exists for the targets ...") when you
+ * try to add the real value on top.
+ *
+ * So nothing empty is ever emitted from here, and each value is checked
+ * against the constraints Vercel actually enforces.
+ */
+function validateForVercel(key, value) {
+  const problems = [];
+
+  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) {
+    problems.push("name must match [A-Za-z_][A-Za-z0-9_]*");
+  }
+
+  if (value === null || value === undefined || value === "") {
+    problems.push("value is EMPTY - Vercel stores the variable, then reports it invalid");
+    return problems;
+  }
+
+  /* Character checks use char codes rather than escape literals: scripted
+   * edits mangled the escapes in this function twice, once splitting a regex
+   * across two lines and breaking the whole file. */
+  const TAB = String.fromCharCode(9);
+  const LF = String.fromCharCode(10);
+  const CR = String.fromCharCode(13);
+
+  if (value !== value.trim()) {
+    problems.push("value has leading or trailing whitespace");
+  }
+  if (value.includes(CR) || value.includes(LF)) {
+    problems.push("value contains a newline - Vercel truncates at the first one");
+  }
+  if (Buffer.byteLength(value) > 65536) {
+    problems.push("value is " + Buffer.byteLength(value) + " bytes, over the 64KB limit");
+  }
+  for (const ch of value) {
+    const c = ch.codePointAt(0);
+    if (c < 32 && ch !== TAB && ch !== LF && ch !== CR) {
+      problems.push("value contains control character U+" + c.toString(16).padStart(4, "0"));
+      break;
+    }
+  }
+
+  return problems;
+}
+
 /* --------------------------------------------------------------------- output */
 
-const emit = rows.filter(r => r.value && !r.skipped);
+// Validate before emitting. An invalid value written into .env.vercel would
+// be pasted into Vercel and produce the same error this tool exists to avoid.
+for (const r of rows) {
+  if (r.skipped || !r.value) continue;
+  const bad = validateForVercel(r.key, r.value);
+  if (bad.length) {
+    r.invalid = bad;
+    problems.push(r.key + ": " + bad.join("; "));
+  }
+}
+
+const emit = rows.filter(r => r.value && !r.skipped && !r.invalid);
 
 if (writeOut) {
   const out = path.join(ROOT, ".env.vercel");
@@ -144,6 +209,28 @@ if (writeOut) {
 if (problems.length) {
   console.log("  Missing required values:");
   for (const p of problems) console.log(`    ${p}`);
+  console.log("");
+}
+
+if (process.argv.includes("--cli")) {
+  console.log("  Vercel CLI - avoids the dashboard entirely");
+  console.log("");
+  console.log("    npm i -g vercel && vercel login && vercel link");
+  console.log("");
+  console.log("  Remove any existing (possibly empty) copy first, then add:");
+  console.log("");
+  for (const r of emit) {
+    for (const envName of ["production", "preview", "development"]) {
+      console.log("    vercel env rm " + r.key + " " + envName + " --yes 2>NUL");
+    }
+  }
+  console.log("");
+  console.log("  Then add each, ticking all three environments. You will be prompted");
+  console.log("  for the value - paste it from .env.vercel:");
+  console.log("");
+  for (const r of emit) {
+    console.log("    vercel env add " + r.key + " production preview development");
+  }
   console.log("");
 }
 
