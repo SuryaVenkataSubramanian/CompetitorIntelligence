@@ -58,7 +58,8 @@
     "vercel-build": "node -e \"require('./server.js');console.log('handler loads')\"",
     "session:secret": "node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
     "deploy:check": "node collectors/deploy-check.js",
-    "build": "node -e \"require('./server.js');console.log('handler loads')\""
+    "build": "node -e \"require('./server.js');console.log('handler loads')\"",
+    "env:audit": "node collectors/env-audit.js"
   },
   "engines": {
     "node": ">=18"

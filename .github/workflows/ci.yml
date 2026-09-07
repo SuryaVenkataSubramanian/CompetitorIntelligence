@@ -36,6 +36,11 @@ jobs:
         # If this regresses, the Vercel function would hang on every cold start.
         run: node -e "const h=require('./server.js'); if (typeof h!=='function') { throw new Error('server.js must export a request handler, got '+typeof h); } console.log('handler exported')"
 
+      - name: Environment variable hygiene
+        # Fails on a duplicate key, where the later assignment silently wins —
+        # a value you believe you set and did not.
+        run: npm run env:audit
+
       - name: Tests
         run: npm test
 

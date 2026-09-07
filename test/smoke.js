@@ -539,6 +539,37 @@ setTimeout(async () => {
     !authority.some(d => /vertexaisearch|^t\.co$|^news\.google\.com$/.test(d.domain)),
     `${authority.length} domains, top: ${authority.slice(0, 3).map(d => d.domain).join(", ")}`);
 
+  /* --------------------------------------- environment variable hygiene */
+  // A duplicate key is a value you believe you set and did not: the later
+  // assignment silently wins. Both files are checked because .env.example is
+  // what a teammate copies.
+  // Regexes here are built from char codes rather than written as literals:
+  // a scripted edit mangled the escape sequences in this exact block twice,
+  // splitting a regex across two lines and breaking the whole file.
+  const SPLIT_LINES = new RegExp(String.fromCharCode(13) + "?" + String.fromCharCode(10));
+  const NL_PORT = String.fromCharCode(10) + "PORT=";
+
+  for (const envFile of [".env", ".env.example"]) {
+    const abs = P(envFile);
+    if (!fs.existsSync(abs)) continue;
+    const keys = fs.readFileSync(abs, "utf8").split(SPLIT_LINES)
+      .map(l => (l.match(/^([A-Z0-9_]+)=/) || [])[1]).filter(Boolean);
+    const dupes = keys.filter((k, i) => keys.indexOf(k) !== i);
+    t(`${envFile} declares every key exactly once`,
+      dupes.length === 0,
+      dupes.length ? [...new Set(dupes)].join(", ") : `${keys.length} unique`);
+  }
+
+  // PORT is reserved on Vercel, so it must be documented as local-only —
+  // otherwise a reader pastes it in and hits a rejected variable.
+  {
+    const ex = fs.readFileSync(P(".env.example"), "utf8");
+    const at = ex.indexOf(NL_PORT);
+    const portBlock = at === -1 ? "" : ex.slice(Math.max(0, at - 700), at + 10);
+    t("PORT is documented as local-only and flagged as reserved on Vercel",
+      /RESERVED/i.test(portBlock) && /LOCAL/i.test(portBlock));
+  }
+
   /* ------------------------------- review-directory audit precision gates */
   const dirLib = require(P("collectors", "lib", "directories.js"));
 
