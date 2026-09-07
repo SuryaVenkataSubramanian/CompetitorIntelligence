@@ -57,7 +57,8 @@
     "directories:resolve": "node collectors/directory-audit.js --resolve",
     "vercel-build": "node -e \"require('./server.js');console.log('handler loads')\"",
     "session:secret": "node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
-    "deploy:check": "node collectors/deploy-check.js"
+    "deploy:check": "node collectors/deploy-check.js",
+    "build": "node -e \"require('./server.js');console.log('handler loads')\""
   },
   "engines": {
     "node": ">=18"
