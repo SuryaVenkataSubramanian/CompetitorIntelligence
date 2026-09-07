@@ -57,13 +57,14 @@ function preflight() {
   } catch (e) { /* reported below as zero */ }
   if (!accounts) {
     problems.push({
-      variable: "AUTH_USERS_JSON",
+      variable: "accounts",
       why:
-        "No accounts are provisioned. collectors/store/auth-users.json holds the password hashes and is " +
-        "gitignored, so it is absent from a fresh deploy and every login would be rejected.",
+        "No accounts are provisioned from any source, so every login would be rejected. The app looks in " +
+        "three places: collectors/store/auth-users.json (gitignored, so absent here), the AUTH_USERS_JSON " +
+        "environment variable, and config/accounts.json (committed).",
       fix:
-        "Run `npm run auth:init` locally, then paste the contents of collectors/store/auth-users.json into " +
-        "an AUTH_USERS_JSON environment variable in Vercel.",
+        "Run `npm run auth:init` locally, then `npm run auth:export` to write config/accounts.json and " +
+        "commit it. That needs no Vercel configuration at all. Setting AUTH_USERS_JSON also works.",
     });
   }
 

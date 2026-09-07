@@ -539,6 +539,44 @@ setTimeout(async () => {
     !authority.some(d => /vertexaisearch|^t\.co$|^news\.google\.com$/.test(d.domain)),
     `${authority.length} domains, top: ${authority.slice(0, 3).map(d => d.domain).join(", ")}`);
 
+  /* ------------------------------------- committed accounts (no Vercel config) */
+  // config/accounts.json lets a deployment authenticate with no environment
+  // variable. It must carry ONLY what auth needs: publishing login timestamps
+  // or counts would disclose who signed in when, for no benefit.
+  {
+    const ap = P("config", "accounts.json");
+    if (fs.existsSync(ap)) {
+      const acc = JSON.parse(fs.readFileSync(ap, "utf8"));
+      const entries = Object.values(acc.accounts || {});
+      t("committed accounts file has accounts", entries.length > 0, `${entries.length} account(s)`);
+
+      const allowed = new Set(["email", "salt", "hash"]);
+      const extra = [...new Set(entries.flatMap(a => Object.keys(a)))].filter(k => !allowed.has(k));
+      t("committed accounts expose only email, salt and hash",
+        extra.length === 0, extra.length ? `also exposes: ${extra.join(", ")}` : "nothing else");
+
+      /* The whole security argument rests on this: a hash is safe to publish,
+       * a session key is not. With both public a cookie could be forged and
+       * the login skipped entirely.
+       *
+       * Scoped to the ACCOUNT VALUES rather than the file text: the _comment
+       * block explains why SESSION_SECRET must stay an environment variable,
+       * so the word legitimately appears there and matching the whole file
+       * flagged the file for its own documentation. */
+      const accVals = JSON.stringify(acc.accounts || {});
+      t("no account value carries a session key or a password",
+        !/SESSION_SECRET/i.test(accVals) &&
+        !Object.values(acc.accounts || {}).some(a => "password" in a));
+
+      // Every account must be on the allow-list, which is the real authority.
+      const authSrc = fs.readFileSync(P("collectors", "lib", "auth.js"), "utf8");
+      const listed = (authSrc.match(/"[a-z.]+@kovai.co"/g) || []).map(x => x.replace(/"/g, ""));
+      const offList = Object.keys(acc.accounts || {}).filter(e => !listed.includes(e));
+      t("every committed account is on the allow-list",
+        offList.length === 0, offList.join(", ") || `all ${listed.length} allow-listed`);
+    }
+  }
+
   /* --------------------------------------- environment variable hygiene */
   // A duplicate key is a value you believe you set and did not: the later
   // assignment silently wins. Both files are checked because .env.example is

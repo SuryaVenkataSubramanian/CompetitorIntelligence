@@ -60,7 +60,8 @@
     "deploy:check": "node collectors/deploy-check.js",
     "build": "node -e \"require('./server.js');console.log('handler loads')\"",
     "env:audit": "node collectors/env-audit.js",
-    "env:vercel": "node collectors/env-for-vercel.js"
+    "env:vercel": "node collectors/env-for-vercel.js",
+    "auth:export": "node collectors/auth-export.js"
   },
   "engines": {
     "node": ">=18"

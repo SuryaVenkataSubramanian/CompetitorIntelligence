@@ -59,23 +59,77 @@ const LOCKOUT_MS = 15 * 60 * 1000;
  * Note what is and is not in there: hashes and salts, never a password. Putting
  * this in an environment variable exposes no more than the file does.
  */
+/** Where the accounts came from, for /api/status and the deploy check. */
+let accountSource = "none";
+
+/**
+ * The provisioned accounts, resolved in a deliberate order:
+ *
+ *   1. collectors/store/auth-users.json  the local, writable store. Wins so
+ *      `auth:init` behaves normally on a developer machine.
+ *   2. AUTH_USERS_JSON                   an environment variable, for hosts
+ *      with no persistent disk that prefer dashboard configuration.
+ *   3. config/accounts.json              COMMITTED to the repository, so a
+ *      deployment needs no auth configuration at all.
+ *
+ * Order matters: local file first means exporting to the committed file never
+ * shadows a freshly provisioned account, and the env variable still overrides
+ * the committed copy if someone wants to rotate without a redeploy.
+ *
+ * Every source carries only email, salt and scrypt hash. No password exists in
+ * any of them.
+ */
 function readUsers() {
   try {
-    if (fs.existsSync(USERS_FILE)) return JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
-  } catch (e) { /* fall through to the env copy */ }
+    if (fs.existsSync(USERS_FILE)) {
+      const j = JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
+      if (j && j.users && Object.keys(j.users).length) {
+        accountSource = "local store (collectors/store/auth-users.json)";
+        return j;
+      }
+    }
+  } catch (e) { /* fall through */ }
 
   const inline = process.env.AUTH_USERS_JSON;
   if (inline) {
     try {
       const parsed = JSON.parse(inline);
-      if (parsed && parsed.users) return parsed;
+      if (parsed && parsed.users && Object.keys(parsed.users).length) {
+        accountSource = "AUTH_USERS_JSON environment variable";
+        return parsed;
+      }
     } catch (e) {
       // A malformed value must not read as "no accounts", which would look
-      // like a wrong password to every user.
-      console.error("AUTH_USERS_JSON is set but is not valid JSON — no accounts loaded.");
+      // like a wrong password to every user rather than a config error.
+      console.error("AUTH_USERS_JSON is set but is not valid JSON — ignoring it.");
     }
   }
+
+  /* The committed fallback. This is what removes the need for any deployment
+   * configuration: the hashes travel with the code. Safe only because
+   * SESSION_SECRET does NOT — with both public, a session cookie could be
+   * forged and the login skipped entirely. */
+  try {
+    const p = path.join(__dirname, "..", "..", "config", "accounts.json");
+    if (fs.existsSync(p)) {
+      const j = JSON.parse(fs.readFileSync(p, "utf8"));
+      const accounts = j && j.accounts;
+      if (accounts && Object.keys(accounts).length) {
+        accountSource = "config/accounts.json (committed)";
+        // Normalised to the store's shape so every caller sees one structure.
+        return { users: accounts };
+      }
+    }
+  } catch (e) { /* fall through to no accounts */ }
+
+  accountSource = "none";
   return { users: {} };
+}
+
+/** Which source the current accounts came from. */
+function usersSource() {
+  readUsers();
+  return accountSource;
 }
 
 function writeUsers(obj) {
@@ -304,6 +358,7 @@ function status() {
       };
     }),
     active_sessions: sessions.size,
+    accounts_from: usersSource(),
     session_mode: session.isStateless() ? "stateless (HMAC-signed cookie)" : "stateful (opaque server-side token)",
     session_secret_configured: !!(process.env.SESSION_SECRET && process.env.SESSION_SECRET.length >= 32),
   };
@@ -315,6 +370,7 @@ module.exports = {
   login,
   logout,
   sessionFor,
+  usersSource,
   sweep,
   status,
   generatePassword,

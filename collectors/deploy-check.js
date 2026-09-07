@@ -124,6 +124,11 @@ if (tracked.length) {
 /* ------------------------------------------------ 4. serverless requirements */
 
 const { execFileSync } = require("child_process");
+
+// Load .env first: these checks read process.env, and without this every key
+// reports as absent even when it is configured.
+require("./lib/env").load();
+
 const secretOk = (process.env.SESSION_SECRET || "").length >= 32;
 line(secretOk ? "OK" : "WARN", "SESSION_SECRET",
   secretOk
@@ -132,10 +137,18 @@ line(secretOk ? "OK" : "WARN", "SESSION_SECRET",
 
 let accounts = 0;
 try { accounts = require("./lib/auth").status().configured; } catch (e) { /* zero */ }
+let acctSource = "unknown";
+try { acctSource = require("./lib/auth").usersSource(); } catch (e) { /* unknown */ }
+const committed = fs.existsSync(P("config", "accounts.json")) &&
+  (!tracked.length || tracked.includes("config/accounts.json"));
 line(accounts ? "OK" : "FAIL", "provisioned accounts",
   accounts
-    ? `${accounts} account(s). auth-users.json is gitignored — paste it into AUTH_USERS_JSON in Vercel`
+    ? `${accounts} account(s) from ${acctSource}`
     : "none — run: npm run auth:init");
+line(committed ? "OK" : "WARN", "accounts available to the deploy",
+  committed
+    ? "config/accounts.json is committed — no Vercel auth variable needed"
+    : "config/accounts.json is missing or untracked. Run: npm run auth:export, then commit it — otherwise set AUTH_USERS_JSON in Vercel");
 
 // Every key the hosted app needs at runtime.
 const RUNTIME_KEYS = [
@@ -145,7 +158,6 @@ const RUNTIME_KEYS = [
   ["NEWSAPI_KEY", "mention collection (local only)"],
   ["BRIGHTDATA_API_KEY", "LinkedIn scraping (local only)"],
 ];
-require("./lib/env").load();
 for (const [k, why] of RUNTIME_KEYS) {
   line(process.env[k] ? "OK" : "WARN", k, process.env[k] ? `set — copy to Vercel (${why})` : `absent — ${why} will report unavailable`);
 }
