@@ -1,47 +1,18 @@
 {
-  "checked_at": "2026-09-01T15:08:34.800Z",
+  "checked_at": "2026-09-07T10:25:38.792Z",
   "paid_calls": false,
   "summary": {
-    "WORKING": 2,
+    "BROKEN": 1,
     "DEGRADED": 6,
-    "SKIPPED": 1
+    "SKIPPED": 1,
+    "WORKING": 1
   },
   "sources": [
     {
       "name": "SearXNG",
-      "state": "WORKING",
-      "detail": "58 results from 7 engines (5 unresponsive: 360search, abcnyheter, boardreader, duckduckgo, fynd)",
-      "engines": {
-        "naver": 15,
-        "yahoo": 7,
-        "google cse": 20,
-        "seznam": 10,
-        "privacywall": 10,
-        "yandex": 15,
-        "searchch": 6
-      },
-      "unresponsive": [
-        [
-          "360search",
-          "Suspended: HTTP connection error"
-        ],
-        [
-          "abcnyheter",
-          "Suspended: HTTP connection error"
-        ],
-        [
-          "boardreader",
-          "parsing error"
-        ],
-        [
-          "duckduckgo",
-          "CAPTCHA"
-        ],
-        [
-          "fynd",
-          "Suspended: HTTP connection error"
-        ]
-      ]
+      "state": "BROKEN",
+      "detail": "no SearXNG instance at http://localhost:8888 (HTTP no response). Start one: npm run searxng:local  (or npm run searxng:up for Docker)",
+      "fix": "Start it with: npm run searxng:local  (then: npm run searxng:status)"
     },
     {
       "name": "Octolens",
@@ -63,14 +34,14 @@
     {
       "name": "NewsAPI",
       "state": "DEGRADED",
-      "detail": "1 total results for \"Document360\", 1 returned",
-      "total_results": 1,
+      "detail": "0 total results for \"Document360\", 0 returned",
+      "total_results": 0,
       "note": "Developer plan: only page 1 is retrievable (page 2 returns HTTP 426), and article content is a ~200-char snippet. Both bound coverage."
     },
     {
       "name": "Bright Data",
       "state": "DEGRADED",
-      "detail": "Web Scraper API works (snapshot sd_mtisxoop4n82iryfj); /request API UNAVAILABLE — no zone provisioned",
+      "detail": "Web Scraper API works (snapshot sd_mtr3ga0cwkofho6fp); /request API UNAVAILABLE — no zone provisioned",
       "customer": "hl_0f7485db",
       "scraper_ok": true,
       "request_api": false,
@@ -79,7 +50,7 @@
     {
       "name": "DataForSEO",
       "state": "DEGRADED",
-      "detail": "balance $0.3719; models: ChatGPT=46, Claude=13, Gemini=10, Perplexity=3; ~1 full 6-surface probe(s) left at $0.1805 each",
+      "detail": "balance $0.3719; models: ChatGPT=46, Claude=14, Gemini=12, Perplexity=3; ~1 full 6-surface probe(s) left at $0.1805 each",
       "balance": 0.37194400000000005,
       "per_probe_cost": 0.1805,
       "probes_remaining": 1,
@@ -203,35 +174,35 @@
     {
       "name": "Windsor.ai",
       "state": "WORKING",
-      "detail": "GA4: 3476 AI-assistant session(s) of 366492 (0.95%) — ChatGPT=2578, Claude=443, Gemini=302, Perplexity=116, Copilot=37",
-      "ai_sessions": 3476,
-      "total_sessions": 366492,
-      "ai_share_pct": 0.95,
+      "detail": "GA4: 3442 AI-assistant session(s) of 364299 (0.94%) — ChatGPT=2577, Claude=425, Gemini=289, Perplexity=119, Copilot=32",
+      "ai_sessions": 3442,
+      "total_sessions": 364299,
+      "ai_share_pct": 0.94,
       "surfaces": [
         {
           "id": "chatgpt",
           "label": "ChatGPT",
-          "sessions": 2578
+          "sessions": 2577
         },
         {
           "id": "claude",
           "label": "Claude",
-          "sessions": 443
+          "sessions": 425
         },
         {
           "id": "gemini",
           "label": "Gemini",
-          "sessions": 302
+          "sessions": 289
         },
         {
           "id": "perplexity",
           "label": "Perplexity",
-          "sessions": 116
+          "sessions": 119
         },
         {
           "id": "copilot",
           "label": "Copilot",
-          "sessions": 37
+          "sessions": 32
         }
       ],
       "note": "First-party only — enriches Document360, says nothing about competitors. Free to query, so this layer survives an exhausted DataForSEO balance."

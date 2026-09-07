@@ -54,6 +54,32 @@ actually reads:
 collectors, which do not run on Vercel. Set them as **GitHub Actions secrets**
 instead.
 
+### If Vercel says a variable already exists
+
+> A variable with the name `SESSION_SECRET` already exists for the targets
+> `production` and `preview`
+
+Vercel scopes every variable to an **environment** — Production, Preview,
+Development. That message means the name already covers some of them, and
+Vercel rejects a second variable of the same name rather than merging it.
+
+**Fix:** find the existing `SESSION_SECRET`, click **Edit**, and tick the
+missing environment. Do not add a second one.
+
+It usually shows up when bulk-pasting: `.env` holds 27 variables and Vercel
+needs 6, so the paste collides with whatever is already set. Generate just the
+six:
+
+```bash
+npm run env:vercel                              # show them
+npm run env:vercel -- --out                     # write .env.vercel, then delete it
+npm run env:vercel -- --skip=SESSION_SECRET     # omit what is already set
+```
+
+That command also assembles `AUTH_USERS_JSON` from the real file and minifies
+it to a single line, because Vercel's value field is single-line — a
+pretty-printed JSON blob gets truncated at the first newline.
+
 ### Why `AUTH_USERS_JSON` exists
 
 `collectors/store/auth-users.json` holds the scrypt hashes and is gitignored,
