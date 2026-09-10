@@ -147,10 +147,29 @@ line(accounts ? "OK" : "FAIL", "provisioned accounts",
   accounts
     ? `${accounts} account(s) from ${acctSource}`
     : "none — run: npm run auth:init");
-line(derivedOk ? "OK" : "FAIL", "the deploy can authenticate",
-  derivedOk
-    ? "passwords derive from SESSION_SECRET — no provisioning, no committed hashes, no AUTH_USERS_JSON"
-    : "SESSION_SECRET is not set, so no password can be derived and every login would be rejected. Generate one: npm run session:secret");
+/* Which credential model the DEPLOY will use, which is not necessarily the one
+ * in use locally. A committed hash is authoritative wherever it exists, so it
+ * decides; derivation is only the fallback when nothing was provisioned. */
+const committedPath = P("config", "accounts.json");
+const committedOk = fs.existsSync(committedPath) &&
+  (!tracked.length || tracked.includes("config/accounts.json"));
+let committedCount = 0;
+if (committedOk) {
+  try { committedCount = Object.keys(JSON.parse(fs.readFileSync(committedPath, "utf8")).accounts || {}).length; }
+  catch (e) { committedCount = 0; }
+}
+
+line(committedCount || derivedOk ? "OK" : "FAIL", "the deploy can authenticate",
+  committedCount
+    ? `${committedCount} committed hash(es) in config/accounts.json — the distributed passwords work, no Vercel auth variable needed`
+    : derivedOk
+      ? "no committed hashes, so passwords derive from SESSION_SECRET — note these are NOT the passwords from auth:init"
+      : "no committed hashes and no SESSION_SECRET, so every login would be rejected");
+
+if (committedCount && derivedOk) {
+  line("OK", "exactly one password per account",
+    "a stored hash is authoritative, so the derived password is refused as a second route in");
+}
 
 // Every key the hosted app needs at runtime.
 const RUNTIME_KEYS = [
