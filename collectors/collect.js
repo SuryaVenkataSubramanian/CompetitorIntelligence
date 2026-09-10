@@ -41,6 +41,7 @@ const ADAPTERS = [
   require("./adapters/gdelt"),
   require("./adapters/searxng"),
   require("./adapters/linkedin-brightdata"),
+  require("./adapters/x-twitterapi"),
   require("./adapters/x-brightdata"),
 ];
 
@@ -68,7 +69,7 @@ function parseArgs(argv) {
   // within seconds; the rate-limited discovery sources then add breadth on top.
   // linkedin_brightdata runs late: its Bright Data collections legitimately take
   // minutes, so the fast sources should already have refreshed the dashboard.
-  const PRIORITY = ["octolens", "newsapi", "blogfeed", "youtube", "hackernews", "x_brightdata", "searxng", "googlenews", "gdelt", "linkedin_brightdata"];
+  const PRIORITY = ["octolens", "newsapi", "blogfeed", "youtube", "hackernews", "x_twitterapi", "searxng", "googlenews", "gdelt", "linkedin_brightdata", "x_brightdata"];
   const adapters = (args.only ? ADAPTERS.filter(a => args.only.includes(a.id)) : ADAPTERS)
     .slice()
     .sort((a, b) => PRIORITY.indexOf(a.id) - PRIORITY.indexOf(b.id));
