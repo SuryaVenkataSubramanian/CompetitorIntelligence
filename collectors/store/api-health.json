@@ -1,66 +1,247 @@
 {
-  "checked_at": "2026-09-07T10:25:38.792Z",
+  "checked_at": "2026-09-10T14:09:24.236Z",
   "paid_calls": false,
   "summary": {
-    "BROKEN": 1,
-    "DEGRADED": 6,
+    "WORKING": 2,
+    "BROKEN": 2,
+    "DEGRADED": 4,
     "SKIPPED": 1,
-    "WORKING": 1
+    "scraping chain": 1
   },
   "sources": [
     {
       "name": "SearXNG",
-      "state": "BROKEN",
-      "detail": "no SearXNG instance at http://localhost:8888 (HTTP no response). Start one: npm run searxng:local  (or npm run searxng:up for Docker)",
-      "fix": "Start it with: npm run searxng:local  (then: npm run searxng:status)"
+      "state": "WORKING",
+      "detail": "69 results from 7 engines (2 unresponsive: duckduckgo, yahoo)",
+      "engines": {
+        "abcnyheter": 10,
+        "seznam": 10,
+        "google cse": 20,
+        "naver": 15,
+        "searchch": 6,
+        "fynd": 10,
+        "yandex": 15
+      },
+      "unresponsive": [
+        [
+          "duckduckgo",
+          "CAPTCHA"
+        ],
+        [
+          "yahoo",
+          "Suspended: HTTP protocol error"
+        ]
+      ]
     },
     {
       "name": "Octolens",
-      "state": "DEGRADED",
-      "detail": "50 mentions on page 1; watches [Mintlify, document360, Gitbook]; NO coverage for 4/7: Confluence, Guru, Bloomfire, KnowledgeOwl",
-      "tracked_keywords": [
-        "Mintlify",
-        "document360",
-        "Gitbook"
-      ],
-      "uncovered_products": [
-        "Confluence",
-        "Guru",
-        "Bloomfire",
-        "KnowledgeOwl"
-      ],
-      "fix": "Add these products as keywords in the Octolens dashboard — the API cannot do it."
+      "state": "BROKEN",
+      "detail": "API error: HTTP 403: API access is not available on your current plan. Upgrade to Pro, Scale, or Enterprise.",
+      "plan_limited": true,
+      "fix": "Octolens API access requires a Pro, Scale or Enterprise plan. The key is valid; the plan does not include API access."
     },
     {
       "name": "NewsAPI",
       "state": "DEGRADED",
-      "detail": "0 total results for \"Document360\", 0 returned",
-      "total_results": 0,
+      "detail": "1 total results for \"Document360\", 1 returned",
+      "total_results": 1,
       "note": "Developer plan: only page 1 is retrievable (page 2 returns HTTP 426), and article content is a ~200-char snippet. Both bound coverage."
     },
     {
       "name": "Bright Data",
-      "state": "DEGRADED",
-      "detail": "Web Scraper API works (snapshot sd_mtr3ga0cwkofho6fp); /request API UNAVAILABLE — no zone provisioned",
-      "customer": "hl_0f7485db",
-      "scraper_ok": true,
-      "request_api": false,
-      "fix": "Create a SERP API or Web Unlocker zone in the Bright Data control panel, then: npm run brightdata:probe"
+      "state": "BROKEN",
+      "detail": "scraper trigger failed: Customer is not active",
+      "fix": "Check the Bright Data account is active and the dataset is accessible"
     },
     {
       "name": "DataForSEO",
       "state": "DEGRADED",
-      "detail": "balance $0.3719; models: ChatGPT=46, Claude=14, Gemini=12, Perplexity=3; ~1 full 6-surface probe(s) left at $0.1805 each",
-      "balance": 0.37194400000000005,
+      "detail": "balance $0.0519; models: ChatGPT=46, Claude=14, Gemini=12, Perplexity=3; ~0 full 6-surface probe(s) left at $0.1805 each",
+      "balance": 0.05194399999999999,
       "per_probe_cost": 0.1805,
-      "probes_remaining": 1,
+      "probes_remaining": 0,
       "spend": {
-        "total": 0.374721,
-        "calls": 15,
+        "total": 0.694721,
+        "calls": 44,
         "by_day": {
-          "2026-09-01": 0.374721
+          "2026-09-01": 0.374721,
+          "2026-09-10": 0.32
         },
         "recent": [
+          {
+            "at": "2026-09-10T12:07:12.678Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Mintlify\" \"gold sponsor\" OR \"platinum sponsor\""
+          },
+          {
+            "at": "2026-09-10T12:07:05.307Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Mintlify\" exhibitor booth conference"
+          },
+          {
+            "at": "2026-09-10T12:06:47.270Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Mintlify\" site:youtube.com"
+          },
+          {
+            "at": "2026-09-10T12:06:39.318Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Mintlify\" \"knowledge base software\""
+          },
+          {
+            "at": "2026-09-10T12:06:31.881Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Mintlify\" case study"
+          },
+          {
+            "at": "2026-09-10T12:06:22.332Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Mintlify\" pricing"
+          },
+          {
+            "at": "2026-09-10T12:06:12.728Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Mintlify\" vs"
+          },
+          {
+            "at": "2026-09-10T12:06:05.230Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Mintlify\" alternatives"
+          },
+          {
+            "at": "2026-09-10T12:05:40.027Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Mintlify\" knowledge base site:linkedin.com"
+          },
+          {
+            "at": "2026-09-10T12:05:34.064Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Mintlify\" site:linkedin.com/pulse"
+          },
+          {
+            "at": "2026-09-10T12:05:28.126Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Mintlify\" site:linkedin.com/posts"
+          },
+          {
+            "at": "2026-09-10T12:05:17.375Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Mintlify\" site:linkedin.com"
+          },
+          {
+            "at": "2026-09-10T12:05:11.457Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Document360\" \"gold sponsor\" OR \"platinum sponsor\""
+          },
+          {
+            "at": "2026-09-10T12:05:03.904Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Document360\" exhibitor booth conference"
+          },
+          {
+            "at": "2026-09-10T12:04:47.189Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Document360\" site:youtube.com"
+          },
+          {
+            "at": "2026-09-10T12:04:40.241Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Document360\" \"knowledge base software\""
+          },
+          {
+            "at": "2026-09-10T12:04:31.554Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Document360\" case study"
+          },
+          {
+            "at": "2026-09-10T12:04:22.844Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Document360\" pricing"
+          },
+          {
+            "at": "2026-09-10T12:04:15.129Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Document360\" vs"
+          },
+          {
+            "at": "2026-09-10T12:04:06.277Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "\"Document360\" alternatives"
+          },
+          {
+            "at": "2026-09-10T12:03:51.999Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.01,
+            "keyword": "\"Document360\" site:twitter.com"
+          },
+          {
+            "at": "2026-09-10T12:03:42.758Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.01,
+            "keyword": "\"Document360\" site:twitter.com"
+          },
+          {
+            "at": "2026-09-10T12:03:23.471Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Document360\" site:x.com"
+          },
+          {
+            "at": "2026-09-10T12:03:14.898Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Document360\" documentation site:linkedin.com"
+          },
+          {
+            "at": "2026-09-10T12:03:07.648Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Document360\" knowledge base site:linkedin.com"
+          },
+          {
+            "at": "2026-09-10T12:03:01.197Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Document360\" site:linkedin.com/pulse"
+          },
+          {
+            "at": "2026-09-10T12:02:49.369Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Document360\" site:linkedin.com/posts"
+          },
+          {
+            "at": "2026-09-10T12:02:42.709Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.02,
+            "keyword": "\"Document360\" site:linkedin.com"
+          },
+          {
+            "at": "2026-09-10T11:51:24.779Z",
+            "endpoint": "serp/google/organic/live/advanced",
+            "cost": 0.004,
+            "keyword": "Document360 knowledge base"
+          },
           {
             "at": "2026-09-01T12:41:42.408Z",
             "endpoint": "serp/google/organic/live/advanced",
@@ -172,37 +353,58 @@
       "detail": "billable — re-run with --paid to verify the LLM path end to end"
     },
     {
+      "name": "DEGRADED",
+      "state": "scraping chain",
+      "detail": "direct -> scrapingbee available; unavailable: scrapebadger",
+      "routes": {
+        "direct": {
+          "available": true,
+          "note": "Free. Blocked by the WAF on g2, capterra, trustradius, softwareadvice and gartner."
+        },
+        "scrapingbee": {
+          "available": true,
+          "note": "Stealth proxy defeats the review-directory bot walls (measured: 948KB of real HTML from G2 where the default mode got a 2.5KB challenge page)."
+        },
+        "scrapebadger": {
+          "available": false,
+          "note": "SCRAPEBADGER_SCRAPER is not set. ScrapeBadger has no generic scrape endpoint — its API is /api/v1/<scraper-name> for a scraper created in the ScrapeBadger dashboard. Probed /scrapers, /list, /account, /me, /jobs and /usage: each returned \"Scraper '<name>' is not configured\" or 404. Create a scraper there, then set SCRAPEBADGER_SCRAPER to its name.",
+          "needs_dashboard_setup": true
+        }
+      },
+      "fix": "ScrapeBadger: create a scraper in their dashboard, then set SCRAPEBADGER_SCRAPER to its name."
+    },
+    {
       "name": "Windsor.ai",
       "state": "WORKING",
-      "detail": "GA4: 3442 AI-assistant session(s) of 364299 (0.94%) — ChatGPT=2577, Claude=425, Gemini=289, Perplexity=119, Copilot=32",
-      "ai_sessions": 3442,
-      "total_sessions": 364299,
+      "detail": "GA4: 3400 AI-assistant session(s) of 360031 (0.94%) — ChatGPT=2567, Claude=391, Gemini=292, Perplexity=120, Copilot=30",
+      "ai_sessions": 3400,
+      "total_sessions": 360031,
       "ai_share_pct": 0.94,
       "surfaces": [
         {
           "id": "chatgpt",
           "label": "ChatGPT",
-          "sessions": 2577
+          "sessions": 2567
         },
         {
           "id": "claude",
           "label": "Claude",
-          "sessions": 425
+          "sessions": 391
         },
         {
           "id": "gemini",
           "label": "Gemini",
-          "sessions": 289
+          "sessions": 292
         },
         {
           "id": "perplexity",
           "label": "Perplexity",
-          "sessions": 119
+          "sessions": 120
         },
         {
           "id": "copilot",
           "label": "Copilot",
-          "sessions": 32
+          "sessions": 30
         }
       ],
       "note": "First-party only — enriches Document360, says nothing about competitors. Free to query, so this layer survives an exhausted DataForSEO balance."
@@ -210,10 +412,10 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 105/1274 records (8%); queue files present",
-      "classified": 105,
-      "total": 1274,
-      "pct": 8,
+      "detail": "sentiment classified on 106/1521 records (7%); queue files present",
+      "classified": 106,
+      "total": 1521,
+      "pct": 7,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
     {

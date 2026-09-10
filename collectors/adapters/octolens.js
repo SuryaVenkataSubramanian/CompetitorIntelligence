@@ -77,7 +77,19 @@ async function fetchPage(cursor) {
     timeout: 40000,
     retries: 1,
   });
-  if (!r.ok) return { ok: false, data: [], nextCursor: null, error: `HTTP ${r.status}` };
+  if (!r.ok) {
+    /* A 403 here is a PLAN limit, not a bad key. Measured 2026-09-10:
+     *   {"code":"FORBIDDEN","message":"API access is not available on your
+     *    current plan. Upgrade to Pro, Scale, or Enterprise."}
+     * Reporting it as "verify the key" sent the reader to check something that
+     * was never wrong. */
+    let detail = `HTTP ${r.status}`;
+    try {
+      const j = JSON.parse(r.body);
+      if (j && j.error && j.error.message) detail = `HTTP ${r.status}: ${j.error.message}`;
+    } catch (e) { /* keep the status */ }
+    return { ok: false, data: [], nextCursor: null, error: detail, plan_limited: r.status === 403 };
+  }
   let j = null;
   try { j = JSON.parse(r.body); } catch (e) {
     return { ok: false, data: [], nextCursor: null, error: "non-JSON response" };

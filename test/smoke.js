@@ -631,6 +631,41 @@ setTimeout(async () => {
       if (prev === undefined) delete process.env.SESSION_SECRET;
       else process.env.SESSION_SECRET = prev;    }
   }
+  /* ------------------------------------------------- scraping fallback chain */
+  {
+    const sc = require(P("collectors", "lib", "scrape.js"));
+
+    // Hosts measured to refuse a direct fetch must skip it, or every scrape of
+    // them wastes a round trip before falling through.
+    t("the WAF-protected directories are known to the chain",
+      ["g2.com", "capterra.com", "trustradius.com", "softwareadvice.com", "gartner.com"]
+        .every(h => sc.KNOWN_WALLED.test(h)) && !sc.KNOWN_WALLED.test("example.com"));
+
+    /* A 200 carrying a challenge page is the dangerous case: it looks like
+     * success and parses to nothing, which is how a bot wall silently becomes
+     * "this company has no products". Measured on G2: the default proxy mode
+     * returned exactly that in 2,562 bytes. */
+    t("a small 200 containing a bot challenge counts as blocked",
+      sc.looksBlocked({ ok: true, bytes: 2562, body: "Just a moment... enable JavaScript and cookies" }) === true);
+    t("a large real page is not treated as blocked merely for mentioning captcha",
+      sc.looksBlocked({ ok: true, bytes: 948680, body: "x".repeat(100) + " captcha " + "y".repeat(100) }) === false);
+    t("an empty 200 is not accepted as content",
+      sc.looksBlocked({ ok: true, bytes: 120, body: "tiny" }) === true);
+    t("a failed response is blocked",
+      sc.looksBlocked({ ok: false, status: 403 }) === true);
+
+    // ScrapeBadger must be inert-with-a-reason rather than silently empty.
+    const badger = sc.badgerStatus();
+    t("ScrapeBadger states why it is unavailable rather than returning nothing",
+      badger.ok || /SCRAPEBADGER_SCRAPER|scraper-name|not configured/i.test(badger.reason || ""),
+      badger.ok ? "configured: " + badger.scraper : "inert, reason given");
+
+    const routes = sc.routeStatus();
+    t("at least one scraping route is available",
+      Object.values(routes).some(r => r.available),
+      Object.entries(routes).filter(([, r]) => r.available).map(([k]) => k).join(" -> "));
+  }
+
   /* --------------------------------------- environment variable hygiene */
   // A duplicate key is a value you believe you set and did not: the later
   // assignment silently wins. Both files are checked because .env.example is

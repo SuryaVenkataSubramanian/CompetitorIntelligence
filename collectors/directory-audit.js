@@ -35,6 +35,7 @@ const path = require("path");
 const { load } = require("./lib/env");
 const searx = require("./lib/searxng-client");
 const { fetchUrl } = require("./lib/fetch");
+const scrape = require("./lib/scrape");
 const { htmlToText, extractTitle, isUsableDescription } = require("./lib/verify");
 const dirs = require("./lib/directories");
 const threat = require("./lib/threat");
@@ -115,7 +116,12 @@ async function resolveWebsite(name, { log = () => {} } = {}) {
 
 /** Fetch a resolved homepage and run the existing threat assessment on it. */
 async function assessWebsite(website, name) {
-  const r = await fetchUrl(website, { retries: 1, timeout: 20000 });
+  /* Through the scraping chain rather than a bare fetch: a vendor homepage
+   * behind a WAF used to read as "unreachable", which then reported as
+   * "not assessed" and looked like a missing product rather than a blocked
+   * request. The chain falls through to a stealth proxy and records which
+   * route retrieved the bytes. */
+  const r = await scrape.fetchPage(website, { log: () => {} });
   if (!r.ok) return { ok: false, reason: `homepage returned HTTP ${r.status || "no response"}` };
   const text = htmlToText(r.body);
   const desc = (String(r.body).match(

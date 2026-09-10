@@ -80,7 +80,12 @@ async function checkOctolens() {
   const ad = require("./adapters/octolens");
   const page = await ad._fetchPage(null);
   if (!page.ok) {
-    return report("Octolens", "BROKEN", `API error: ${page.error}`, { fix: "Verify the key in the Octolens dashboard" });
+    return report("Octolens", "BROKEN", `API error: ${page.error}`, {
+      plan_limited: !!page.plan_limited,
+      fix: page.plan_limited
+        ? "Octolens API access requires a Pro, Scale or Enterprise plan. The key is valid; the plan does not include API access."
+        : "Verify the key in the Octolens dashboard",
+    });
   }
   const kws = {};
   for (const m of page.data) for (const k of (m.keywords || [])) kws[k.keyword] = (kws[k.keyword] || 0) + 1;
@@ -203,6 +208,24 @@ async function checkDataForSeo() {
   }
 }
 
+/* ------------------------------------------------------------- scraping chain */
+
+async function checkScraping() {
+  const st = require("./lib/scrape").routeStatus();
+  const up = Object.entries(st).filter(([, v]) => v.available).map(([k]) => k);
+  const down = Object.entries(st).filter(([, v]) => !v.available).map(([k]) => k);
+  // One available route is enough to scrape; the chain exists so a dead
+  // provider costs an attempt rather than a channel.
+  report(up.length ? (down.length ? "DEGRADED" : "WORKING") : "FAIL", "scraping chain",
+    `${up.join(" -> ")} available` + (down.length ? `; unavailable: ${down.join(", ")}` : ""),
+    {
+      routes: st,
+      fix: st.scrapebadger.needs_dashboard_setup
+        ? "ScrapeBadger: create a scraper in their dashboard, then set SCRAPEBADGER_SCRAPER to its name."
+        : null,
+    });
+}
+
 /* ------------------------------------------------------------------ Windsor */
 
 async function checkWindsor() {
@@ -275,6 +298,7 @@ async function checkSmtp() {
     ["NewsAPI", checkNewsapi],
     ["Bright Data", checkBrightData],
     ["DataForSEO", checkDataForSeo],
+    ["Scraping chain", checkScraping],
     ["Windsor.ai", checkWindsor],
     ["Claude runtime", checkClaudeRuntime],
     ["SMTP", checkSmtp],

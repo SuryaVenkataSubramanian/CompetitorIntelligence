@@ -30,6 +30,7 @@
 const path = require("path");
 const fs = require("fs");
 const { fetchUrl, pool } = require("./lib/fetch");
+const scrape = require("./lib/scrape");
 const { htmlToText, extractTitle, domainOf, canonicalUrl } = require("./lib/verify");
 const { brandOrder, brand } = require("./lib/brands");
 const threat = require("./lib/threat");
@@ -306,7 +307,9 @@ function nextBatch(size) {
   const rejected = [];
 
   await pool(list, 8, async c => {
-    const r = await fetchUrl(c.probe_url, { retries: 1, timeout: 20000 });
+    // Via the scraping chain, so a WAF-protected homepage is judged on its
+    // content rather than rejected as unreachable.
+    const r = await scrape.fetchPage(c.probe_url, { log: () => {} });
     if (!r.ok) {
       rejected.push({ host: c.host, reason: `homepage returned HTTP ${r.status || "no response"}` });
       return;
