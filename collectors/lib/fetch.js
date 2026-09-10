@@ -19,6 +19,12 @@ const UA =
 // Per-host minimum gap between requests, in ms. GDELT explicitly asks for 1 req / 5s.
 const HOST_THROTTLE = {
   "api.gdeltproject.org": 5500,
+  /* DataForSEO enforces 6 requests per minute and answers a 7th with
+   * "40202 The rates limit per minute has been exceeded: 6 >= 6" — a task-level
+   * error inside an HTTP 200, so it does NOT look like a failure to a caller
+   * checking status codes. Measured while probing: a burst of ordinary calls
+   * tripped it. 10.5s spaces requests just under the limit. */
+  "api.dataforseo.com": 10500,
   "hn.algolia.com": 300,
   "news.google.com": 1200,
   "www.youtube.com": 800,

@@ -23,6 +23,7 @@
 // provider without a circular import.
 const searxng = require("./searxng-client");
 const builtin = require("./serp");
+const dfs = require("./dataforseo");
 
 const MODE = (process.env.SERP_PROVIDER || "auto").toLowerCase();
 
@@ -30,6 +31,73 @@ let resolved = null; // cached for the life of the process
 
 async function resolve({ log = () => {} } = {}) {
   if (resolved) return resolved;
+
+  /* DATAFORSEO FIRST.
+   *
+   * SearXNG was the preferred provider and it is not a reliable one: it is a
+   * local process that has to be running, its upstream engines rate-limit and
+   * CAPTCHA independently, and when it stops the channels that depend on it go
+   * quiet rather than erroring. Measured: unreachable, and the Events, SERP and
+   * Google-News channels had been stale for 10 days as a result.
+   *
+   * DataForSEO returns real Google results over plain HTTP with no local
+   * service, so nothing to keep alive. It costs $0.002 a query, which is the
+   * trade: a metered provider that works beats a free one that is down.
+   * SearXNG remains the free fallback for exactly that reason. */
+  const wantDfs = MODE === "dataforseo" || MODE === "auto";
+  if (wantDfs && dfs.configured()) {
+    const bal = await dfs.balance();
+    const minBal = Number(process.env.DATAFORSEO_MIN_BALANCE || 0.05);
+    if (bal.ok && bal.balance > minBal) {
+      resolved = {
+        id: "dataforseo",
+        label: "DataForSEO (real Google SERP)",
+        search: async (q, o = {}) => {
+          const r = await dfs.googleOrganic(q, { useCache: o.useCache !== false, log: o.log });
+          if (!r.ok) return { ok: false, results: [], error: r.error, status: r.status };
+          return {
+            ok: true,
+            status: 200,
+            results: r.results,
+            unresponsive_engines: [],
+            cost: r.cost || 0,
+            from_cache: !!r.from_cache,
+          };
+        },
+        note:
+          `Real Google results via DataForSEO. Balance ${Number(bal.balance).toFixed(4)} at ~` +
+          `$0.002/query (~${Math.floor((bal.balance - minBal) / 0.002)} queries). Cached for 7 days, ` +
+          `so a repeated query is free.`,
+        degraded: false,
+        metered: true,
+        balance: bal.balance,
+        capabilities: {
+          provider: "dataforseo",
+          site_operator: true,
+          qualifier_terms: true,
+          date_filter: false,   // depth/location, not a time_range parameter
+          serves_channels: ["web", "blog", "linkedin", "x", "video", "event"],
+          cannot_serve_channels: [],
+        },
+      };
+      log(`    SERP provider: DataForSEO (real Google), balance ${Number(bal.balance).toFixed(4)}`);
+      return resolved;
+    }
+    if (bal.ok) {
+      log(`    DataForSEO balance ${Number(bal.balance).toFixed(4)} is at or below the ${minBal} reserve — falling back`);
+    } else {
+      log(`    DataForSEO unavailable (${String(bal.reason).slice(0, 60)}) — falling back`);
+    }
+    if (MODE === "dataforseo") {
+      resolved = {
+        id: "none", label: "none",
+        search: async () => ({ ok: false, results: [], error: "DataForSEO was requested but is unavailable or out of budget" }),
+        note: "SERP_PROVIDER=dataforseo was requested but the balance is exhausted or the credential failed.",
+        unavailable: true, degraded: true,
+      };
+      return resolved;
+    }
+  }
 
   const wantSearx = MODE === "searxng" || MODE === "auto";
   const wantBuiltin = MODE === "builtin" || MODE === "auto";

@@ -8,8 +8,8 @@
     "start": "node server.js",
     "collect": "node collectors/collect.js --days=365",
     "collect:90": "node collectors/collect.js --days=90",
-    "collect:linkedin": "node collectors/collect.js --days=90 --only=linkedin",
-    "collect:x": "node collectors/collect.js --days=90 --only=x_twikit",
+    "collect:linkedin": "node collectors/collect.js --days=365 --only=linkedin_brightdata",
+    "collect:x": "node collectors/collect.js --days=90 --only=x_brightdata",
     "reverify:legacy": "node collectors/reverify-legacy.js",
     "resolve:feeds": "node collectors/resolve-feeds.js",
     "build:data": "node collectors/build.js",
@@ -62,7 +62,9 @@
     "env:audit": "node collectors/env-audit.js",
     "env:vercel": "node collectors/env-for-vercel.js",
     "auth:export": "node collectors/auth-export.js",
-    "auth:passwords": "node collectors/auth-passwords.js"
+    "auth:passwords": "node collectors/auth-passwords.js",
+    "refresh:recent": "node collectors/refresh-recent.js",
+    "refresh:recent:full": "node collectors/refresh-recent.js --full"
   },
   "engines": {
     "node": ">=18"

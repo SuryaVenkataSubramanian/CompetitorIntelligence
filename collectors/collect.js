@@ -17,6 +17,20 @@ const { upsertMentions, logRun, writeJson, STORE_DIR } = require("./lib/store");
 const { allBrands } = require("./lib/brands");
 const path = require("path");
 
+/* Registered adapters.
+ *
+ * linkedin.js and x_twikit.js are DELIBERATELY ABSENT. Both drove a real user
+ * session — a li_at cookie and an X username/password — and both had been
+ * dormant since they were written, reporting "not connected" on the dashboard
+ * forever. That approach cannot work here: the credential is a personal login,
+ * it cannot go to a hosted deployment safely, and any login flow dies on a
+ * CAPTCHA or 2FA challenge at which point the channel stops collecting in
+ * silence.
+ *
+ * Their Bright Data replacements need no account at all, which removes the
+ * whole class of problem rather than scheduling around it. The files are kept
+ * on disk for reference; they are simply not run.
+ */
 const ADAPTERS = [
   require("./adapters/octolens"),
   require("./adapters/newsapi"),
@@ -26,9 +40,8 @@ const ADAPTERS = [
   require("./adapters/googlenews"),
   require("./adapters/gdelt"),
   require("./adapters/searxng"),
-  require("./adapters/linkedin"),
   require("./adapters/linkedin-brightdata"),
-  require("./adapters/x_twikit"),
+  require("./adapters/x-brightdata"),
 ];
 
 function parseArgs(argv) {
@@ -55,7 +68,7 @@ function parseArgs(argv) {
   // within seconds; the rate-limited discovery sources then add breadth on top.
   // linkedin_brightdata runs late: its Bright Data collections legitimately take
   // minutes, so the fast sources should already have refreshed the dashboard.
-  const PRIORITY = ["octolens", "newsapi", "blogfeed", "youtube", "hackernews", "searxng", "googlenews", "gdelt", "linkedin", "x_twikit", "linkedin_brightdata"];
+  const PRIORITY = ["octolens", "newsapi", "blogfeed", "youtube", "hackernews", "x_brightdata", "searxng", "googlenews", "gdelt", "linkedin_brightdata"];
   const adapters = (args.only ? ADAPTERS.filter(a => args.only.includes(a.id)) : ADAPTERS)
     .slice()
     .sort((a, b) => PRIORITY.indexOf(a.id) - PRIORITY.indexOf(b.id));

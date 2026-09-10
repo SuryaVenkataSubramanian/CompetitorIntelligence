@@ -1,0 +1,97 @@
+# Frequent incremental refresh.
+#
+# WHY THIS IS SEPARATE FROM collect.yml
+# -------------------------------------
+# collect.yml is the daily deep sweep: SearXNG keyword discovery, the
+# review-directory audit, GDELT. It takes tens of minutes and cannot run often.
+#
+# This is the shallow, frequent one. It touches only sources that answer in
+# seconds-to-minutes and carry exact timestamps, so it can run every two hours
+# and keep the recent view current.
+#
+# It exists because the hosted app CANNOT collect: a serverless function has
+# neither the runtime budget nor a writable filesystem. Freshness on Vercel is
+# therefore a function of how often this commits, and nothing else. Every run
+# that finds new records pushes a commit, which redeploys with the new data.
+
+name: Refresh recent
+
+on:
+  schedule:
+    # Every 2 hours. GitHub queues cron on shared runners, so treat the interval
+    # as approximate rather than exact.
+    - cron: "0 */2 * * *"
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Window in days"
+        required: false
+        default: "7"
+      full:
+        description: "Include the slow discovery sources"
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  # Overlapping runs would race on the evidence store.
+  group: refresh-recent
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      OCTOLENS_API_KEY: ${{ secrets.OCTOLENS_API_KEY }}
+      BRIGHTDATA_API_KEY: ${{ secrets.BRIGHTDATA_API_KEY }}
+      DATAFORSEO_B64: ${{ secrets.DATAFORSEO_B64 }}
+      WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+      NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+      # Keep a scheduled job inside a predictable spend.
+      DATAFORSEO_MAX_PROBE_COST: "0.05"
+      DATAFORSEO_MIN_BALANCE: "0.05"
+      # No SearXNG on this runner; the fast path does not use it, and the SERP
+      # provider falls back to DataForSEO where a query is needed.
+      SERP_PROVIDER: auto
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Refresh
+        run: |
+          DAYS="${{ github.event.inputs.days }}"
+          [ -z "$DAYS" ] && DAYS=7
+          if [ "${{ github.event.inputs.full }}" = "true" ]; then
+            node collectors/refresh-recent.js --days=$DAYS --full
+          else
+            node collectors/refresh-recent.js --days=$DAYS
+          fi
+
+      - name: Accuracy audit
+        # Fails the run rather than committing data that cannot be traced to
+        # evidence and then serving it to the team as fact.
+        run: node collectors/audit-mentions.js
+
+      - name: Commit if anything advanced
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ collectors/store/mentions.json collectors/store/coverage.json \
+                  collectors/store/runs.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Nothing new since the last refresh."
+            exit 0
+          fi
+          NEWEST=$(node -e "try{console.log(require('./data/refresh-receipt.json').newest_after||'?')}catch(e){console.log('?')}")
+          RECORDS=$(node -e "try{console.log(require('./data/meta.json').integrity.verified_records)}catch(e){console.log('?')}")
+          git commit -m "data: refresh (newest $NEWEST, $RECORDS records)" \
+                     -m "Automated 2-hourly incremental. Vercel redeploys from this commit."
+          git push
