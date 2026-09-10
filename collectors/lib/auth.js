@@ -127,6 +127,18 @@ function readUsers() {
   return { users: {} };
 }
 
+/**
+ * Does this account have a stored hash?
+ *
+ * Callers need this to know whether a password can be shown at all: a stored
+ * one cannot, because scrypt is one-way. It also decides which credential
+ * model applies, since a stored hash is authoritative wherever it exists.
+ */
+function hasStoredHash(email) {
+  const u = readUsers().users[String(email || "").trim().toLowerCase()];
+  return !!(u && u.salt && u.hash);
+}
+
 /** Which source the current accounts came from. */
 function usersSource() {
   readUsers();
@@ -289,27 +301,26 @@ function login(email, password, ip) {
   let ok = false;
   let credentialSource = null;
 
-  /* DERIVED FIRST, deliberately.
+  /* A STORED HASH IS AUTHORITATIVE. Derivation applies only where none exists.
    *
-   * Checking the stored hash first meant local and deployed could accept
-   * DIFFERENT passwords for the same person: locally a hash from auth:init, on
-   * the host a hash from config/accounts.json, and derived only where neither
-   * existed. Three sources, three possible answers, and no way to tell which
-   * one a given environment would use.
+   * This ordering is what gives each account exactly ONE valid password.
+   * Accepting both a stored and a derived password would mean two live
+   * credentials per person, and no way to say which one is "the" password when
+   * someone asks.
    *
-   * Deriving first collapses that: wherever SESSION_SECRET is the same, the
-   * passwords are the same. A stored hash still works as a fallback for anyone
-   * who prefers provisioning, and a wrong derived password falls through to it
-   * rather than failing outright. */
-  if (derived.available()) {
+   * So: if a hash exists for this account — from auth:init locally, or from
+   * config/accounts.json on a deploy — that hash decides, and a derived
+   * password is NOT accepted as a second route in. Derivation exists for the
+   * case where nothing was ever provisioned, so that a fresh deployment can
+   * still authenticate instead of reporting that no password exists.
+   */
+  if (u && u.salt && u.hash) {
+    credentialSource = "stored hash (" + accountSource + ")";
+    ok = !!password && verifyPassword(password, u.salt, u.hash);
+  } else if (derived.available()) {
     credentialSource = "derived from SESSION_SECRET";
     ok = derived.verify(e, password);
-  }
-  if (!ok && u && u.salt && u.hash) {
-    credentialSource = "stored hash";
-    ok = !!password && verifyPassword(password, u.salt, u.hash);
-  }
-  if (!derived.available() && !(u && u.salt && u.hash)) {
+  } else {
     // Neither a stored hash nor a usable secret: a configuration problem, and
     // saying so is more useful than implying the password was wrong.
     /* A configuration fault, not a bad password — and worth saying so. The
@@ -441,6 +452,7 @@ module.exports = {
   logout,
   sessionFor,
   usersSource,
+  hasStoredHash,
   sweep,
   status,
   generatePassword,

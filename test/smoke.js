@@ -585,11 +585,52 @@ setTimeout(async () => {
     else process.env.SESSION_SECRET = prevSecret;
   }
 
-  // Account hashes must not be committed: derived mode makes them redundant,
-  // and publishing password hashes to a repository has no upside.
-  t("no account hashes are committed to the repository",
-    !fs.existsSync(P("config", "accounts.json")),
-    "config/accounts.json absent");
+  /* The committed hashes are what let the deployment accept the four
+   * distributed passwords, which are random and therefore cannot be derived.
+   * They must carry only what auth needs. */
+  {
+    const ap = P("config", "accounts.json");
+    t("account hashes are committed so the deploy can authenticate",
+      fs.existsSync(ap), "config/accounts.json present");
+
+    if (fs.existsSync(ap)) {
+      const acc = JSON.parse(fs.readFileSync(ap, "utf8"));
+      const entries = Object.values(acc.accounts || {});
+      const allowedFields = new Set(["email", "salt", "hash"]);
+      const extra = [...new Set(entries.flatMap(a => Object.keys(a)))].filter(k => !allowedFields.has(k));
+      t("committed accounts expose only email, salt and hash",
+        entries.length === 4 && extra.length === 0,
+        extra.length ? "also exposes: " + extra.join(", ") : entries.length + " accounts, nothing extra");
+
+      // No plaintext, and no session key: the hash is safe to publish only
+      // while SESSION_SECRET is not.
+      const vals = JSON.stringify(acc.accounts || {});
+      t("no committed account value carries a session key or a password",
+        !/SESSION_SECRET/i.test(vals) && !entries.some(a => "password" in a));
+
+      /* A stored hash must be AUTHORITATIVE: a derived password cannot be a
+       * second way in. Two live credentials per account would mean there is no
+       * single answer to the question what is my password.
+       *
+       * Tested as behaviour rather than by matching source, because a regex
+       * over auth.js breaks on any refactor while telling us nothing about
+       * what the code does. */
+      const authLib = require(P("collectors", "lib", "auth.js"));
+      const derivedLib = require(P("collectors", "lib", "derived-auth.js"));
+      const testEmail = Object.keys(acc.accounts || {})[0];
+      const prev = process.env.SESSION_SECRET;
+      process.env.SESSION_SECRET = "z".repeat(64);
+      if (testEmail && derivedLib.available()) {
+        const dpw = derivedLib.derivePassword(testEmail);
+        // A unique IP per attempt, so the rate limiter does not mask the result.
+        const r = authLib.login(testEmail, dpw, "10.99." + Math.floor(Math.random() * 250) + ".1");
+        t("a derived password is refused when a stored hash exists",
+          r.ok === false,
+          r.ok ? "ACCEPTED - two live credentials per account" : "exactly one password per account");
+      }
+      if (prev === undefined) delete process.env.SESSION_SECRET;
+      else process.env.SESSION_SECRET = prev;    }
+  }
   /* --------------------------------------- environment variable hygiene */
   // A duplicate key is a value you believe you set and did not: the later
   // assignment silently wins. Both files are checked because .env.example is
