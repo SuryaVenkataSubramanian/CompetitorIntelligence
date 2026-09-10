@@ -305,7 +305,39 @@ async function verifyCandidates(candidates, opts = {}) {
         date_method = du.method;
       }
     }
+    /* TWO DEFENCES AT THE SINGLE GATE, because both bugs recurred after being
+     * fixed once in the adapters — the gate is the only place every record
+     * must pass through.
+     *
+     * 1. A FUTURE published_at is never a publication date. Measured: an
+     *    upcoming-event page (Vercel Ship 26, 2026-10-15) had its event date
+     *    scraped as its publish date, which then reported as "-35 days old".
+     *    Dropped to undated rather than kept, since undated is handled
+     *    honestly downstream and a future date is simply wrong.
+     *
+     * 2. The CHANNEL must match what the URL structurally is. Measured: 6
+     *    youtube.com and linkedin.com URLs discovered by the SearXNG adapter
+     *    were filed under "web", so they vanished from their own channel
+     *    filters. The adapter sets the channel from its own name; the URL is
+     *    the stronger signal. */
+    if (published_at) {
+      const todayIso = new Date().toISOString().slice(0, 10);
+      if (String(published_at).slice(0, 10) > todayIso) {
+        stats.rejected_future_date = (stats.rejected_future_date || 0) + 1;
+        published_at = null;
+        date_method = null;
+        // Cleared together: leaving date_confidence behind is what made the
+        // integrity counts stop adding up.
+        if (typeof date_confidence !== "undefined") date_confidence = null;
+      }
+    }
     if (published_at) stats.dated++;
+
+    const urlChannel = require("./classify").channelFromUrl(c.url);
+    const channel = (urlChannel && c.channel !== "event") ? urlChannel : c.channel;
+    if (urlChannel && urlChannel !== c.channel && c.channel !== "event") {
+      stats.channel_corrected = (stats.channel_corrected || 0) + 1;
+    }
 
     const title =
       c.title ||
@@ -314,7 +346,7 @@ async function verifyCandidates(candidates, opts = {}) {
 
     return makeRecord({
       brand_id: c.brand_id,
-      channel: c.channel,
+      channel,
       url: c.url,
       canonical_url: c.canonical_url,
       domain: domainOf(c.url),

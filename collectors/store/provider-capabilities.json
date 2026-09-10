@@ -1,0 +1,93 @@
+{
+  "probed_at": "2026-09-10T12:53:39.796Z",
+  "providers": [
+    {
+      "provider": "SerpAPI",
+      "state": "WORKING",
+      "detail": "plan Free Plan, 250 searches left; site: query returned 10 result(s)",
+      "plan": "Free Plan",
+      "searches_left": 250,
+      "searches_used_this_month": 0,
+      "site_operator_works": true,
+      "sample": [
+        "https://www.linkedin.com/posts/brittney-ball_start-your-free-trial-today-document360-activity-7473044289393074178-lXUS",
+        "https://www.linkedin.com/posts/peace-sandy-bb7a691b0_start-your-free-trial-today-document360-activity-7451875816344547328-MUf5",
+        "https://www.linkedin.com/posts/document360_ai-powered-knowledge-base-software-that-scales-activity-7382392011053580288-YAv4"
+      ],
+      "error": null
+    },
+    {
+      "provider": "twitterapi.io",
+      "state": "BROKEN",
+      "detail": "no API key. TWITTERAPI_IO_USER_ID=488689478811152384 is present, but the value supplied for the key was the user ID repeated",
+      "needs": "TWITTERAPI_IO_KEY",
+      "how": "Copy the API key from the twitterapi.io dashboard — it is a separate value from the user ID."
+    },
+    {
+      "provider": "BROKEN",
+      "state": "ScrapingBee",
+      "detail": "credits 0/1000; G2 fetch HTTP 500, 2804 bytes (still bot-walled)",
+      "used_api_credit": 0,
+      "max_api_credit": 1000,
+      "g2_status": 500,
+      "g2_bytes": 2804,
+      "defeats_bot_wall": false
+    },
+    {
+      "provider": "ScrapeBadger",
+      "state": "BROKEN",
+      "detail": "no tried endpoint returned the target page. GET  /v1/scrape?url= → 0; GET  /scrape?url= → 0; GET  /v1/?url= (bearer) → 0; GET  /account → 0",
+      "tried": [
+        {
+          "shape": "GET  /v1/scrape?url=",
+          "status": 0,
+          "bytes": 0,
+          "returned_target": false,
+          "body": ""
+        },
+        {
+          "shape": "GET  /scrape?url=",
+          "status": 0,
+          "bytes": 0,
+          "returned_target": false,
+          "body": ""
+        },
+        {
+          "shape": "GET  /v1/?url= (bearer)",
+          "status": 0,
+          "bytes": 0,
+          "returned_target": false,
+          "body": ""
+        },
+        {
+          "shape": "GET  /account",
+          "status": 0,
+          "bytes": 0,
+          "returned_target": false,
+          "body": ""
+        }
+      ],
+      "note": "The base URL and path were not supplied; these are the shapes attempted."
+    },
+    {
+      "provider": "Bright Data",
+      "state": "BROKEN",
+      "detail": "account suspended, can_make_requests=false",
+      "status": "suspended",
+      "fix": "Reactivate the account in the Bright Data console."
+    },
+    {
+      "provider": "DataForSEO",
+      "state": "DEGRADED",
+      "detail": "balance $0.0519 (reserve $0.05)",
+      "balance": 0.05194399999999999,
+      "fix": null
+    },
+    {
+      "provider": "SearXNG",
+      "state": "WORKING",
+      "detail": "SearXNG at http://localhost:8888 — 91 results, engines: google cse, fynd, yahoo, naver, ya",
+      "fix": null
+    }
+  ]
+}

@@ -24,6 +24,7 @@
 const searxng = require("./searxng-client");
 const builtin = require("./serp");
 const dfs = require("./dataforseo");
+const serpapi = require("./serpapi");
 
 const MODE = (process.env.SERP_PROVIDER || "auto").toLowerCase();
 
@@ -48,7 +49,15 @@ async function resolve({ log = () => {} } = {}) {
   if (wantDfs && dfs.configured()) {
     const bal = await dfs.balance();
     const minBal = Number(process.env.DATAFORSEO_MIN_BALANCE || 0.05);
-    if (bal.ok && bal.balance > minBal) {
+    /* Enough headroom for at least one QUERY, not merely above the reserve.
+     *
+     * Measured bug: with a balance of $0.0519 and a $0.05 reserve, `> minBal`
+     * was true, so DataForSEO was selected over a working free provider — and
+     * then every query it served failed the budget guard, because a Google
+     * organic call costs $0.002-0.004. Selecting a provider that cannot answer
+     * is worse than not selecting it. */
+    const perQuery = 0.004;
+    if (bal.ok && bal.balance - minBal >= perQuery) {
       resolved = {
         id: "dataforseo",
         label: "DataForSEO (real Google SERP)",
@@ -136,6 +145,56 @@ async function resolve({ log = () => {} } = {}) {
       return resolved;
     }
     log(`    SearXNG unavailable (${p.reason.split(".")[0]}) — falling back to the built-in engines`);
+  }
+
+  /* SERPAPI — after SearXNG, before the built-in engines.
+   *
+   * Ordered this way on purpose. SearXNG is free and unmetered, so it must
+   * carry bulk keyword sweeps (hundreds of queries per run). SerpAPI is real
+   * Google but capped at 250 searches a MONTH on this plan — one sweep would
+   * exhaust it and then every dependent channel would report nothing.
+   *
+   * Its value is that it is HOSTED: unlike SearXNG it works from a serverless
+   * function, so it is the provider that keeps SERP-dependent channels alive
+   * where the app actually runs. Used sparingly, cached for a day. */
+  const wantSerpApi = MODE === "serpapi" || MODE === "auto";
+  if (wantSerpApi && serpapi.configured()) {
+    const p = await serpapi.probe();
+    if (p.ok) {
+      resolved = {
+        id: "serpapi",
+        label: "SerpAPI (real Google, hosted)",
+        search: (q, o = {}) => serpapi.search(q, { ...o, log: o.log }),
+        note:
+          p.detail +
+          ". Hosted, so it works from a serverless function where SearXNG cannot. " +
+          "Capped at 250 searches/month, cached 24h, with a reserve held back — a quota stop " +
+          "reports as not-checked rather than as an empty result.",
+        degraded: false,
+        metered: true,
+        searches_left: p.searches_left,
+        capabilities: {
+          provider: "serpapi",
+          site_operator: true,
+          qualifier_terms: true,
+          date_filter: false,
+          serves_channels: ["web", "blog", "linkedin", "x", "video", "event"],
+          cannot_serve_channels: [],
+        },
+      };
+      log(`    SERP provider: ${p.detail}`);
+      return resolved;
+    }
+    log(`    SerpAPI unavailable (${String(p.reason).slice(0, 70)}) — falling back`);
+    if (MODE === "serpapi") {
+      resolved = {
+        id: "none", label: "none",
+        search: async () => ({ ok: false, results: [], error: p.reason }),
+        note: `SERP_PROVIDER=serpapi was requested but ${p.reason}`,
+        unavailable: true, degraded: true,
+      };
+      return resolved;
+    }
   }
 
   if (wantBuiltin) {

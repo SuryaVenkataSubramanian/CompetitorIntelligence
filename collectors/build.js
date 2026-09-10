@@ -141,7 +141,14 @@ function summarise(records) {
   for (const r of records) {
     byChannel[r.channel] = (byChannel[r.channel] || 0) + 1;
     sentiment[r.sentiment || "unclassified"]++;
-    if (r.date_confidence === "exact") dated++;
+    /* Counted from the DATE ITSELF, not from date_confidence.
+     *
+     * Two fields encoded the same fact and drifted: clearing a bad
+     * published_at (a future event date) left date_confidence "exact", so the
+     * integrity strip reported 1274 dated + 187 undated against 1460 records.
+     * A count that does not add up undermines every other number on the page. */
+    // Either shape: store records carry published_at, built records carry date.
+    if ((r.published_at || r.date) && r.date_confidence === "exact") dated++;
     if (r.link_ok) linkOk++;
   }
 

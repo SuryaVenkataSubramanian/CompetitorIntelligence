@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-09-01T15:07:52.172Z",
+  "built_at": "2026-09-10T13:02:09.409Z",
   "excluded_unverified": [],
   "legacy_reverification": {
     "submitted": 67,
@@ -142,52 +142,1780 @@
     ]
   },
   "collector_run": {
-    "finished_at": "2026-09-01T06:17:01.842Z",
-    "window_days": 365,
+    "finished_at": "2026-09-10T12:54:04.339Z",
+    "window_days": 7,
     "adapters": [
       {
-        "adapter": "linkedin_brightdata",
-        "label": "LinkedIn (Bright Data Web Scraper)",
+        "adapter": "blogfeed",
+        "label": "Brand blog/changelog RSS",
         "status": "ok",
-        "candidates": 341,
+        "candidates": 6,
+        "requires": [],
+        "coverage_limit": null,
+        "connection": null,
+        "ms": 9993
+      },
+      {
+        "adapter": "youtube",
+        "label": "YouTube channel RSS",
+        "status": "ok",
+        "candidates": 1,
+        "requires": [],
+        "coverage_limit": null,
+        "connection": null,
+        "ms": 6778
+      },
+      {
+        "adapter": "hackernews",
+        "label": "Hacker News (Algolia)",
+        "status": "ok",
+        "candidates": 119,
+        "requires": [],
+        "coverage_limit": null,
+        "connection": null,
+        "ms": 12623
+      },
+      {
+        "adapter": "searxng",
+        "label": "SearXNG metasearch (self-hosted)",
+        "status": "ok",
+        "candidates": 871,
         "requires": [
-          "BRIGHTDATA_API_KEY"
+          "a running SearXNG instance (SEARXNG_URL)"
         ],
-        "coverage_limit": {
-          "note": "The Bright Data LinkedIn-posts dataset supports discovery by url, profile_url and company_url only — there is no keyword discovery. Keyword coverage is therefore bounded by how many linkedin.com/posts URLs a web search can surface, and LinkedIn is partially de-indexed. A keyword returning no URLs means 'not found by search', not 'no such post exists'.",
-          "discovery_modes": [
-            "url",
-            "profile_url",
-            "company_url"
-          ]
-        },
-        "connection": {
-          "id": "linkedin_brightdata",
-          "label": "LinkedIn (Bright Data Web Scraper)",
-          "connected": true,
-          "blockers": [],
-          "how_to_enable": null,
-          "fallback_in_use": null
-        },
-        "ms": 283475
+        "coverage_limit": null,
+        "connection": null,
+        "ms": 2374679
       }
     ],
     "verification": {
-      "candidates": 341,
-      "unique": 341,
-      "fetched": 341,
-      "fetch_failed": 0,
-      "verified": 341,
+      "candidates": 997,
+      "unique": 481,
+      "fetched": 349,
+      "fetch_failed": 132,
+      "verified": 279,
       "rejected_non_article": 0,
-      "rejected_non_content": 0,
-      "rejected_no_mention": 0,
-      "rejected_no_evidence": 0,
-      "dated": 341,
-      "built_but_unverified": 0,
-      "link_healthy": 341
+      "rejected_non_content": 126,
+      "rejected_no_mention": 182,
+      "rejected_no_evidence": 1,
+      "dated": 212,
+      "built_but_unverified": 19,
+      "link_healthy": 271
     },
-    "gaps": [],
-    "rejection_total": 0,
-    "rejections_sample": []
+    "gaps": [
+      {
+        "adapter": "blogfeed",
+        "brand_id": "gitbook",
+        "reason": "No discoverable RSS/Atom feed — probed 8 candidate paths plus <head> autodiscovery, all 404. Blog coverage for GitBook comes from SearXNG + GDELT web discovery instead."
+      },
+      {
+        "adapter": "blogfeed",
+        "brand_id": "guru",
+        "reason": "No discoverable RSS/Atom feed — probed 6 candidate paths plus <head> autodiscovery, all 404. Blog coverage comes from SearXNG + GDELT."
+      },
+      {
+        "adapter": "blogfeed",
+        "brand_id": "knowledgeowl",
+        "reason": "No discoverable RSS/Atom feed — probed 9 candidate paths plus <head> autodiscovery, all 404 (one 200 returned HTML, not a feed). Blog coverage comes from SearXNG + GDELT."
+      },
+      {
+        "adapter": "youtube",
+        "brand_id": "knowledgeowl",
+        "reason": "No YouTube channel resolved for any tried handle. The Videos channel for KnowledgeOwl is populated by SearXNG site:youtube.com discovery instead of an owned-channel feed."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (X — docs context p1): Could not read the DataForSEO balance: The rates limit per minute has been exceeded: 6 >= 6."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (X — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (web — reviews p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (web — reviews p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (YouTube — reviews/demos p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (Instagram — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (Facebook — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (blog — third-party posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (blog — how-to coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "document360",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (LinkedIn — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (LinkedIn — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (X — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (X — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (web — reviews p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (web — reviews p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (YouTube — reviews/demos p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (Instagram — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (Facebook — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (blog — third-party posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (blog — how-to coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "mintlify",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — posts p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — articles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — articles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — category context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — category context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (LinkedIn — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (X — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (X — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — reviews p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — reviews p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — head-to-head p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — head-to-head p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — pricing coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — pricing coverage p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — customer stories p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — customer stories p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — category listicles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (web — category listicles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (YouTube — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (YouTube — reviews/demos p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (Instagram — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (Facebook — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (blog — third-party posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (blog — how-to coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "gitbook",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — posts p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — articles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — articles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — category context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — category context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (LinkedIn — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (X — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (X — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — reviews p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — reviews p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — head-to-head p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — head-to-head p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — pricing coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — pricing coverage p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — customer stories p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — customer stories p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — category listicles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (web — category listicles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (YouTube — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (YouTube — reviews/demos p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (Instagram — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (Facebook — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (blog — third-party posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (blog — how-to coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "confluence",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — posts p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — articles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — articles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — category context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — category context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (LinkedIn — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (X — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (X — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — reviews p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — reviews p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — head-to-head p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — head-to-head p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — pricing coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — pricing coverage p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — customer stories p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — customer stories p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — category listicles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (web — category listicles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (YouTube — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (YouTube — reviews/demos p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (Instagram — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (Facebook — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (blog — third-party posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (blog — how-to coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "guru",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — posts p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — articles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — articles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — category context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — category context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (LinkedIn — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (X — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (X — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — reviews p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — reviews p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — head-to-head p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — head-to-head p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — pricing coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — pricing coverage p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — customer stories p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — customer stories p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — category listicles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (web — category listicles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (YouTube — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (YouTube — reviews/demos p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (Instagram — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (Facebook — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (blog — third-party posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (blog — how-to coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "bloomfire",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — brand mention p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — posts p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — articles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — articles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — category context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — category context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (LinkedIn — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (X — brand mention (x.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (X — brand mention (twitter.com) p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (X — docs context p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (X — docs context p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — reviews p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — reviews p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — alternatives/comparisons p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — head-to-head p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — head-to-head p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — pricing coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — pricing coverage p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — customer stories p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — customer stories p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — category listicles p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (web — category listicles p2): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (YouTube — brand mention p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (YouTube — reviews/demos p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (Instagram — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (Facebook — posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (blog — third-party posts p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (blog — how-to coverage p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      },
+      {
+        "adapter": "searxng",
+        "brand_id": "knowledgeowl",
+        "reason": "SearXNG query failed (event sponsorship p1): Skipped: the DataForSEO balance is $0.0519 and this call costs ~$0.0020, which would drop below the $0.05 reserve. Top up the DataForSEO account to resume measuring this surface. This is a budget stop, NOT a measurement of absence."
+      }
+    ],
+    "rejection_total": 328,
+    "rejections_sample": [
+      {
+        "url": "https://www.atlassian.com/blog/bitbucket/monitor-test-health-at-a-glance-in-bitbucket-tests",
+        "brand_id": "confluence",
+        "adapter": "blogfeed",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://context.apimatic.io/",
+        "brand_id": "mintlify",
+        "adapter": "hackernews",
+        "reason": "site homepage, not a specific mention"
+      },
+      {
+        "url": "https://qumra.io",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "site homepage, not a specific mention"
+      },
+      {
+        "url": "https://www.votito.com/",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "site homepage, not a specific mention"
+      },
+      {
+        "url": "https://www.youtube.com/@PyConAU/videos",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "YouTube channel/playlist page, not a video"
+      },
+      {
+        "url": "https://maxxwell.dev/",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "site homepage, not a specific mention"
+      },
+      {
+        "url": "https://aietalks.com/",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "site homepage, not a specific mention"
+      },
+      {
+        "url": "https://www.mrbray.com/gifbook",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49605536",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49611065",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "negative context matched: \"confluence of\""
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49583482",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "negative context matched: \"confluence of\""
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49641349",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49594674",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "ambiguous name \"Confluence\" with no product context (needed one of: atlassian, wiki, knowledge base, documentation…)"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49636330",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49598912",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "ambiguous name \"Confluence\" with no product context (needed one of: atlassian, wiki, knowledge base, documentation…)"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49553937",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49554470",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49608586",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "ambiguous name \"Confluence\" with no product context (needed one of: atlassian, wiki, knowledge base, documentation…)"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49554478",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://link.springer.com/article/10.3758/s13423-015-0947-8",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://galvered.com/blog/ai4-conference/",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49640700",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49641167",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49640261",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49642054",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49641553",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49610069",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49572431",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49550118",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "negative context matched: \"confluence of\""
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49566316",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "negative context matched: \"confluence of\""
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49633563",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49634430",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49636113",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49634929",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49637421",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49637260",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49638162",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49638341",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49638752",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49639062",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49638986",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49615174",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "ambiguous name \"Guru\" with no product context (needed one of: getguru, knowledge management, enterprise search, knowledge base…)"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49597729",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "negative context matched: \"tech guru\""
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49631503",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49628219",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49637647",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "ambiguous name \"Guru\" with no product context (needed one of: getguru, knowledge management, enterprise search, knowledge base…)"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49632088",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49632333",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49633510",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49633422",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49633306",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49605756",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49557020",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49637334",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49632749",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49641090",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49641346",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49622339",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49609218",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49590217",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49578767",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "ambiguous name \"Guru\" with no product context (needed one of: getguru, knowledge management, enterprise search, knowledge base…)"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49561247",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "ambiguous name \"Guru\" with no product context (needed one of: getguru, knowledge management, enterprise search, knowledge base…)"
+      },
+      {
+        "url": "https://github.com/sysdev-0/grubst",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49635287",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49639288",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49620870",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49622742",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49621934",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49623368",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49627455",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49631415",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49632060",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49633102",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49633543",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49631736",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49599799",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49603206",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49600737",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49612306",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49614634",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49611143",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49618386",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49616964",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49616469",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49616199",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49588019",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49589903",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49590398",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49596847",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49596975",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49590976",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49593031",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49641559",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49596128",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49589095",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49592691",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49641333",
+        "brand_id": "knowledgeowl",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49574683",
+        "brand_id": "bloomfire",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49626837",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49623330",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      }
+    ]
   }
 }

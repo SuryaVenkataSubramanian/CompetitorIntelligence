@@ -64,7 +64,8 @@
     "auth:export": "node collectors/auth-export.js",
     "auth:passwords": "node collectors/auth-passwords.js",
     "refresh:recent": "node collectors/refresh-recent.js",
-    "refresh:recent:full": "node collectors/refresh-recent.js --full"
+    "refresh:recent:full": "node collectors/refresh-recent.js --full",
+    "probe:providers": "node collectors/probe-providers.js"
   },
   "engines": {
     "node": ">=18"
