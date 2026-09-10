@@ -65,3 +65,7 @@ Thumbs.db
 
 # Generated paste-file for Vercel — contains live secrets, never commit.
 .env.vercel
+
+# Provisioned account hashes. Superseded by derived passwords (SESSION_SECRET),
+# and there is no reason to publish password hashes to a repository.
+config/accounts.json

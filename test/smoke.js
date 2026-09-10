@@ -539,44 +539,57 @@ setTimeout(async () => {
     !authority.some(d => /vertexaisearch|^t\.co$|^news\.google\.com$/.test(d.domain)),
     `${authority.length} domains, top: ${authority.slice(0, 3).map(d => d.domain).join(", ")}`);
 
-  /* ------------------------------------- committed accounts (no Vercel config) */
-  // config/accounts.json lets a deployment authenticate with no environment
-  // variable. It must carry ONLY what auth needs: publishing login timestamps
-  // or counts would disclose who signed in when, for no benefit.
+  /* ---------------------------------- derived passwords (no provisioning) */
+  // Passwords are a pure function of SESSION_SECRET, which is what lets a
+  // fresh deploy authenticate with no provisioning step. These assert the
+  // properties that makes safe.
   {
-    const ap = P("config", "accounts.json");
-    if (fs.existsSync(ap)) {
-      const acc = JSON.parse(fs.readFileSync(ap, "utf8"));
-      const entries = Object.values(acc.accounts || {});
-      t("committed accounts file has accounts", entries.length > 0, `${entries.length} account(s)`);
+    const derived = require(P("collectors", "lib", "derived-auth.js"));
+    const prevSecret = process.env.SESSION_SECRET;
+    process.env.SESSION_SECRET = "t".repeat(64);
 
-      const allowed = new Set(["email", "salt", "hash"]);
-      const extra = [...new Set(entries.flatMap(a => Object.keys(a)))].filter(k => !allowed.has(k));
-      t("committed accounts expose only email, salt and hash",
-        extra.length === 0, extra.length ? `also exposes: ${extra.join(", ")}` : "nothing else");
+    const email = "sunil.krishna@kovai.co";
+    const pw = derived.derivePassword(email);
 
-      /* The whole security argument rests on this: a hash is safe to publish,
-       * a session key is not. With both public a cookie could be forged and
-       * the login skipped entirely.
-       *
-       * Scoped to the ACCOUNT VALUES rather than the file text: the _comment
-       * block explains why SESSION_SECRET must stay an environment variable,
-       * so the word legitimately appears there and matching the whole file
-       * flagged the file for its own documentation. */
-      const accVals = JSON.stringify(acc.accounts || {});
-      t("no account value carries a session key or a password",
-        !/SESSION_SECRET/i.test(accVals) &&
-        !Object.values(acc.accounts || {}).some(a => "password" in a));
+    t("a derived password has the expected shape and strength",
+      /^[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}$/.test(pw),
+      pw.length + " chars, 16 symbols from a 32-char alphabet = 80 bits");
 
-      // Every account must be on the allow-list, which is the real authority.
-      const authSrc = fs.readFileSync(P("collectors", "lib", "auth.js"), "utf8");
-      const listed = (authSrc.match(/"[a-z.]+@kovai.co"/g) || []).map(x => x.replace(/"/g, ""));
-      const offList = Object.keys(acc.accounts || {}).filter(e => !listed.includes(e));
-      t("every committed account is on the allow-list",
-        offList.length === 0, offList.join(", ") || `all ${listed.length} allow-listed`);
-    }
+    t("derivation is deterministic for the same secret",
+      derived.derivePassword(email) === pw);
+
+    t("two accounts never share a password",
+      new Set(["a@kovai.co", "b@kovai.co", "c@kovai.co"].map(e => derived.derivePassword(e))).size === 3);
+
+    // Rotating the secret must change every password AND invalidate sessions.
+    process.env.SESSION_SECRET = "u".repeat(64);
+    t("rotating SESSION_SECRET changes the derived password",
+      derived.derivePassword(email) !== pw);
+
+    // The alphabet must divide 256 evenly or the modulo mapping loses entropy.
+    t("the password alphabet maps from bytes without bias",
+      256 % derived.ALPHABET.length === 0,
+      "256 % " + derived.ALPHABET.length + " = " + (256 % derived.ALPHABET.length));
+
+    t("look-alike characters are excluded from the alphabet",
+      !["0", "O", "1", "l", "I"].some(c => derived.ALPHABET.includes(c)),
+      derived.ALPHABET);
+
+    // With no secret there are no derived passwords, and that must be stated
+    // rather than silently producing a weak or empty one.
+    delete process.env.SESSION_SECRET;
+    t("no secret means derivation reports itself unavailable",
+      derived.available() === false && derived.verify(email, pw) === false);
+
+    if (prevSecret === undefined) delete process.env.SESSION_SECRET;
+    else process.env.SESSION_SECRET = prevSecret;
   }
 
+  // Account hashes must not be committed: derived mode makes them redundant,
+  // and publishing password hashes to a repository has no upside.
+  t("no account hashes are committed to the repository",
+    !fs.existsSync(P("config", "accounts.json")),
+    "config/accounts.json absent");
   /* --------------------------------------- environment variable hygiene */
   // A duplicate key is a value you believe you set and did not: the later
   // assignment silently wins. Both files are checked because .env.example is

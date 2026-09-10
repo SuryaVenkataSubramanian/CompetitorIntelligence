@@ -29,6 +29,7 @@
 const crypto = require("crypto");
 const fs = require("fs");
 const session = require("./session");
+const derived = require("./derived-auth");
 const path = require("path");
 
 const STORE_DIR = path.join(__dirname, "..", "store");
@@ -274,11 +275,58 @@ function login(email, password, ip) {
 
   const store = readUsers();
   const u = store.users && store.users[e];
-  if (!u) {
-    return { ok: false, error: "No password has been generated yet. Run: npm run auth:init" };
+
+  /* Two ways to hold a credential, and the stored one wins when present.
+   *
+   * STORED   a scrypt hash from `auth:init`, in the local store, an
+   *          environment variable, or config/accounts.json.
+   * DERIVED  computed from SESSION_SECRET on the spot — see lib/derived-auth.js.
+   *          This is what makes the deployment need no provisioning at all: a
+   *          fresh host with one environment variable can authenticate, where
+   *          before it reported "no password has been generated" because
+   *          nothing had written a hash anywhere it could see.
+   */
+  let ok = false;
+  let credentialSource = null;
+
+  /* DERIVED FIRST, deliberately.
+   *
+   * Checking the stored hash first meant local and deployed could accept
+   * DIFFERENT passwords for the same person: locally a hash from auth:init, on
+   * the host a hash from config/accounts.json, and derived only where neither
+   * existed. Three sources, three possible answers, and no way to tell which
+   * one a given environment would use.
+   *
+   * Deriving first collapses that: wherever SESSION_SECRET is the same, the
+   * passwords are the same. A stored hash still works as a fallback for anyone
+   * who prefers provisioning, and a wrong derived password falls through to it
+   * rather than failing outright. */
+  if (derived.available()) {
+    credentialSource = "derived from SESSION_SECRET";
+    ok = derived.verify(e, password);
+  }
+  if (!ok && u && u.salt && u.hash) {
+    credentialSource = "stored hash";
+    ok = !!password && verifyPassword(password, u.salt, u.hash);
+  }
+  if (!derived.available() && !(u && u.salt && u.hash)) {
+    // Neither a stored hash nor a usable secret: a configuration problem, and
+    // saying so is more useful than implying the password was wrong.
+    /* A configuration fault, not a bad password — and worth saying so. The
+     * previous message ("Run: npm run auth:init") sent a user of a HOSTED app
+     * off to run a local command they have no access to, which is the wrong
+     * instruction for the person most likely to see it. */
+    return {
+      ok: false,
+      error:
+        "This deployment has no sign-in credentials configured, so no password can be correct yet. " +
+        "Whoever owns the deployment needs to set SESSION_SECRET in its environment variables — " +
+        "passwords are derived from it and no other setup is required.",
+      configuration_error: true,
+    };
   }
 
-  if (!password || !verifyPassword(password, u.salt, u.hash)) {
+  if (!ok) {
     recordFailure(e, ip);
     return { ok: false, error: "Invalid email or password." };
   }
@@ -293,17 +341,30 @@ function login(email, password, ip) {
    * invalidates old tokens. */
   let token;
   if (session.isStateless()) {
-    token = session.issue(e, u.hash, { ttlMs: SESSION_TTL_MS }).token;
+    /* The signature binds to a credential fingerprint so that rotating the
+     * credential invalidates every token issued against the old one.
+     *
+     * With a stored hash that is the hash. In derived mode there is no stored
+     * hash, so the derived password stands in: it changes exactly when
+     * SESSION_SECRET changes, which is the only way a derived password can
+     * change. Either way, rotation revokes. */
+    const fingerprintInput = (u && u.hash) || derived.derivePassword(e);
+    token = session.issue(e, fingerprintInput, { ttlMs: SESSION_TTL_MS }).token;
   } else {
     token = crypto.randomBytes(32).toString("hex");
     sessions.set(token, { email: e, created: now, expires: now + SESSION_TTL_MS });
   }
 
-  u.last_login = new Date().toISOString();
-  u.login_count = (u.login_count || 0) + 1;
-  writeUsers(store);
+  // Bookkeeping only, and only when there is a record to write it to. Derived
+  // mode has no per-user record by design, so there is nothing to update —
+  // which must not fail the login.
+  if (u) {
+    u.last_login = new Date().toISOString();
+    u.login_count = (u.login_count || 0) + 1;
+    writeUsers(store);
+  }
 
-  return { ok: true, token, email: e, expires_in_ms: SESSION_TTL_MS };
+  return { ok: true, token, email: e, expires_in_ms: SESSION_TTL_MS, credential_source: credentialSource };
 }
 
 function sessionFor(token) {
@@ -314,8 +375,17 @@ function sessionFor(token) {
   // every stateful request.
   if (session.isStateless() || token.includes(".")) {
     const v = session.verify(token, email => {
-      const u = readUsers().users[String(email).toLowerCase()];
-      return u ? u.hash : null;
+      const key = String(email).toLowerCase();
+      const u = readUsers().users[key];
+      if (u && u.hash) return u.hash;
+      /* Derived mode stores no hash, so the fingerprint falls back to the
+       * derived password - the same value login() signed with. Without this a
+       * correctly issued token would fail verification and the user would be
+       * bounced to the login page immediately after signing in. */
+      if (derived.available()) {
+        try { return derived.derivePassword(key); } catch (err) { return null; }
+      }
+      return null;
     });
     if (v) return v;
     if (session.isStateless()) return null;

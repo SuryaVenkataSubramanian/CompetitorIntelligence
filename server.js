@@ -200,7 +200,36 @@ async function handleRequest(req, res) {
 
   if (url === "/api/me") {
     if (!session) return json(res, 401, { authenticated: false });
-    return json(res, 200, { authenticated: true, email: session.email });
+
+    const derivedAuth = require("./collectors/lib/derived-auth");
+    /* The caller's OWN password, and only their own.
+     *
+     * Deliberately not all four. Passwords here are derived from
+     * SESSION_SECRET, so an endpoint returning every account would turn one
+     * hijacked session into disclosure of every credential on the deployment —
+     * a real amplification, even though the four accounts see identical data.
+     * Self-service recovery needs only your own; distributing the initial set
+     * is `npm run auth:passwords`, run once by whoever owns the deployment.
+     */
+    let ownPassword = null;
+    let mode = "stored";
+    if (derivedAuth.available()) {
+      mode = "derived";
+      try { ownPassword = derivedAuth.derivePassword(session.email); } catch (e) { ownPassword = null; }
+    }
+
+    return json(res, 200, {
+      authenticated: true,
+      email: session.email,
+      credential_mode: mode,
+      // Shown so a local/host secret mismatch is visible rather than inferred
+      // from a login that mysteriously fails.
+      secret_fingerprint: derivedAuth.available() ? derivedAuth.secretFingerprint() : null,
+      own_password: ownPassword,
+      own_password_note: ownPassword
+        ? "Derived from SESSION_SECRET. Rotating that secret changes it and signs everyone out."
+        : "Passwords on this deployment are stored as scrypt hashes and cannot be displayed — that is by design.",
+    });
   }
 
   /* -------------------------------------------------------------- the gate */
