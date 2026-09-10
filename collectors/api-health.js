@@ -216,7 +216,10 @@ async function checkScraping() {
   const down = Object.entries(st).filter(([, v]) => !v.available).map(([k]) => k);
   // One available route is enough to scrape; the chain exists so a dead
   // provider costs an attempt rather than a channel.
-  report(up.length ? (down.length ? "DEGRADED" : "WORKING") : "FAIL", "scraping chain",
+  // report(NAME, STATE, ...) - not (state, name). Getting this backwards is the
+  // second time in this session; it renders a bogus status mark and makes the
+  // row unfindable by name in the stored health JSON.
+  report("Scraping chain", up.length ? (down.length ? "DEGRADED" : "WORKING") : "BROKEN",
     `${up.join(" -> ")} available` + (down.length ? `; unavailable: ${down.join(", ")}` : ""),
     {
       routes: st,
