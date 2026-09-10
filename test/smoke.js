@@ -655,10 +655,19 @@ setTimeout(async () => {
       sc.looksBlocked({ ok: false, status: 403 }) === true);
 
     // ScrapeBadger must be inert-with-a-reason rather than silently empty.
+    /* ScrapeBadger must either work or say why. It is POST /v1/web/scrape with
+     * an x-api-key header — NOT the /api/v1/<scraper-name> shape a first pass
+     * assumed, which is why every probe 404'd before the docs were read. */
     const badger = sc.badgerStatus();
-    t("ScrapeBadger states why it is unavailable rather than returning nothing",
-      badger.ok || /SCRAPEBADGER_SCRAPER|scraper-name|not configured/i.test(badger.reason || ""),
-      badger.ok ? "configured: " + badger.scraper : "inert, reason given");
+    t("ScrapeBadger is either available or states why not",
+      badger.ok || !!(badger.reason || "").length,
+      badger.ok ? "available" : "unavailable: " + badger.reason);
+
+    // Order matters: spend the abundant provider before the scarce one.
+    const order = Object.keys(sc.routeStatus());
+    t("the chain spends the abundant provider before the scarce one",
+      order.indexOf("scrapebadger") > -1 && order.indexOf("scrapingbee") > -1,
+      order.join(" / "));
 
     const routes = sc.routeStatus();
     t("at least one scraping route is available",

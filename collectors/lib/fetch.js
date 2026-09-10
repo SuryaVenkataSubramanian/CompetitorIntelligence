@@ -25,6 +25,11 @@ const HOST_THROTTLE = {
    * checking status codes. Measured while probing: a burst of ordinary calls
    * tripped it. 10.5s spaces requests just under the limit. */
   "api.dataforseo.com": 10500,
+  /* ScrapeBadger free tier is 5 requests/minute and answers a 6th with
+   * 429 {"detail":"Rate limit exceeded","limit":5,"tier":"free"}. Tripped it
+   * three times while probing, which made real endpoints look like 404s.
+   * 13s spaces requests safely under it. */
+  "scrapebadger.com": 13000,
   "hn.algolia.com": 300,
   "news.google.com": 1200,
   "www.youtube.com": 800,

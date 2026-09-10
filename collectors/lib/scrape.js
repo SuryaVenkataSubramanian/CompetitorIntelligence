@@ -1,7 +1,7 @@
 /**
  * One scraping entry point, with an explicit fallback chain.
  *
- *   direct fetch  →  ScrapingBee (stealth)  →  ScrapeBadger
+ *   direct fetch  →  ScrapeBadger  →  ScrapingBee (stealth)
  *
  * WHY A CHAIN RATHER THAN A PROVIDER PER CALLER
  * ---------------------------------------------
@@ -17,23 +17,26 @@
  * WHAT EACH ROUTE IS FOR
  * ----------------------
  *   direct        Free and fast. Works for most of the web.
- *   ScrapingBee   For hosts that refuse a plain request. MEASURED on G2's
- *                 category page: default HTTP 500, premium_proxy a 2.5KB
- *                 challenge page, stealth_proxy 948KB of real HTML with 17
- *                 products. Stealth is the only mode that works there.
- *   ScrapeBadger  Last resort. It is a configure-a-scraper product: the API is
- *                 /api/v1/<scraper-name> for a scraper built in their
- *                 dashboard. There is no generic scrape endpoint — probed
- *                 /scrapers, /list, /account, /me, /jobs, /usage and every one
- *                 answered "Scraper '<name>' is not configured" or 404. So it
- *                 stays INERT until SCRAPEBADGER_SCRAPER names a real scraper,
- *                 and says so rather than silently returning nothing.
+ *   ScrapeBadger  POST /v1/web/scrape. 998 credits on the free tier, so it
+ *                 carries the volume. It DECLINES hard bot walls with
+ *                 422 blocking_page_detected rather than fighting them, which
+ *                 is cheap to detect and hand on.
+ *   ScrapingBee   Last, because 895 credits is the scarcer pool — but it is the
+ *                 only route that beats the review-directory walls. MEASURED on
+ *                 G2: default HTTP 500, premium_proxy a 2.5KB challenge page,
+ *                 stealth_proxy 948KB of real HTML with 17 products.
+ *
+ * Order is by ABUNDANCE THEN CAPABILITY: spend the plentiful provider first,
+ * keep the scarce-but-stronger one for the pages that need it. For hosts
+ * already known to be walled the first two are skipped entirely, so a G2 fetch
+ * does not burn a ScrapeBadger credit and 13 seconds to learn what is already
+ * recorded.
  *
  * A 200 CARRYING A CHALLENGE PAGE IS THE DANGEROUS CASE. It looks like success
  * and parses to nothing, which is how a bot wall becomes "this company has no
  * products". Detected here, and treated as a failure so the next route is tried.
  */
-const { fetchUrl } = require("./fetch");
+const { fetchUrl, fetchJson } = require("./fetch");
 const scrapingbee = require("./scrapingbee");
 
 /** Signs that a 200 response is a challenge, not the content. */
@@ -54,101 +57,127 @@ function looksBlocked(r) {
 
 /* ------------------------------------------------------------- ScrapeBadger */
 
-function badgerConfig() {
+/**
+ * I GOT THIS WRONG THE FIRST TIME, AND THE MISTAKE IS WORTH RECORDING.
+ *
+ * I probed /api/v1/scrape, /api/v1/scrapers, /api/v1/account and a dozen
+ * similar guesses. Every one answered
+ *   {"error":"Scraper Not Found","message":"Scraper '<name>' is not configured"}
+ * so I concluded it was a configure-a-scraper-in-the-dashboard product with no
+ * generic endpoint. That was wrong. I had never read the docs.
+ *
+ * The real API, from docs.scrapebadger.com:
+ *
+ *   POST https://scrapebadger.com/v1/web/scrape
+ *   x-api-key: <key>
+ *   {"url": "...", "format": "markdown" | "html"}
+ *
+ * Note /v1/, not /api/v1/ — which is why every guess 404'd. Verified working:
+ * example.com returned {"success":true,"content":"..."} and the account reports
+ * 998 credits on the free tier.
+ *
+ * TWO LIMITS THAT SHAPE ITS PLACE IN THE CHAIN
+ *
+ *   5 requests/minute on the free tier. A 6th gets 429, and tripping that made
+ *   real endpoints look like 404s three separate times while probing — the
+ *   limiter fires before routing, so a rate-limited call and a wrong path are
+ *   indistinguishable. Throttled in lib/fetch.js to one request per 13s.
+ *
+ *   It REFUSES hard bot walls rather than fighting them: G2 came back
+ *   422 {"error":"blocking_page_detected"}. That is honest behaviour and cheap
+ *   to detect, which is why ScrapingBee stealth still sits behind it for those
+ *   specific hosts.
+ */
+const BADGER_BASE = "https://scrapebadger.com/v1";
+
+function badgerStatus() {
+  const key = process.env.SCRAPEBADGER_KEY || "";
+  if (!key) return { ok: false, reason: "SCRAPEBADGER_KEY is not set." };
+  return { ok: true };
+}
+
+/** Remaining credits. Cheap, but it does consume one of the 5 per minute. */
+async function badgerAccount() {
+  const st = badgerStatus();
+  if (!st.ok) return { ok: false, reason: st.reason };
+  const r = await fetchJson(BADGER_BASE + "/account/me", {
+    headers: { "x-api-key": process.env.SCRAPEBADGER_KEY }, retries: 1, timeout: 40000,
+  });
+  if (!r.ok || !r.json) return { ok: false, status: r.status, reason: "HTTP " + r.status };
+  const j = r.json;
   return {
-    key: process.env.SCRAPEBADGER_KEY || "",
-    scraper: process.env.SCRAPEBADGER_SCRAPER || "",
+    ok: true,
+    credits: j.total_credits_balance ?? j.credits_balance ?? null,
+    tier: j.tier || null,
+    rate_limit_per_minute: j.rate_limit_per_minute ?? null,
   };
 }
 
-function badgerStatus() {
-  const { key, scraper } = badgerConfig();
-  if (!key) {
-    return { ok: false, reason: "SCRAPEBADGER_KEY is not set." };
-  }
-  if (!scraper) {
-    return {
-      ok: false,
-      reason:
-        "SCRAPEBADGER_SCRAPER is not set. ScrapeBadger has no generic scrape endpoint — its API is " +
-        "/api/v1/<scraper-name> for a scraper created in the ScrapeBadger dashboard. Probed " +
-        "/scrapers, /list, /account, /me, /jobs and /usage: each returned " +
-        '"Scraper \'<name>\' is not configured" or 404. Create a scraper there, then set ' +
-        "SCRAPEBADGER_SCRAPER to its name.",
-      needs_dashboard_setup: true,
-    };
-  }
-  return { ok: true, scraper };
-}
-
-/**
- * Fetch through ScrapeBadger's named scraper.
- *
- * The response shape depends on how the scraper was built in their dashboard,
- * so both a raw-HTML body and a JSON envelope carrying html/content/body are
- * accepted. Anything else is reported rather than guessed at.
- */
-async function viaBadger(url, { log = () => {} } = {}) {
+async function viaBadger(url, { format = "html", log = () => {} } = {}) {
   const st = badgerStatus();
   if (!st.ok) return { ok: false, skipped: "not_configured", error: st.reason, via: "scrapebadger" };
 
-  const { key, scraper } = badgerConfig();
-  const endpoint =
-    `https://scrapebadger.com/api/v1/${encodeURIComponent(scraper)}?url=${encodeURIComponent(url)}`;
-
-  const r = await fetchUrl(endpoint, {
-    headers: { Authorization: `Bearer ${key}`, "X-API-Key": key },
+  const payload = JSON.stringify({ url, format });
+  const r = await fetchUrl(BADGER_BASE + "/web/scrape", {
+    method: "POST",
+    headers: {
+      "x-api-key": process.env.SCRAPEBADGER_KEY,
+      "Content-Type": "application/json",
+      "Content-Length": Buffer.byteLength(payload),
+    },
+    body: payload,
     retries: 1,
     timeout: 120000,
     maxBytes: 16 * 1024 * 1024,
   });
 
-  if (!r.ok) {
-    // Their free tier is 5 requests/minute and answers a 6th with 429.
-    const rateLimited = r.status === 429;
+  let j = null;
+  try { j = JSON.parse(r.body); } catch (e) { /* handled below */ }
+
+  // 422 blocking_page_detected: it saw a bot wall and declined. Recorded as a
+  // blocked attempt so the chain moves on to a route that can fight one.
+  if (r.status === 422 || (j && j.error === "blocking_page_detected")) {
     return {
       ok: false,
       status: r.status,
-      error: rateLimited
-        ? "ScrapeBadger rate limit (free tier: 5 requests/minute)"
-        : `ScrapeBadger HTTP ${r.status}: ${String(r.body || "").replace(/\s+/g, " ").slice(0, 160)}`,
-      rate_limited: rateLimited,
-      via: `scrapebadger (${scraper})`,
+      blocked: true,
+      error: "ScrapeBadger declined: " + ((j && j.error) || "blocking_page_detected") +
+        " — the target served a bot wall",
+      via: "scrapebadger",
+    };
+  }
+  if (r.status === 429) {
+    return {
+      ok: false,
+      status: 429,
+      rate_limited: true,
+      error: "ScrapeBadger rate limit: free tier allows 5 requests per minute",
+      via: "scrapebadger",
+    };
+  }
+  if (!r.ok || !j || j.success !== true) {
+    const detail = String((j && (j.error || j.detail)) || r.body || "").replace(/\s+/g, " ").slice(0, 160);
+    return {
+      ok: false,
+      status: r.status,
+      error: "ScrapeBadger HTTP " + r.status + ": " + detail,
+      via: "scrapebadger",
     };
   }
 
-  // A configured scraper may return HTML directly or wrapped in JSON.
-  let body = r.body;
-  const trimmed = String(body || "").trimStart();
-  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
-    try {
-      const j = JSON.parse(body);
-      body = j.html || j.content || j.body || j.data || null;
-      if (body && typeof body !== "string") body = JSON.stringify(body);
-      if (!body) {
-        return {
-          ok: false,
-          error:
-            `ScrapeBadger scraper "${scraper}" returned JSON with no html/content/body field. ` +
-            `Keys: ${Object.keys(j).join(", ").slice(0, 120)}. The scraper may be configured to ` +
-            `return structured data rather than a page.`,
-          via: `scrapebadger (${scraper})`,
-        };
-      }
-    } catch (e) { /* not JSON after all; keep the raw body */ }
-  }
-
-  log(`      scrapebadger(${scraper}): ${url.slice(0, 60)} → ${String(body || "").length} chars`);
+  const body = j.content || "";
+  log("      scrapebadger: " + url.slice(0, 58) + " -> " + body.length + " chars (upstream " + j.status_code + ")");
   return {
     ok: true,
-    status: r.status,
+    status: j.status_code || r.status,
     url,
-    final_url: url,
+    final_url: j.url || url,
     fetched_at: new Date().toISOString(),
-    bytes: Buffer.byteLength(String(body || "")),
+    bytes: Buffer.byteLength(body),
     content_sha256: r.content_sha256,
-    body: String(body || ""),
-    via: `scrapebadger (${scraper})`,
+    body,
+    via: "scrapebadger",
+    format,
     error: null,
   };
 }
@@ -191,7 +220,32 @@ async function fetchPage(url, {
     attempts.push({ route: "direct", skipped: true, why: `${host} is known to refuse a direct fetch` });
   }
 
-  /* 2. ScrapingBee — stealth is chosen automatically for the walled hosts. */
+  /* 2. ScrapeBadger — the abundant pool (998 credits), so it carries volume.
+   *    Skipped for hosts already known to be walled: it declines those with
+   *    422 blocking_page_detected, and learning that again would cost a credit
+   *    and 13 seconds of throttle for nothing. */
+  if (!KNOWN_WALLED.test(host)) {
+    const b = await viaBadger(url, { format: renderJs ? "html" : "html", log });
+    if (b.ok && !looksBlocked(b)) {
+      return { ...b, attempts };
+    }
+    attempts.push({
+      route: "scrapebadger",
+      status: b.status || null,
+      skipped: b.skipped || null,
+      blocked: !!b.blocked,
+      why: b.error || "returned no usable content",
+    });
+  } else {
+    attempts.push({
+      route: "scrapebadger",
+      skipped: true,
+      why: `${host} is a known bot wall, which ScrapeBadger declines with 422 blocking_page_detected`,
+    });
+  }
+
+  /* 3. ScrapingBee — last, because 895 credits is the scarcer pool, but it is
+   *    the only route that beats the review-directory walls. */
   if (scrapingbee.configured()) {
     const r = await scrapingbee.fetch(url, { renderJs, log });
     if (r.ok && !looksBlocked(r)) {
@@ -207,18 +261,6 @@ async function fetchPage(url, {
   } else {
     attempts.push({ route: "scrapingbee", skipped: true, why: scrapingbee.credentialStatus().reason });
   }
-
-  /* 3. ScrapeBadger — last resort, inert until a scraper is named. */
-  const b = await viaBadger(url, { log });
-  if (b.ok && !looksBlocked(b)) {
-    return { ...b, attempts };
-  }
-  attempts.push({
-    route: "scrapebadger",
-    status: b.status || null,
-    skipped: b.skipped || null,
-    why: b.error || "returned no usable content",
-  });
 
   return {
     ok: false,
@@ -249,9 +291,8 @@ function routeStatus() {
     scrapebadger: {
       available: badger.ok,
       note: badger.ok
-        ? `Configured scraper: ${badger.scraper}`
+        ? "POST /v1/web/scrape. Carries volume (998 credits, free tier). Declines hard bot walls with 422 blocking_page_detected, and is throttled to 5 requests/minute."
         : badger.reason,
-      needs_dashboard_setup: !!badger.needs_dashboard_setup,
     },
   };
 }

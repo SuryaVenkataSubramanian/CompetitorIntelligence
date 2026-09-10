@@ -1,34 +1,31 @@
 {
-  "checked_at": "2026-09-10T14:11:06.126Z",
+  "checked_at": "2026-09-10T14:20:15.455Z",
   "paid_calls": false,
   "summary": {
-    "WORKING": 2,
+    "WORKING": 3,
     "BROKEN": 2,
-    "DEGRADED": 5,
+    "DEGRADED": 4,
     "SKIPPED": 1
   },
   "sources": [
     {
       "name": "SearXNG",
       "state": "WORKING",
-      "detail": "68 results from 7 engines (2 unresponsive: duckduckgo, yahoo)",
+      "detail": "68 results from 8 engines (1 unresponsive: duckduckgo)",
       "engines": {
+        "yahoo": 7,
         "seznam": 10,
+        "naver": 15,
         "abcnyheter": 10,
         "google cse": 20,
-        "naver": 15,
-        "searchch": 6,
+        "yandex": 15,
         "fynd": 10,
-        "yandex": 15
+        "searchch": 6
       },
       "unresponsive": [
         [
           "duckduckgo",
           "CAPTCHA"
-        ],
-        [
-          "yahoo",
-          "Suspended: HTTP protocol error"
         ]
       ]
     },
@@ -353,8 +350,8 @@
     },
     {
       "name": "Scraping chain",
-      "state": "DEGRADED",
-      "detail": "direct -> scrapingbee available; unavailable: scrapebadger",
+      "state": "WORKING",
+      "detail": "direct -> scrapingbee -> scrapebadger available",
       "routes": {
         "direct": {
           "available": true,
@@ -365,12 +362,11 @@
           "note": "Stealth proxy defeats the review-directory bot walls (measured: 948KB of real HTML from G2 where the default mode got a 2.5KB challenge page)."
         },
         "scrapebadger": {
-          "available": false,
-          "note": "SCRAPEBADGER_SCRAPER is not set. ScrapeBadger has no generic scrape endpoint — its API is /api/v1/<scraper-name> for a scraper created in the ScrapeBadger dashboard. Probed /scrapers, /list, /account, /me, /jobs and /usage: each returned \"Scraper '<name>' is not configured\" or 404. Create a scraper there, then set SCRAPEBADGER_SCRAPER to its name.",
-          "needs_dashboard_setup": true
+          "available": true,
+          "note": "POST /v1/web/scrape. Carries volume (998 credits, free tier). Declines hard bot walls with 422 blocking_page_detected, and is throttled to 5 requests/minute."
         }
       },
-      "fix": "ScrapeBadger: create a scraper in their dashboard, then set SCRAPEBADGER_SCRAPER to its name."
+      "fix": null
     },
     {
       "name": "Windsor.ai",
