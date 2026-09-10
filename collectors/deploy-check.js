@@ -139,16 +139,18 @@ let accounts = 0;
 try { accounts = require("./lib/auth").status().configured; } catch (e) { /* zero */ }
 let acctSource = "unknown";
 try { acctSource = require("./lib/auth").usersSource(); } catch (e) { /* unknown */ }
-const committed = fs.existsSync(P("config", "accounts.json")) &&
-  (!tracked.length || tracked.includes("config/accounts.json"));
+// Derived mode is the primary path: passwords come from SESSION_SECRET, so
+// nothing needs to be committed or pasted. A stored hash is only a fallback.
+let derivedOk = false;
+try { derivedOk = require("./lib/derived-auth").available(); } catch (e) { /* false */ }
 line(accounts ? "OK" : "FAIL", "provisioned accounts",
   accounts
     ? `${accounts} account(s) from ${acctSource}`
     : "none — run: npm run auth:init");
-line(committed ? "OK" : "WARN", "accounts available to the deploy",
-  committed
-    ? "config/accounts.json is committed — no Vercel auth variable needed"
-    : "config/accounts.json is missing or untracked. Run: npm run auth:export, then commit it — otherwise set AUTH_USERS_JSON in Vercel");
+line(derivedOk ? "OK" : "FAIL", "the deploy can authenticate",
+  derivedOk
+    ? "passwords derive from SESSION_SECRET — no provisioning, no committed hashes, no AUTH_USERS_JSON"
+    : "SESSION_SECRET is not set, so no password can be derived and every login would be rejected. Generate one: npm run session:secret");
 
 // Every key the hosted app needs at runtime.
 const RUNTIME_KEYS = [
