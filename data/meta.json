@@ -1,6 +1,6 @@
 {
-  "built_at": "2026-09-11T02:58:05.069Z",
-  "store_updated_at": "2026-09-11T02:58:03.879Z",
+  "built_at": "2026-09-11T08:33:56.862Z",
+  "store_updated_at": "2026-09-11T08:33:55.979Z",
   "brand_order": [
     "document360",
     "mintlify",
@@ -133,8 +133,8 @@
     "unverified_excluded": 0,
     "with_exact_date": 1338,
     "without_date": 187,
-    "links_verified_working": 1454,
-    "links_broken": 71,
+    "links_verified_working": 1453,
+    "links_broken": 72,
     "sentiment_classified": 106,
     "sentiment_unclassified": 1419,
     "classification_engine": "claude-code, grounded quote verified against the evidence excerpt",
@@ -194,7 +194,7 @@
         "adapter": "searxng",
         "label": "SearXNG metasearch (self-hosted)",
         "blockers": [
-          "Not probed in the last collector run (2026-09-11T02:58:04.998Z), so its status is unknown. Channels that depend on it — Events, SERP/Web-AI-Overview, Google News resolution — may be stale or empty."
+          "Not probed in the last collector run (2026-09-11T08:33:56.799Z), so its status is unknown. Channels that depend on it — Events, SERP/Web-AI-Overview, Google News resolution — may be stale or empty."
         ],
         "how_to_enable": "npm run searxng:up  then  npm run collect",
         "fallback_in_use": null
@@ -229,8 +229,8 @@
     "total": 1525,
     "dated": 1338,
     "undated": 187,
-    "link_ok": 1454,
-    "link_broken": 71,
+    "link_ok": 1453,
+    "link_broken": 72,
     "by_channel": {
       "linkedin": 548,
       "x": 147,
@@ -403,8 +403,8 @@
       "twitterapi.io": 61
     },
     "by_verification": {
-      "verified": 1454,
-      "provider": 71,
+      "verified": 1453,
+      "provider": 72,
       "unverified": 0
     },
     "buying_intent": 21,
@@ -557,8 +557,8 @@
   },
   "data_quality": {
     "records_retrieved": 1525,
-    "records_verified": 1454,
-    "records_provider_only": 71,
+    "records_verified": 1453,
+    "records_provider_only": 72,
     "records_ai_classified": 106,
     "records_unclassified": 1419,
     "duplicates_removed": 217,
@@ -571,16 +571,15 @@
     "low_relevance_records": 0,
     "missing_urls": 0,
     "uncertain_classifications": 13,
-    "links_verified_working": 1454,
-    "links_broken": 71,
-    "rejected_this_run": 140,
+    "links_verified_working": 1453,
+    "links_broken": 72,
+    "rejected_this_run": 139,
     "rejected_by_reason": {
       "no alias in text": 126,
-      "site homepage, not a specific mention": 2,
-      "YouTube channel/playlist page, not a video": 1,
+      "site homepage, not a specific mention": 3,
       "negative context matched: \"…\"": 4,
       "ambiguous name \"…\" with no product context (needed one of: atlassian, wiki, knowledge base": 3,
-      "ambiguous name \"…\" with no product context (needed one of: getguru, knowledge management, ": 4
+      "ambiguous name \"…\" with no product context (needed one of: getguru, knowledge management, ": 3
     },
     "api_errors": [],
     "by_api_source": {
@@ -595,13 +594,13 @@
       "twitterapi.io": 61
     },
     "by_verification": {
-      "verified": 1454,
-      "provider": 71,
+      "verified": 1453,
+      "provider": 72,
       "unverified": 0
     },
-    "last_successful_sync": "2026-09-11T02:58:04.998Z",
+    "last_successful_sync": "2026-09-11T08:33:56.799Z",
     "last_sync_window_days": 7,
-    "total_runs_logged": 28,
+    "total_runs_logged": 29,
     "provider_stats": {},
     "credentials": [
       {
@@ -616,11 +615,11 @@
       }
     ]
   },
-  "last_updated": "2026-09-11T02:58:05.086Z",
+  "last_updated": "2026-09-11T08:33:56.879Z",
   "data_freshness": {
     "newest_published": "2026-09-10",
     "newest_published_age_days": 1,
-    "store_updated_at": "2026-09-11T02:58:03.879Z",
-    "last_collector_run": "2026-09-11T02:58:04.998Z"
+    "store_updated_at": "2026-09-11T08:33:55.979Z",
+    "last_collector_run": "2026-09-11T08:33:56.799Z"
   }
 }
