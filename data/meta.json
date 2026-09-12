@@ -1,6 +1,6 @@
 {
-  "built_at": "2026-09-12T13:21:18.725Z",
-  "store_updated_at": "2026-09-12T13:21:17.557Z",
+  "built_at": "2026-09-12T16:44:58.256Z",
+  "store_updated_at": "2026-09-12T16:44:57.267Z",
   "brand_order": [
     "document360",
     "mintlify",
@@ -194,7 +194,7 @@
         "adapter": "searxng",
         "label": "SearXNG metasearch (self-hosted)",
         "blockers": [
-          "Not probed in the last collector run (2026-09-12T13:21:18.655Z), so its status is unknown. Channels that depend on it — Events, SERP/Web-AI-Overview, Google News resolution — may be stale or empty."
+          "Not probed in the last collector run (2026-09-12T16:44:58.188Z), so its status is unknown. Channels that depend on it — Events, SERP/Web-AI-Overview, Google News resolution — may be stale or empty."
         ],
         "how_to_enable": "npm run searxng:up  then  npm run collect",
         "fallback_in_use": null
@@ -573,9 +573,9 @@
     "uncertain_classifications": 13,
     "links_verified_working": 1453,
     "links_broken": 72,
-    "rejected_this_run": 140,
+    "rejected_this_run": 119,
     "rejected_by_reason": {
-      "no alias in text": 129,
+      "no alias in text": 108,
       "site homepage, not a specific mention": 2,
       "ambiguous name \"…\" with no product context (needed one of: atlassian, wiki, knowledge base": 3,
       "negative context matched: \"…\"": 3,
@@ -598,9 +598,9 @@
       "provider": 72,
       "unverified": 0
     },
-    "last_successful_sync": "2026-09-12T13:21:18.655Z",
+    "last_successful_sync": "2026-09-12T16:44:58.188Z",
     "last_sync_window_days": 7,
-    "total_runs_logged": 35,
+    "total_runs_logged": 36,
     "provider_stats": {},
     "credentials": [
       {
@@ -615,11 +615,11 @@
       }
     ]
   },
-  "last_updated": "2026-09-12T13:21:18.743Z",
+  "last_updated": "2026-09-12T16:44:58.274Z",
   "data_freshness": {
     "newest_published": "2026-09-10",
     "newest_published_age_days": 2,
-    "store_updated_at": "2026-09-12T13:21:17.557Z",
-    "last_collector_run": "2026-09-12T13:21:18.655Z"
+    "store_updated_at": "2026-09-12T16:44:57.267Z",
+    "last_collector_run": "2026-09-12T16:44:58.188Z"
   }
 }
