@@ -259,7 +259,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-09-15T20:51:17.420Z",
+        "fetched_at": "2026-09-15T23:56:58.121Z",
         "extra": {}
       },
       {
@@ -33069,12 +33069,12 @@
       },
       "ranges": {
         "7": {
-          "total": 63,
+          "total": 64,
           "sentiment": {
             "positive": 0,
             "negative": 0,
             "neutral": 1,
-            "unclassified": 62
+            "unclassified": 63
           },
           "by_channel": {
             "linkedin": 1,
@@ -33082,23 +33082,23 @@
             "youtube": 0,
             "instagram": 0,
             "facebook": 0,
-            "blog": 2,
+            "blog": 3,
             "web": 18,
             "event": 11
           },
           "by_basis": {
-            "published": 35,
+            "published": 36,
             "discovered": 28
           },
-          "published_only": 35
+          "published_only": 36
         },
         "30": {
-          "total": 122,
+          "total": 123,
           "sentiment": {
             "positive": 19,
             "negative": 9,
             "neutral": 15,
-            "unclassified": 79
+            "unclassified": 80
           },
           "by_channel": {
             "linkedin": 6,
@@ -33106,23 +33106,23 @@
             "youtube": 0,
             "instagram": 0,
             "facebook": 0,
-            "blog": 9,
+            "blog": 10,
             "web": 30,
             "event": 13
           },
           "by_basis": {
-            "published": 94,
+            "published": 95,
             "discovered": 28
           },
-          "published_only": 94
+          "published_only": 95
         },
         "90": {
-          "total": 217,
+          "total": 218,
           "sentiment": {
             "positive": 19,
             "negative": 9,
             "neutral": 15,
-            "unclassified": 174
+            "unclassified": 175
           },
           "by_channel": {
             "linkedin": 27,
@@ -33130,15 +33130,15 @@
             "youtube": 6,
             "instagram": 0,
             "facebook": 0,
-            "blog": 18,
+            "blog": 19,
             "web": 54,
             "event": 42
           },
           "by_basis": {
-            "published": 156,
+            "published": 157,
             "discovered": 61
           },
-          "published_only": 156
+          "published_only": 157
         },
         "365": {
           "total": 409,
@@ -33167,22 +33167,22 @@
       },
       "growth": {
         "7": {
-          "current": 63,
+          "current": 64,
           "previous": 6,
-          "change_pct": 950,
-          "absolute": 57
-        },
-        "30": {
-          "current": 122,
-          "previous": 64,
-          "change_pct": 91,
+          "change_pct": 967,
           "absolute": 58
         },
+        "30": {
+          "current": 123,
+          "previous": 64,
+          "change_pct": 92,
+          "absolute": 59
+        },
         "90": {
-          "current": 217,
-          "previous": 97,
-          "change_pct": 124,
-          "absolute": 120
+          "current": 218,
+          "previous": 96,
+          "change_pct": 127,
+          "absolute": 122
         },
         "365": {
           "current": 409,
@@ -33233,6 +33233,52 @@
       }
     },
     "mentions": [
+      {
+        "brand": "mintlify",
+        "channel": "blog",
+        "url": "https://www.mintlify.com/blog/automations-rebuilt",
+        "domain": "mintlify.com",
+        "title": "Automations, rebuilt",
+        "author": "Patrick Foster",
+        "date": "2026-09-15",
+        "date_confidence": "exact",
+        "date_method": "rss:pubDate",
+        "days_ago": 0,
+        "first_seen": "2026-08-10",
+        "effective_date": "2026-09-15",
+        "date_basis": "published",
+        "effective_days_ago": 0,
+        "api_source": "blogfeed",
+        "verification_status": "verified",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.9,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_quote": null,
+        "sentiment_rationale": null,
+        "evidence": "…The work of combing through merged PRs, filtering out info that's important to users, and writing a coherent summary is exactly the kind of task that's easy to skip and painful to catch up on. A recurring automation that handles it once a week is valuable to anyone who doesn't find joy writing a changelog. Improving docs. Mintlify collects user feedback on pages and assistant conversations. Teams also go through support tickets to find content gaps. Reviewing these signals and updating the docs is a valuable way to improve the quality of your documentation, but it's a lot of work to do manually.…",
+        "evidence_source": "fetched page text",
+        "source": "blogfeed",
+        "link_ok": true,
+        "http_status": 200,
+        "verified_via": "page",
+        "matched_alias": "Mintlify",
+        "match_context": null,
+        "fetched_at": "2026-09-15T23:56:58.139Z",
+        "extra": {}
+      },
       {
         "brand": "mintlify",
         "channel": "x",
@@ -45138,52 +45184,6 @@
           "query_intent": "LinkedIn posts/pages via public index",
           "query": "\"Mintlify\" site:linkedin.com"
         }
-      },
-      {
-        "brand": "mintlify",
-        "channel": "blog",
-        "url": "https://www.mintlify.com/blog/automations-rebuilt",
-        "domain": "mintlify.com",
-        "title": "Automations, rebuilt",
-        "author": "Patrick Foster",
-        "date": "2026-04-29",
-        "date_confidence": "exact",
-        "date_method": "rss:pubDate",
-        "days_ago": 139,
-        "first_seen": "2026-08-10",
-        "effective_date": "2026-04-29",
-        "date_basis": "published",
-        "effective_days_ago": 139,
-        "api_source": "blogfeed",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": null,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_quote": null,
-        "sentiment_rationale": null,
-        "evidence": "…We learned from early users what tasks benefit the most from automation: keeping content in sync with code, generating changelogs, maintaining translations, and more. Instead of asking you to write and maintain prompts, Mintlify owns the underlying logic and improves it over time. Enabling an automation is two clicks. When we launched automations in March , we gave teams the ability to define automations as version-controlled Markdown files in their project repos.…",
-        "evidence_source": "fetched page text",
-        "source": "blogfeed",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
-        "matched_alias": "Mintlify",
-        "match_context": null,
-        "fetched_at": "2026-08-25T14:41:22.909Z",
-        "extra": {}
       },
       {
         "brand": "mintlify",
@@ -68942,8 +68942,8 @@
       "total": 130,
       "dated": 120,
       "undated": 10,
-      "link_ok": 109,
-      "link_broken": 21,
+      "link_ok": 105,
+      "link_broken": 25,
       "by_channel": {
         "linkedin": 26,
         "x": 9,
@@ -69105,8 +69105,8 @@
         "twitterapi.io": 1
       },
       "by_verification": {
-        "verified": 109,
-        "provider": 21,
+        "verified": 105,
+        "provider": 25,
         "unverified": 0
       },
       "buying_intent": 3,
@@ -69137,10 +69137,10 @@
         "date_basis": "published",
         "effective_days_ago": 1,
         "api_source": "hackernews",
-        "verification_status": "verified",
+        "verification_status": "provider",
         "relevance_score": null,
         "relevance_comment": null,
-        "confidence_score": 0.9,
+        "confidence_score": 0.75,
         "mention_type": null,
         "mention_type_basis": null,
         "buying_intent": false,
@@ -69156,15 +69156,15 @@
         "sentiment_method": null,
         "sentiment_quote": null,
         "sentiment_rationale": null,
-        "evidence": "…Hi All working on an open source tool to manage knowledge base from one person (consultant/freelancer) to a organization. Built for both humans and Agents. Currently building for myself and managing my own work with it, would vision something alternative for confluence. Would love to have more collaborators helping to build an open source project - https://github.com/entangle-cloud/wave . Guidelines | FAQ | Lists | API | Security | Legal | Apply to YC | Contact .",
-        "evidence_source": "fetched page text",
+        "evidence": "…Hi All working on an open source tool to manage knowledge base from one person (consultant&#x2F;freelancer) to a organization. Built for both humans and Agents.<p>Currently building for myself and managing my own work with it, would vision something alternative for confluence.<p>Would love to have more collaborators helping to build an open source project - <a href=\"https:&#x2F;&#x2F;github.com&#x2F;entangle-cloud&#x2F;wave\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2…",
+        "evidence_source": "source feed/api entry",
         "source": "hackernews",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
+        "link_ok": false,
+        "http_status": 429,
+        "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "knowledge base",
-        "fetched_at": "2026-09-15T20:51:25.590Z",
+        "fetched_at": "2026-09-15T23:57:25.663Z",
         "extra": {
           "hn_object_id": "49693612",
           "hn_points": null,
@@ -69216,7 +69216,7 @@
         "verified_via": "page",
         "matched_alias": "Confluence",
         "match_context": "atlassian",
-        "fetched_at": "2026-09-15T20:51:17.583Z",
+        "fetched_at": "2026-09-15T23:56:58.387Z",
         "extra": {}
       },
       {
@@ -69262,7 +69262,7 @@
         "verified_via": "page",
         "matched_alias": "Confluence",
         "match_context": "atlassian",
-        "fetched_at": "2026-09-15T20:51:18.174Z",
+        "fetched_at": "2026-09-15T23:56:58.982Z",
         "extra": {}
       },
       {
@@ -69281,10 +69281,10 @@
         "date_basis": "published",
         "effective_days_ago": 1,
         "api_source": "hackernews",
-        "verification_status": "verified",
+        "verification_status": "provider",
         "relevance_score": null,
         "relevance_comment": null,
-        "confidence_score": 0.9,
+        "confidence_score": 0.75,
         "mention_type": null,
         "mention_type_basis": null,
         "buying_intent": false,
@@ -69300,15 +69300,15 @@
         "sentiment_method": null,
         "sentiment_quote": null,
         "sentiment_rationale": null,
-        "evidence": "…For starters you're going to have traceability requirements that can only be satisfied if you have a product requirements document and then often a software design document. Now you might well choose to manage all of that in JIRA and Confluence (or whatever) rather than sitting down and writing an actual document intended to be laid out and printed on paper but the fact remains the documentation exists and, indeed, is a must to satisfy compliance and regulatory frameworks.…",
-        "evidence_source": "fetched page text",
+        "evidence": "…g to have traceability requirements that can only be satisfied if you have a product requirements document and then often a software design document. Now you might well choose to manage all of that in JIRA and Confluence (or whatever) rather than sitting down and writing an actual document intended to be laid out and printed on paper but the fact remains the documentation exists and, indeed, is a must to satisfy comp…",
+        "evidence_source": "source feed/api entry",
         "source": "hackernews",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
+        "link_ok": false,
+        "http_status": 429,
+        "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "documentation",
-        "fetched_at": "2026-09-15T20:51:40.229Z",
+        "fetched_at": "2026-09-15T23:57:25.664Z",
         "extra": {
           "hn_object_id": "49698564",
           "hn_points": null,
@@ -69333,10 +69333,10 @@
         "date_basis": "published",
         "effective_days_ago": 2,
         "api_source": "hackernews",
-        "verification_status": "verified",
+        "verification_status": "provider",
         "relevance_score": null,
         "relevance_comment": null,
-        "confidence_score": 0.9,
+        "confidence_score": 0.75,
         "mention_type": null,
         "mention_type_basis": null,
         "buying_intent": false,
@@ -69352,15 +69352,15 @@
         "sentiment_method": null,
         "sentiment_quote": null,
         "sentiment_rationale": null,
-        "evidence": "…Just Astra looking at our Helm charts and then the underlying repositories to see how the different parts of the system talk to each other and rely on each other. It also had access to our internal docs (Confluence), JIRAs, Slack conversation history… All via MCPs. So it could dig around to its heart’s content as would a human developer trying to figure out the same problem.…",
-        "evidence_source": "fetched page text",
+        "evidence": "…Just Astra looking at our Helm charts and then the underlying repositories to see how the different parts of the system talk to each other and rely on each other.<p>It also had access to our internal docs (Confluence), JIRAs, Slack conversation history… All via MCPs. So it could dig around to its heart’s content as would a human developer trying to figure out the same problem.<p>I did also add a Vectorize databas…",
+        "evidence_source": "source feed/api entry",
         "source": "hackernews",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
+        "link_ok": false,
+        "http_status": 429,
+        "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "jira",
-        "fetched_at": "2026-09-15T20:51:25.587Z",
+        "fetched_at": "2026-09-15T23:57:21.173Z",
         "extra": {
           "hn_object_id": "49688245",
           "hn_points": null,
@@ -69385,10 +69385,10 @@
         "date_basis": "published",
         "effective_days_ago": 3,
         "api_source": "hackernews",
-        "verification_status": "verified",
+        "verification_status": "provider",
         "relevance_score": null,
         "relevance_comment": null,
-        "confidence_score": 0.9,
+        "confidence_score": 0.75,
         "mention_type": null,
         "mention_type_basis": null,
         "buying_intent": false,
@@ -69404,15 +69404,15 @@
         "sentiment_method": null,
         "sentiment_quote": null,
         "sentiment_rationale": null,
-        "evidence": "…> How about; if it's already documented, make it available to the end user. There's documentation, and then there's documentation. What passes for documentation in the modern era is scattershot over thousands of JIRA tickets and Confluence pages. Most outdated. pocksuppet 2 days ago [–] . Then let the \"owners\" and repair shops ask questions, mandate accurate replies, and \"we don't know\" is a valid answer if and only if you actually don't know.…",
-        "evidence_source": "fetched page text",
+        "evidence": "…&gt; How about; if it&#x27;s already documented, make it available to the end user.<p>There&#x27;s documentation, and then there&#x27;s documentation. What passes for documentation in the modern era is scattershot over thousands of JIRA tickets and Confluence pages.…",
+        "evidence_source": "source feed/api entry",
         "source": "hackernews",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
+        "link_ok": false,
+        "http_status": 429,
+        "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "documentation",
-        "fetched_at": "2026-09-15T20:51:40.222Z",
+        "fetched_at": "2026-09-15T23:57:25.662Z",
         "extra": {
           "hn_object_id": "49676787",
           "hn_points": null,
@@ -69575,7 +69575,7 @@
         "verified_via": "page",
         "matched_alias": "Confluence",
         "match_context": "atlassian",
-        "fetched_at": "2026-09-15T20:51:18.156Z",
+        "fetched_at": "2026-09-15T23:56:58.879Z",
         "extra": {}
       },
       {
