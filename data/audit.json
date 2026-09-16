@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-09-16T14:35:36.558Z",
+  "built_at": "2026-09-16T19:22:55.126Z",
   "excluded_unverified": [],
   "legacy_reverification": {
     "submitted": 67,
@@ -142,7 +142,7 @@
     ]
   },
   "collector_run": {
-    "finished_at": "2026-09-16T14:35:36.484Z",
+    "finished_at": "2026-09-16T19:22:55.060Z",
     "window_days": 7,
     "adapters": [
       {
@@ -188,11 +188,11 @@
         "adapter": "blogfeed",
         "label": "Brand blog/changelog RSS",
         "status": "ok",
-        "candidates": 6,
+        "candidates": 7,
         "requires": [],
         "coverage_limit": null,
         "connection": null,
-        "ms": 5710
+        "ms": 4833
       },
       {
         "adapter": "youtube",
@@ -202,17 +202,17 @@
         "requires": [],
         "coverage_limit": null,
         "connection": null,
-        "ms": 4101
+        "ms": 4200
       },
       {
         "adapter": "hackernews",
         "label": "Hacker News (Algolia)",
         "status": "ok",
-        "candidates": 150,
+        "candidates": 152,
         "requires": [],
         "coverage_limit": null,
         "connection": null,
-        "ms": 58963
+        "ms": 56640
       },
       {
         "adapter": "x_brightdata",
@@ -244,13 +244,13 @@
       }
     ],
     "verification": {
-      "candidates": 156,
+      "candidates": 159,
       "unique": 156,
-      "fetched": 10,
-      "fetch_failed": 146,
+      "fetched": 15,
+      "fetch_failed": 141,
       "verified": 8,
       "rejected_non_article": 0,
-      "rejected_non_content": 0,
+      "rejected_non_content": 3,
       "rejected_no_mention": 148,
       "rejected_no_evidence": 0,
       "dated": 8,
@@ -289,10 +289,10 @@
         "reason": "BRIGHTDATA_API_KEY not set — X collection is not connected."
       }
     ],
-    "rejection_total": 148,
+    "rejection_total": 151,
     "rejections_sample": [
       {
-        "url": "https://www.atlassian.com/blog/jira/governed-agent-loops",
+        "url": "https://www.atlassian.com/blog/jira/introducing-bearq-for-jira",
         "brand_id": "confluence",
         "adapter": "blogfeed",
         "reason": "no alias in text"
@@ -304,7 +304,49 @@
         "reason": "no alias in text"
       },
       {
+        "url": "https://www.atlassian.com/blog/jira/governed-agent-loops",
+        "brand_id": "confluence",
+        "adapter": "blogfeed",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://exploreddd.com/",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "site homepage, not a specific mention"
+      },
+      {
+        "url": "https://sfruby.com/",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "site homepage, not a specific mention"
+      },
+      {
+        "url": "https://stagecaptions.io",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "site homepage, not a specific mention"
+      },
+      {
         "url": "https://getbootstrap.com/2.0.2/",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49730618",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49685009",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49716198",
         "brand_id": "gitbook",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -316,16 +358,58 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49727228",
+        "url": "https://blog.veeso.dev/blog/en/why-rust-conferences-became-irrelevant-to-me/",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49697557",
+        "url": "https://blog.bluebox.ai/investigation-with-context-and-confidence/",
         "brand_id": "confluence",
         "adapter": "hackernews",
-        "reason": "negative context matched: \"confluence of\""
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://www.developing.dev/p/engineering-confidence",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://github.com/sealandseacat/dbmask",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49678690",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49730621",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49707464",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49730458",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49706181",
+        "brand_id": "gitbook",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
       },
       {
         "url": "https://news.ycombinator.com/item?id=49665526",
@@ -346,10 +430,10 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49706181",
-        "brand_id": "gitbook",
+        "url": "https://news.ycombinator.com/item?id=49697557",
+        "brand_id": "confluence",
         "adapter": "hackernews",
-        "reason": "no alias in text"
+        "reason": "negative context matched: \"confluence of\""
       },
       {
         "url": "https://news.ycombinator.com/item?id=49722381",
@@ -358,115 +442,91 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49685009",
-        "brand_id": "gitbook",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49716198",
-        "brand_id": "gitbook",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49707464",
-        "brand_id": "gitbook",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49678690",
-        "brand_id": "gitbook",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49727103",
+        "url": "https://news.ycombinator.com/item?id=49731048",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49725913",
+        "url": "https://news.ycombinator.com/item?id=49659764",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49724688",
+        "url": "https://news.ycombinator.com/item?id=49632749",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49724272",
+        "url": "https://news.ycombinator.com/item?id=49730917",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49725101",
+        "url": "https://news.ycombinator.com/item?id=49730713",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49724300",
+        "url": "https://news.ycombinator.com/item?id=49730431",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49722611",
+        "url": "https://news.ycombinator.com/item?id=49729548",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49724214",
+        "url": "https://news.ycombinator.com/item?id=49728891",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49724192",
+        "url": "https://news.ycombinator.com/item?id=49729388",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49723849",
+        "url": "https://news.ycombinator.com/item?id=49729217",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49724000",
+        "url": "https://news.ycombinator.com/item?id=49728653",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49723571",
+        "url": "https://news.ycombinator.com/item?id=49728341",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49724040",
+        "url": "https://news.ycombinator.com/item?id=49727768",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49723530",
+        "url": "https://news.ycombinator.com/item?id=49728546",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49722615",
+        "url": "https://news.ycombinator.com/item?id=49728407",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -484,43 +544,25 @@
         "reason": "no alias in text"
       },
       {
+        "url": "https://news.ycombinator.com/item?id=49723530",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49722615",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
         "url": "https://news.ycombinator.com/item?id=49722423",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49719120",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49718890",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49718729",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49718828",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49718857",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49722311",
+        "url": "https://news.ycombinator.com/item?id=49722611",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -532,56 +574,14 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49720113",
+        "url": "https://news.ycombinator.com/item?id=49722077",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49718708",
+        "url": "https://news.ycombinator.com/item?id=49722311",
         "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49721325",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49715564",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49715901",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49718626",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49718361",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49718350",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49712077",
-        "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
@@ -592,7 +592,13 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49715464",
+        "url": "https://news.ycombinator.com/item?id=49712077",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49724214",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -602,6 +608,48 @@
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "ambiguous name \"Guru\" with no product context (needed one of: getguru, knowledge management, enterprise search, knowledge base…)"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49724272",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49724192",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49724040",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49728994",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49637647",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "ambiguous name \"Guru\" with no product context (needed one of: getguru, knowledge management, enterprise search, knowledge base…)"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49684960",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49731139",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
       },
       {
         "url": "https://gitlab.com/bztsrc/easyboot",
@@ -616,19 +664,13 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49719671",
+        "url": "https://news.ycombinator.com/item?id=49725369",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49628219",
-        "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49724320",
+        "url": "https://news.ycombinator.com/item?id=49727740",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -640,20 +682,20 @@
         "reason": "no alias in text"
       },
       {
+        "url": "https://news.ycombinator.com/item?id=49719903",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
         "url": "https://news.ycombinator.com/item?id=49722076",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49725369",
+        "url": "https://news.ycombinator.com/item?id=49719996",
         "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49720827",
-        "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
@@ -664,16 +706,10 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49719903",
+        "url": "https://news.ycombinator.com/item?id=49730202",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49637647",
-        "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "ambiguous name \"Guru\" with no product context (needed one of: getguru, knowledge management, enterprise search, knowledge base…)"
       },
       {
         "url": "https://news.ycombinator.com/item?id=49715924",
@@ -682,7 +718,13 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49631503",
+        "url": "https://news.ycombinator.com/item?id=49714475",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49714628",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -706,31 +748,25 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49714628",
-        "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49722077",
+        "url": "https://news.ycombinator.com/item?id=49727228",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49720611",
-        "brand_id": "confluence",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49711719",
+        "url": "https://news.ycombinator.com/item?id=49714296",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49712992",
+        "url": "https://news.ycombinator.com/item?id=49711599",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49710160",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -748,13 +784,25 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49707849",
-        "brand_id": "guru",
+        "url": "https://news.ycombinator.com/item?id=49723849",
+        "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49710160",
+        "url": "https://news.ycombinator.com/item?id=49727103",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49723571",
+        "brand_id": "confluence",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49707849",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -766,37 +814,19 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49709974",
-        "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49720601",
+        "url": "https://news.ycombinator.com/item?id=49725913",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49719996",
+        "url": "https://news.ycombinator.com/item?id=49712992",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49702494",
-        "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49701296",
-        "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49714296",
+        "url": "https://news.ycombinator.com/item?id=49697175",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -814,25 +844,25 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49697175",
+        "url": "https://news.ycombinator.com/item?id=49685876",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49682099",
-        "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49719384",
+        "url": "https://news.ycombinator.com/item?id=49725101",
         "brand_id": "confluence",
         "adapter": "hackernews",
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49711599",
+        "url": "https://news.ycombinator.com/item?id=49685902",
+        "brand_id": "guru",
+        "adapter": "hackernews",
+        "reason": "no alias in text"
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=49693717",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -844,13 +874,7 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49675957",
-        "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49684960",
+        "url": "https://news.ycombinator.com/item?id=49680189",
         "brand_id": "guru",
         "adapter": "hackernews",
         "reason": "no alias in text"
@@ -862,32 +886,8 @@
         "reason": "no alias in text"
       },
       {
-        "url": "https://news.ycombinator.com/item?id=49674045",
+        "url": "https://news.ycombinator.com/item?id=49676151",
         "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49724247",
-        "brand_id": "knowledgeowl",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49721413",
-        "brand_id": "knowledgeowl",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49693717",
-        "brand_id": "guru",
-        "adapter": "hackernews",
-        "reason": "no alias in text"
-      },
-      {
-        "url": "https://news.ycombinator.com/item?id=49724150",
-        "brand_id": "knowledgeowl",
         "adapter": "hackernews",
         "reason": "no alias in text"
       }
