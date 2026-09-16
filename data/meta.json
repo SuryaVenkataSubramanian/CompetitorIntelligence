@@ -1,6 +1,6 @@
 {
-  "built_at": "2026-09-15T23:58:00.987Z",
-  "store_updated_at": "2026-09-15T23:57:59.962Z",
+  "built_at": "2026-09-16T03:54:15.347Z",
+  "store_updated_at": "2026-09-16T03:54:14.178Z",
   "brand_order": [
     "document360",
     "mintlify",
@@ -194,7 +194,7 @@
         "adapter": "searxng",
         "label": "SearXNG metasearch (self-hosted)",
         "blockers": [
-          "Not probed in the last collector run (2026-09-15T23:58:00.924Z), so its status is unknown. Channels that depend on it — Events, SERP/Web-AI-Overview, Google News resolution — may be stale or empty."
+          "Not probed in the last collector run (2026-09-16T03:54:15.279Z), so its status is unknown. Channels that depend on it — Events, SERP/Web-AI-Overview, Google News resolution — may be stale or empty."
         ],
         "how_to_enable": "npm run searxng:up  then  npm run collect",
         "fallback_in_use": null
@@ -249,28 +249,28 @@
     },
     "ranges": {
       "7": {
-        "total": 113,
+        "total": 95,
         "sentiment": {
           "positive": 0,
           "negative": 0,
           "neutral": 1,
-          "unclassified": 112
+          "unclassified": 94
         },
         "by_channel": {
           "linkedin": 2,
-          "x": 46,
+          "x": 36,
           "youtube": 0,
           "instagram": 0,
           "facebook": 0,
-          "blog": 12,
-          "web": 35,
+          "blog": 6,
+          "web": 33,
           "event": 18
         },
         "by_basis": {
-          "published": 67,
+          "published": 49,
           "discovered": 46
         },
-        "published_only": 67
+        "published_only": 49
       },
       "30": {
         "total": 331,
@@ -297,28 +297,28 @@
         "published_only": 236
       },
       "90": {
-        "total": 713,
+        "total": 706,
         "sentiment": {
           "positive": 30,
           "negative": 15,
           "neutral": 33,
-          "unclassified": 635
+          "unclassified": 628
         },
         "by_channel": {
-          "linkedin": 194,
+          "linkedin": 190,
           "x": 119,
-          "youtube": 27,
+          "youtube": 26,
           "instagram": 12,
           "facebook": 4,
           "blog": 86,
-          "web": 190,
+          "web": 188,
           "event": 81
         },
         "by_basis": {
-          "published": 526,
+          "published": 519,
           "discovered": 187
         },
-        "published_only": 526
+        "published_only": 519
       },
       "365": {
         "total": 1278,
@@ -347,22 +347,22 @@
     },
     "growth": {
       "7": {
-        "current": 113,
-        "previous": 37,
-        "change_pct": 205,
-        "absolute": 76
+        "current": 95,
+        "previous": 51,
+        "change_pct": 86,
+        "absolute": 44
       },
       "30": {
         "current": 331,
-        "previous": 275,
-        "change_pct": 20,
-        "absolute": 56
+        "previous": 269,
+        "change_pct": 23,
+        "absolute": 62
       },
       "90": {
-        "current": 713,
-        "previous": 266,
-        "change_pct": 168,
-        "absolute": 447
+        "current": 706,
+        "previous": 271,
+        "change_pct": 161,
+        "absolute": 435
       },
       "365": {
         "current": 1278,
@@ -423,31 +423,31 @@
   },
   "share_of_voice": {
     "7": {
-      "total": 113,
+      "total": 95,
       "by_brand": {
         "document360": {
-          "mentions": 21,
-          "share_pct": 18.6
+          "mentions": 19,
+          "share_pct": 20
         },
         "mintlify": {
-          "mentions": 64,
-          "share_pct": 56.6
+          "mentions": 59,
+          "share_pct": 62.1
         },
         "gitbook": {
-          "mentions": 14,
-          "share_pct": 12.4
+          "mentions": 6,
+          "share_pct": 6.3
         },
         "confluence": {
-          "mentions": 10,
-          "share_pct": 8.8
+          "mentions": 9,
+          "share_pct": 9.5
         },
         "guru": {
           "mentions": 0,
           "share_pct": 0
         },
         "bloomfire": {
-          "mentions": 4,
-          "share_pct": 3.5
+          "mentions": 2,
+          "share_pct": 2.1
         },
         "knowledgeowl": {
           "mentions": 0,
@@ -489,31 +489,31 @@
       }
     },
     "90": {
-      "total": 713,
+      "total": 706,
       "by_brand": {
         "document360": {
-          "mentions": 251,
-          "share_pct": 35.2
+          "mentions": 250,
+          "share_pct": 35.4
         },
         "mintlify": {
-          "mentions": 218,
-          "share_pct": 30.6
+          "mentions": 217,
+          "share_pct": 30.7
         },
         "gitbook": {
-          "mentions": 95,
-          "share_pct": 13.3
+          "mentions": 91,
+          "share_pct": 12.9
         },
         "confluence": {
           "mentions": 73,
-          "share_pct": 10.2
+          "share_pct": 10.3
         },
         "guru": {
           "mentions": 15,
           "share_pct": 2.1
         },
         "bloomfire": {
-          "mentions": 46,
-          "share_pct": 6.5
+          "mentions": 45,
+          "share_pct": 6.4
         },
         "knowledgeowl": {
           "mentions": 15,
@@ -573,9 +573,9 @@
     "uncertain_classifications": 13,
     "links_verified_working": 1456,
     "links_broken": 75,
-    "rejected_this_run": 144,
+    "rejected_this_run": 145,
     "rejected_by_reason": {
-      "no alias in text": 139,
+      "no alias in text": 140,
       "site homepage, not a specific mention": 3,
       "negative context matched: \"…\"": 1,
       "ambiguous name \"…\" with no product context (needed one of: getguru, knowledge management, ": 1
@@ -597,9 +597,9 @@
       "provider": 75,
       "unverified": 0
     },
-    "last_successful_sync": "2026-09-15T23:58:00.924Z",
+    "last_successful_sync": "2026-09-16T03:54:15.279Z",
     "last_sync_window_days": 7,
-    "total_runs_logged": 52,
+    "total_runs_logged": 53,
     "provider_stats": {},
     "credentials": [
       {
@@ -614,11 +614,11 @@
       }
     ]
   },
-  "last_updated": "2026-09-15T23:58:01.004Z",
+  "last_updated": "2026-09-16T03:54:15.364Z",
   "data_freshness": {
     "newest_published": "2026-09-15",
-    "newest_published_age_days": 0,
-    "store_updated_at": "2026-09-15T23:57:59.962Z",
-    "last_collector_run": "2026-09-15T23:58:00.924Z"
+    "newest_published_age_days": 1,
+    "store_updated_at": "2026-09-16T03:54:14.178Z",
+    "last_collector_run": "2026-09-16T03:54:15.279Z"
   }
 }
