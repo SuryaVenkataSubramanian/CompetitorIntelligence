@@ -1,6 +1,6 @@
 {
-  "built_at": "2026-09-17T19:32:28.501Z",
-  "store_updated_at": "2026-09-17T19:32:27.571Z",
+  "built_at": "2026-09-17T22:39:52.837Z",
+  "store_updated_at": "2026-09-17T22:39:51.652Z",
   "brand_order": [
     "document360",
     "mintlify",
@@ -194,7 +194,7 @@
         "adapter": "searxng",
         "label": "SearXNG metasearch (self-hosted)",
         "blockers": [
-          "Not probed in the last collector run (2026-09-17T19:32:28.434Z), so its status is unknown. Channels that depend on it — Events, SERP/Web-AI-Overview, Google News resolution — may be stale or empty."
+          "Not probed in the last collector run (2026-09-17T22:39:52.790Z), so its status is unknown. Channels that depend on it — Events, SERP/Web-AI-Overview, Google News resolution — may be stale or empty."
         ],
         "how_to_enable": "npm run searxng:up  then  npm run collect",
         "fallback_in_use": null
@@ -573,12 +573,11 @@
     "uncertain_classifications": 13,
     "links_verified_working": 1459,
     "links_broken": 76,
-    "rejected_this_run": 124,
+    "rejected_this_run": 145,
     "rejected_by_reason": {
-      "no alias in text": 119,
-      "site homepage, not a specific mention": 1,
+      "no alias in text": 140,
       "negative context matched: \"…\"": 1,
-      "ambiguous name \"…\" with no product context (needed one of: getguru, knowledge management, ": 3
+      "ambiguous name \"…\" with no product context (needed one of: getguru, knowledge management, ": 4
     },
     "api_errors": [],
     "by_api_source": {
@@ -597,9 +596,9 @@
       "provider": 76,
       "unverified": 0
     },
-    "last_successful_sync": "2026-09-17T19:32:28.434Z",
+    "last_successful_sync": "2026-09-17T22:39:52.790Z",
     "last_sync_window_days": 7,
-    "total_runs_logged": 61,
+    "total_runs_logged": 62,
     "provider_stats": {},
     "credentials": [
       {
@@ -614,11 +613,11 @@
       }
     ]
   },
-  "last_updated": "2026-09-17T19:32:28.518Z",
+  "last_updated": "2026-09-17T22:39:52.847Z",
   "data_freshness": {
     "newest_published": "2026-09-17",
     "newest_published_age_days": 0,
-    "store_updated_at": "2026-09-17T19:32:27.571Z",
-    "last_collector_run": "2026-09-17T19:32:28.434Z"
+    "store_updated_at": "2026-09-17T22:39:51.652Z",
+    "last_collector_run": "2026-09-17T22:39:52.790Z"
   }
 }
