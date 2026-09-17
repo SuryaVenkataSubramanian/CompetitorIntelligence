@@ -72,7 +72,83 @@ const legacyRejected = readJson(path.join(STORE_DIR, "legacy-rejected.json"), nu
  * first saw it in the last 7 days" are different business facts and a reader
  * must be able to tell them apart.
  */
+/**
+ * Grounded enrichment, applied at build time rather than stored.
+ *
+ * Sentiment, the three-bullet brief and the priority band are all DERIVED from
+ * the evidence excerpt that is already in the store. Deriving them here rather
+ * than writing them back means a change to the lexicon takes effect on the next
+ * build instead of requiring a re-classification pass over 1,521 records, and it
+ * keeps the store as what it is meant to be: fetched bytes and nothing else.
+ *
+ * PRECEDENCE, AND WHY IT MATTERS: a stored Claude classification always wins. It
+ * was verified against a grounded quote by a stronger reader than a regex, and
+ * silently overwriting 106 verified judgements with lexicon output would be a
+ * downgrade disguised as an improvement. The lexicon only fills the gap where
+ * there is no judgement at all, and says so via `sentiment_grade`.
+ */
+const signals = require("./lib/signals");
+
+function enrich(r) {
+  const text = r.evidence || "";
+  const alias = r.matched_alias || null;
+
+  /* A stored judgement is authoritative for the VERDICT. The lexicon still runs
+   * alongside it, for a reason found while building the opportunities view:
+   * Claude-classified records carry a sentiment and a rationale but no theme
+   * and, for some, no quote — so a negative Mintlify record rendered as a card
+   * with "null" where the complaint should be. The lexicon supplies the theme
+   * and the quote in that case, and never touches the verdict. */
+  const existing = r.sentiment || null;
+  const lex = signals.classifySentiment(text, { alias });
+
+  const sentiment = existing || (lex ? lex.sentiment : null);
+  const grade = existing ? (r.sentiment_method ? "claude" : "stored") : (lex ? "lexicon" : null);
+
+  /* Themes are only meaningful when they agree with the verdict. A record
+   * Claude called negative, where the only lexicon hit is praise, gets no
+   * theme rather than a contradictory one. */
+  const lexAgrees = !!lex && (!existing || lex.sentiment === existing);
+
+  const brief = signals.summarise(text, { alias, max: 3 });
+  const intent = signals.intentSignals(text);
+  const prio = signals.priority(
+    r,
+    lexAgrees ? Object.assign({}, lex, { sentiment })
+      : (existing ? { sentiment: existing, negative_hits: [], themes: [] } : null)
+  );
+
+  return {
+    sentiment,
+    sentiment_grade: grade,
+    sentiment_quote: r.sentiment_quote || (lexAgrees && lex.trigger ? lex.trigger.quote : null),
+    sentiment_phrase: lexAgrees && lex.trigger ? lex.trigger.phrase : null,
+    sentiment_confidence: existing ? null : (lex ? lex.confidence : null),
+    themes: lexAgrees ? lex.themes : [],
+    negative_hits: lexAgrees ? lex.negative_hits : [],
+    positive_hits: lexAgrees ? lex.positive_hits : [],
+    brief,
+    intent_signals: intent,
+    priority: prio.band,
+    priority_score: prio.score,
+    priority_factors: prio.factors,
+    // Only for a NEGATIVE mention of a product that is not ours: what we can do
+    // about it. Explicitly a recommendation, never presented as an observation.
+    /* A play needs a theme to answer, so it needs a lexicon hit that agrees with
+     * the verdict. A negative record with no identifiable complaint gets no
+     * suggested response — better an empty slot than a generic one. */
+    play: (sentiment === "negative" && lexAgrees && r.brand_id !== "document360")
+      ? signals.play(Object.assign({}, r, { source_text: text }), Object.assign({}, lex, { sentiment }), brandNameOf(r.brand_id))
+      : null,
+  };
+}
+
+function brandNameOf(id) {
+  try { return require("./lib/brands").brand(id).name; } catch (e) { return id; }
+}
+
 function toWire(r) {
+  const e = enrich(r);
   const firstSeen = (r.first_seen || r.fetched_at || null);
   const firstSeenDay = firstSeen ? String(firstSeen).slice(0, 10) : null;
   const effective = r.published_at || firstSeenDay;
@@ -111,10 +187,28 @@ function toWire(r) {
     engagement: r.engagement || null,
     provider_tags: r.provider_tags || [],
     also_seen_in: r.also_seen_in || [],
-    sentiment: r.sentiment || null,
-    sentiment_method: r.sentiment_method || null,
-    sentiment_quote: r.sentiment_quote || null,
+    sentiment: e.sentiment,
+    sentiment_method: r.sentiment_method || (e.sentiment_grade === "lexicon"
+      ? "phrase lexicon, anchored to a sentence naming the brand"
+      : null),
+    sentiment_grade: e.sentiment_grade,
+    sentiment_quote: e.sentiment_quote,
+    sentiment_phrase: e.sentiment_phrase,
+    sentiment_confidence: e.sentiment_confidence,
     sentiment_rationale: r.sentiment_rationale || null,
+    themes: e.themes,
+    negative_hits: e.negative_hits,
+    positive_hits: e.positive_hits,
+
+    // The three-bullet brief. Every bullet is a verbatim sentence from the
+    // evidence above — selected, trimmed, never rewritten.
+    brief: e.brief,
+    intent_signals: e.intent_signals,
+    priority: e.priority,
+    priority_score: e.priority_score,
+    priority_factors: e.priority_factors,
+    play: e.play,
+
     evidence: r.evidence,
     evidence_source: r.evidence_source,
     source: r.source_adapter,
@@ -467,7 +561,20 @@ function buildCaveats() {
 /* --------------------------------------------------------------- outputs */
 
 const totals = summarise(wire);
-const classified = wire.filter(r => r.sentiment).length;
+/* Two grades of classification, counted separately and never summed into one
+ * undifferentiated "classified" number.
+ *
+ *   claude   a model read the record and its judgement was checked against a
+ *            grounded quote. 106 records.
+ *   lexicon  a fixed phrase matched in a sentence that names the brand, and the
+ *            phrase and sentence are both stored so it can be audited.
+ *
+ * They are different strengths of evidence. Reporting "165 classified" would
+ * imply a uniformity that does not exist, which is the same mistake as folding
+ * provider-asserted records in with fetched ones. */
+const classifiedByClaude = wire.filter(r => r.sentiment_grade === "claude" || r.sentiment_grade === "stored").length;
+const classifiedByLexicon = wire.filter(r => r.sentiment_grade === "lexicon").length;
+const classified = classifiedByClaude + classifiedByLexicon;
 
 /**
  * Share of voice per product, per range. Denominator is all seven products in
@@ -582,8 +689,13 @@ w("meta.json", {
     links_verified_working: totals.link_ok,
     links_broken: totals.link_broken,
     sentiment_classified: classified,
+    sentiment_classified_by_claude: classifiedByClaude,
+    sentiment_classified_by_lexicon: classifiedByLexicon,
     sentiment_unclassified: totals.total - classified,
-    classification_engine: "claude-code, grounded quote verified against the evidence excerpt",
+    classification_engine:
+      "Two grades, counted separately: claude-code with a grounded quote verified against the evidence " +
+      "excerpt, and a phrase lexicon anchored to a sentence that names the brand. Records neither can " +
+      "reach stay unclassified and are shown under the Unclassified filter — never folded into neutral.",
     rule: "No field in this dataset was produced without either fetched bytes or a mechanically verified Claude judgement.",
   },
   caveats: buildCaveats(),

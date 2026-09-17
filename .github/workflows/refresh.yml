@@ -5,9 +5,14 @@
 # collect.yml is the daily deep sweep: SearXNG keyword discovery, the
 # review-directory audit, GDELT. It takes tens of minutes and cannot run often.
 #
-# This is the shallow, frequent one. It touches only sources that answer in
-# seconds-to-minutes and carry exact timestamps, so it can run every two hours
-# and keep the recent view current.
+# This is the shallow, frequent one: the eleven KEYLESS sources, in one process,
+# about a minute. It can run every two hours and keep the recent view current.
+#
+# Keyless is the load-bearing word. Bright Data suspended, DataForSEO ran out,
+# Octolens moved its API behind a paid tier and twitterapi.io went to negative
+# credits — all inside one week — and the dashboard did not report an outage, it
+# reported a quiet week. Nothing this job depends on can be switched off by a
+# billing balance.
 #
 # It exists because the hosted app CANNOT collect: a serverless function has
 # neither the runtime budget nor a writable filesystem. Freshness on Vercel is
@@ -52,6 +57,16 @@ jobs:
       DATAFORSEO_B64: ${{ secrets.DATAFORSEO_B64 }}
       WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
       NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+      # The metered routes the sweep uses where they are funded: SerpAPI is the
+      # only path to LinkedIn, and ScrapingBee the only way past DuckDuckGo's
+      # block page from a datacentre IP. Both are optional — without them those
+      # two sources report a gap rather than a zero.
+      SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+      SCRAPINGBEE_KEY: ${{ secrets.SCRAPINGBEE_KEY }}
+      SCRAPEBADGER_KEY: ${{ secrets.SCRAPEBADGER_KEY }}
+      TWITTERAPI_IO_KEY: ${{ secrets.TWITTERAPI_IO_KEY }}
+      # A scheduled job must not drain the month's SerpAPI quota in a week.
+      SERPAPI_MIN_REMAINING: "40"
       # Keep a scheduled job inside a predictable spend.
       DATAFORSEO_MAX_PROBE_COST: "0.05"
       DATAFORSEO_MIN_BALANCE: "0.05"
@@ -66,14 +81,22 @@ jobs:
           node-version: "22"
 
       - name: Refresh
+        # sweep-live.js, not refresh-recent.js.
+        #
+        # refresh-recent.js spawns collect.js for a list of adapters chosen when
+        # Octolens, Bright Data and SearXNG all worked. All three are now dark,
+        # so that list collects almost nothing — and it collects nothing
+        # QUIETLY, which is how the dashboard came to serve week-old data while
+        # every scheduled run reported success.
+        #
+        # sweep-live.js runs the eleven keyless sources in-process. None of them
+        # needs a key, so this job keeps working whatever the billing state of
+        # the metered providers, which is the entire point of a scheduled
+        # refresh.
         run: |
           DAYS="${{ github.event.inputs.days }}"
           [ -z "$DAYS" ] && DAYS=7
-          if [ "${{ github.event.inputs.full }}" = "true" ]; then
-            node collectors/refresh-recent.js --days=$DAYS --full
-          else
-            node collectors/refresh-recent.js --days=$DAYS
-          fi
+          node collectors/sweep-live.js --days=$DAYS
 
       - name: Accuracy audit
         # Fails the run rather than committing data that cannot be traced to

@@ -37,6 +37,20 @@ const threat = require("./lib/threat");
 const { readJson, writeJson, STORE_DIR } = require("./lib/store");
 
 const KEYWORDS = require("../config/keywords.json");
+
+/* .env MUST be loaded here, and its absence was a real, silent bug.
+ *
+ * lib/env.load() is only called by whoever reaches for it — no module in this
+ * chain did. So SERPAPI_KEY, DATAFORSEO_B64 and SCRAPINGBEE_KEY were all unset
+ * at require time, every credentialed provider reported itself "not
+ * configured", and the SERP provider fell through to the free built-in engines
+ * — which DuckDuckGo had already blocked. The visible symptom was a discovery
+ * sweep that found almost nothing while the paid provider it should have used
+ * sat there working.
+ *
+ * Nothing errored. The keys were simply invisible, which is the worst shape a
+ * configuration bug can take. */
+require("./lib/env").load();
 const CURSOR = path.join(STORE_DIR, "discover-cursor.json");
 const OUT = path.join(STORE_DIR, "competitors.json");
 
@@ -234,7 +248,9 @@ function nextBatch(size) {
     const a = process.argv.find(x => x.startsWith(`--${k}=`));
     return a ? a.split("=")[1] : d;
   };
-  const batchSize = Math.max(1, parseInt(arg("keywords", "24"), 10));
+  const explicitBatch = process.argv.some(a => a.startsWith("--keywords="))
+    ? Math.max(1, parseInt(arg("keywords", "24"), 10))
+    : null;
   // --recent biases the sweep toward launches, funding and betas, which is what
   // the daily monitor wants. Without it the sweep is category-wide.
   RECENT_MODE = process.argv.includes("--recent");
@@ -245,13 +261,54 @@ function nextBatch(size) {
     process.exit(1);
   }
 
+  /* HOW MANY KEYWORDS THIS RUN GETS, AND WHY IT IS NOT A DROPDOWN.
+   *
+   * It was a dropdown — 8 / 16 / 24 / 40 — and it asked the reader a question
+   * they had no way to answer, because the right number depends entirely on
+   * which provider resolved and what budget it has left. Both facts are
+   * invisible in the UI.
+   *
+   * Worse, the default was wrong. SerpAPI's free plan allows 250 searches a
+   * MONTH and each keyword costs one, so a 16-keyword daily sweep exhausts the
+   * quota in a fortnight — and the failure mode is not an error, it is every
+   * subsequent sweep silently finding nothing.
+   *
+   * So the budget decides. A free provider gets a full batch; a metered one
+   * gets what it can afford for thirty more daily runs, with its own reserve
+   * left intact. An explicit --keywords= still overrides, for a one-off deep
+   * sweep. */
+  const DAILY_RUNS_TO_SUSTAIN = 30;
+  let batchSize = explicitBatch;
+  let batchBasis = explicitBatch ? `--keywords=${explicitBatch} was given explicitly` : null;
+
+  if (!batchSize) {
+    if (provider.id === "serpapi" && provider.searches_left != null) {
+      const reserve = Number(process.env.SERPAPI_MIN_REMAINING || 20);
+      const spendable = Math.max(0, provider.searches_left - reserve);
+      batchSize = Math.max(3, Math.min(24, Math.floor(spendable / DAILY_RUNS_TO_SUSTAIN)));
+      batchBasis =
+        `${provider.searches_left} SerpAPI search(es) left, reserve ${reserve}: ` +
+        `${batchSize} keyword(s) sustains ${DAILY_RUNS_TO_SUSTAIN} more daily runs`;
+    } else if (provider.id === "dataforseo" && provider.balance != null) {
+      const minBal = Number(process.env.DATAFORSEO_MIN_BALANCE || 0.05);
+      const queries = Math.max(0, Math.floor((provider.balance - minBal) / 0.004));
+      batchSize = Math.max(3, Math.min(24, Math.floor(queries / DAILY_RUNS_TO_SUSTAIN)));
+      batchBasis = `$${Number(provider.balance).toFixed(4)} DataForSEO balance: ~${queries} query(ies), ${batchSize} per run`;
+    } else {
+      // Free and unmetered — the only constraint is wall-clock and rate limits.
+      batchSize = 16;
+      batchBasis = `${provider.label} is unmetered, so a full batch`;
+    }
+  }
+
   const { batch, nextIndex, wrapped, total, cursor } = nextBatch(batchSize);
   const ex = buildExclusions();
 
   console.log(`\nNew-competitor discovery`);
   console.log(`  keyword taxonomy: ${total} terms across ${KEYWORDS.categories.length} categories`);
   console.log(`  this run: ${batch.length} keywords from cursor ${cursor.index}${wrapped ? " (wraps)" : ""}`);
-  console.log(`  provider: ${provider.label}\n`);
+  console.log(`  provider: ${provider.label}`);
+  console.log(`  batch size: ${batchSize} — ${batchBasis}\n`);
 
   // --- 1. search each keyword, collect candidate domains ---
   const candidates = new Map();   // host -> { url, keywords:Set, titles:[] }
@@ -487,6 +544,7 @@ function nextBatch(size) {
     new_this_run: newDomains.length,
     new_domains_this_run: newDomains,
     by_classification: byClass,
+    batch_basis: batchBasis,
     high_threat_count: merged.filter(m => (m.threat_score || 0) >= 70).length,
     rejected_this_run: rejected,
     search_gaps: searchGaps,

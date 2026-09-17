@@ -23,6 +23,20 @@ const { verifyCandidates } = require("./lib/pipeline");
 const { upsertMentions, writeJson, STORE_DIR } = require("./lib/store");
 const { brandOrder } = require("./lib/brands");
 
+/* .env MUST be loaded here, and its absence was a real, silent bug.
+ *
+ * lib/env.load() is only called by whoever reaches for it — no module in this
+ * chain did. So SERPAPI_KEY, DATAFORSEO_B64 and SCRAPINGBEE_KEY were all unset
+ * at require time, every credentialed provider reported itself "not
+ * configured", and the SERP provider fell through to the free built-in engines
+ * — which DuckDuckGo had already blocked. The visible symptom was a discovery
+ * sweep that found almost nothing while the paid provider it should have used
+ * sat there working.
+ *
+ * Nothing errored. The keys were simply invisible, which is the worst shape a
+ * configuration bug can take. */
+require("./lib/env").load();
+
 const LEGACY = path.join(__dirname, "raw", "owned-mentions.json");
 
 // The legacy file used 4 brand ids; all 4 are still tracked. Its category strings

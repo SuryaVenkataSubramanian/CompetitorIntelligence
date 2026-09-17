@@ -57,6 +57,135 @@ t("channels are grouped for the summary matrix",
 t("legacy 'video' channel fully migrated to 'youtube'",
   !all.some(m => m.channel === "video") && !meta.channels.some(c => c.id === "video"));
 
+/* ------------------------------ grounded signals, opportunities, merge ----- */
+/**
+ * These guard the newest and most dangerous surface in the app: a section that
+ * tells a human "a competitor's customer is unhappy, go reply to them". A false
+ * positive here is not a wrong number on a chart — it sends somebody to argue
+ * with a testimonial in public. Both misclassifications below were REAL, found
+ * while building the view, and each has a test so they cannot come back.
+ */
+function signalTests() {
+  section("Grounded signals");
+  const signals = require(P("collectors", "lib", "signals.js"));
+  const opportunities = require(P("collectors", "lib", "opportunities.js"));
+  const merge = require(P("collectors", "lib", "competitor-merge.js"));
+
+  /* THE TESTIMONIAL TRAP. A five-star review of Mintlify was classified as a
+   * negative mention of Mintlify, because the writer described the problem it
+   * SOLVED as "horrible". A negative word only speaks for a brand if the brand
+   * is named in the same sentence. */
+  const testimonial =
+    "All of these had the same content with different schemas, and it was becoming horrible " +
+    "to keep them in sync. Now I use a Mintlify workflow that propagates changes automatically. " +
+    "I love this feature so much.";
+  t("a negative word in a sentence that does not name the brand is not the brand's sentiment",
+    signals.classifySentiment(testimonial, { alias: "Mintlify" }) === null,
+    "the 'horrible' testimonial stays unclassified");
+
+  /* THE AVOIDANCE TRAP. Marketing copy routinely names the pain a product
+   * removes, in the same sentence as the product. */
+  const avoided = "Mintlify centralized secrets while the lift was small, sidestepping the painful migration.";
+  const av = signals.classifySentiment(avoided, { alias: "Mintlify" });
+  t("a negative word inside an avoidance clause is not a complaint",
+    av === null || av.sentiment !== "negative",
+    "'sidestepping the painful migration' is not a usability complaint");
+
+  /* A LISTICLE IS NOT A COMPLAINT. "The 4 best alternatives to Mintlify" is an
+   * editorial round-up; treating it as a negative mention sends someone to
+   * reply to a magazine. */
+  const listicle = "A curated collection of the 4 best open source alternatives to Mintlify.";
+  const li = signals.classifySentiment(listicle, { alias: "Mintlify" });
+  t("an alternatives round-up is not classified as a negative mention",
+    li === null || li.sentiment !== "negative",
+    "carries a competitive_listicle intent signal instead");
+  t("an alternatives round-up is still detected as a competitive signal",
+    signals.intentSignals(listicle).some(i => i.tag === "competitive_listicle"));
+
+  /* A REAL complaint must still be caught, or the tests above have just
+   * disabled the feature. */
+  const real = "Honestly, Mintlify is too expensive for what we get.";
+  const rs = signals.classifySentiment(real, { alias: "Mintlify" });
+  t("a genuine complaint naming the brand IS classified negative",
+    !!rs && rs.sentiment === "negative" && rs.themes.includes("pricing"),
+    rs ? `${rs.sentiment}/${rs.themes.join(",")}` : "not classified");
+  t("a negative classification always carries the phrase and the sentence it came from",
+    !!rs && !!rs.trigger && !!rs.trigger.phrase && !!rs.trigger.quote &&
+    real.toLowerCase().includes(rs.trigger.phrase.toLowerCase()),
+    rs && rs.trigger ? `"${rs.trigger.phrase}"` : "missing");
+
+  /* EXTRACTIVE, NOT GENERATIVE. Every bullet must appear in the source text. A
+   * paraphrase here would be a fabricated quote in a card people paste into
+   * Slack. */
+  const source =
+    "Document360 shipped collaborative editing this week. The editor now supports real-time " +
+    "presence for up to twenty people. Teams evaluating it should note the API v3 change.";
+  const bullets = signals.summarise(source, { alias: "Document360" });
+  const norm = x => String(x).replace(/\s+/g, " ").replace(/\.\.\.$/, "").trim();
+  t("every brief bullet is a verbatim span of the source text",
+    bullets.length > 0 && bullets.every(b => norm(source).includes(norm(b.text))),
+    `${bullets.length} bullet(s), all verbatim`);
+  t("a brief never invents bullets to reach a fixed length",
+    signals.summarise("Too short.", { alias: "Document360" }).length <= 1);
+
+  /* ADVICE MUST BE LABELLED. */
+  const play = signals.play({ channel: "web", source_text: real }, rs, "Mintlify");
+  t("a suggested response is labelled a recommendation, not an observation",
+    !!play && play.kind === "recommendation" && !!play.asset && !!play.note,
+    play ? play.asset.title : "no play");
+  t("a suggested response carries the complaint it answers",
+    !!play && !!play.answers_complaint && !!play.matched_phrase);
+
+  /* THE OPPORTUNITIES PAYLOAD. */
+  const opps = opportunities.build(brands, meta.brand_order, { days: 7 });
+  t("no competitor-negative card is emitted without evidence to show",
+    opps.competitor_negatives.every(n => n.quote || n.rationale),
+    `${opps.competitor_negatives.length} card(s), all with a quote or a rationale`);
+  t("every competitor-negative names a product that is not ours",
+    opps.competitor_negatives.every(n => n.competitor !== "document360"));
+  t("every competitor-negative links to its source",
+    opps.competitor_negatives.every(n => /^https?:\/\//.test(n.url || "")));
+  t("our-mentions half is bounded by the requested window",
+    opps.our_mentions.every(m => m.days_ago == null || m.days_ago <= 7),
+    `${opps.our_mentions.length} in 7d`);
+  t("every our-mention carries a link and a priority band",
+    opps.our_mentions.every(m => /^https?:\/\//.test(m.url || "") && ["HIGH", "MEDIUM", "LOW"].includes(m.priority)));
+
+  /* THE MERGE. "Not a competitor" must not survive as a display category. */
+  let dirs = { products: [] };
+  try { dirs = D("directory-listings.json"); } catch (e) { /* optional */ }
+  const merged = merge.merge(D("competitors.json"), dirs);
+  t("'not a competitor' is never a category in the merged list",
+    !merged.competitors.some(c => c.classification === "not_a_competitor"),
+    `${merged.ruled_out_count} ruled out and counted instead`);
+  t("every merged competitor is direct, emerging or adjacent",
+    merged.competitors.every(c => merge.KEEP.has(c.classification)),
+    Object.keys(merged.by_classification).join(", "));
+  t("a competitor promoted from a review directory states why it was promoted",
+    merged.competitors.filter(c => (c.found_via || []).includes("review directory") &&
+      !(c.found_via || []).includes("keyword discovery"))
+      .every(c => !!c.promotion_basis),
+    `${merged.promoted_from_directories} promoted`);
+  t("a directory listing with no fetched homepage is never promoted",
+    merged.competitors.every(c => !!c.website),
+    `${merged.directory_listings_not_promoted} listing(s) held back`);
+
+  /* THE KEYLESS LAYER is the freshness floor; it must stay keyless. */
+  const fresh = require(P("collectors", "lib", "freshsources.js"));
+  t("the keyless layer declares at least 8 sources", fresh.SOURCES.length >= 8, `${fresh.SOURCES.length} sources`);
+  const fsSrc = fs.readFileSync(P("collectors", "lib", "freshsources.js"), "utf8");
+  t("no source in the keyless layer reads an API key",
+    !/process\.env\.[A-Z_]*(KEY|TOKEN|SECRET|B64)/.test(fsSrc),
+    "nothing there depends on a billing balance");
+  t("the brand pre-filter rejects a substring near-miss",
+    fresh.literalAlias("I bought a netbook", "GitBook") === null &&
+    fresh.literalAlias("we use GitBook daily", "GitBook") === "GitBook",
+    "'netbook' must not match 'GitBook'");
+}
+try { signalTests(); } catch (e) {
+  t("grounded-signal tests ran", false, String(e && e.message || e));
+}
+
 const r = meta.totals.ranges;
 t("7/30/90/365 buckets are strictly increasing",
   r["7"].total < r["30"].total && r["30"].total < r["90"].total && r["90"].total < r["365"].total,
@@ -220,7 +349,7 @@ try {
 t(`index.html loads every frontend script (${SCRIPTS.length})`,
   SCRIPTS.includes("app.js") && SCRIPTS.includes("views-ai.js") && SCRIPTS.includes("views-extra.js"),
   SCRIPTS.join(", "));
-const WINDOW_GLOBALS = ["D360Premium", "D360Views", "D360AI", "D360Directories"];
+const WINDOW_GLOBALS = ["D360Premium", "D360Views", "D360AI", "D360Directories", "D360Opportunities"];
 t("app.js's window globals are all defined by the loaded scripts",
   topLevelOk && WINDOW_GLOBALS.every(k => sandbox.window[k]),
   WINDOW_GLOBALS.filter(k => !sandbox.window[k]).join(", ") || "all present");
@@ -241,12 +370,35 @@ setTimeout(async () => {
     const STATES = [
       ["overview", {}], ["mentions", {}], ["ai", {}], ["recommendations", {}], ["sources", {}],
       // The tabs added for competitor discovery and settings must render too.
-      ["competitors", {}], ["settings", {}],
+      ["competitors", {}], ["settings", {}], ["opportunities", {}],
       ["overview", { range: 7 }], ["overview", { range: 365 }], ["overview", { range: "all" }],
       ["mentions", { range: 7 }], ["mentions", { includeUndated: true }],
       ["mentions", { channels: ["video"] }], ["mentions", { sentiments: ["negative"] }],
       ["recommendations", { recType: "accelerate_llm" }],
+      // The live recommendation mode renders from a different payload entirely,
+      // so the stored-mode pass proves nothing about it.
+      ["recommendations", { recMode: "live", recDays: 7 }],
+      ["opportunities", { range: 7 }],
     ];
+
+    /* The Opportunities view reads a payload the browser fetches on first
+     * visit. Seeded here with the real thing, because rendering its "Loading"
+     * state would prove only that the loading state renders. */
+    try {
+      const opps = require(P("collectors", "lib", "opportunities.js"))
+        .build(brands, meta.brand_order, { days: 7 });
+      sandbox.window.__d360_opps = opps;
+      const liveRecs = require(P("collectors", "lib", "recommend-live.js"))
+        .build(brands, meta.brand_order, { days: 30 });
+      sandbox.window.__d360_liveRecs = liveRecs;
+      t("the Opportunities payload has something to render",
+        opps.competitor_negatives.length + opps.our_mentions.length > 0,
+        `${opps.competitor_negatives.length} negative(s), ${opps.our_mentions.length} own mention(s)`);
+      t("the live recommendation engine produces recommendations",
+        liveRecs.recommendations.length > 0, `${liveRecs.recommendations.length} rec(s)`);
+    } catch (e) {
+      t("the Opportunities and live-recommendation payloads build", false, String(e.message || e));
+    }
     let bad = [];
     for (const id of meta.brand_order) {
       for (const [view, extra] of STATES) {

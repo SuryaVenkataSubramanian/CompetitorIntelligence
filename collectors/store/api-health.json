@@ -1,33 +1,134 @@
 {
-  "checked_at": "2026-09-10T14:20:15.455Z",
+  "checked_at": "2026-09-17T18:54:46.647Z",
   "paid_calls": false,
   "summary": {
+    "SKIPPED": 2,
     "WORKING": 3,
-    "BROKEN": 2,
-    "DEGRADED": 4,
-    "SKIPPED": 1
+    "BROKEN": 3,
+    "DEGRADED": 5
   },
   "sources": [
     {
-      "name": "SearXNG",
+      "name": "SearXNG (optional)",
+      "state": "SKIPPED",
+      "detail": "not running — no SearXNG instance at http://localhost:8888 (HTTP no response). Start one: npm run searxn. Superseded by the keyless sources above, which need no local service and work on a serverless host.",
+      "optional": true,
+      "superseded_by": "lib/freshsources.js",
+      "fix": null
+    },
+    {
+      "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "68 results from 8 engines (1 unresponsive: duckduckgo)",
-      "engines": {
-        "yahoo": 7,
-        "seznam": 10,
-        "naver": 15,
-        "abcnyheter": 10,
-        "google cse": 20,
-        "yandex": 15,
-        "fynd": 10,
-        "searchch": 6
-      },
-      "unresponsive": [
-        [
-          "duckduckgo",
-          "CAPTCHA"
-        ]
-      ]
+      "detail": "11/11 source(s) answered in 35s; 3 returned data, 18 candidate(s) for Document360 over 7d; 2 gap(s) reported",
+      "sources": [
+        {
+          "id": "googlenews_rss",
+          "tier": "primary",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "hn_recent",
+          "tier": "primary",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "duckduckgo_week",
+          "tier": "primary",
+          "candidates": 8,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "youtube_week",
+          "tier": "primary",
+          "candidates": 8,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "github_recent",
+          "tier": "secondary",
+          "candidates": 2,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "stackexchange",
+          "tier": "secondary",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "status_page",
+          "tier": "secondary",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "alternatives_page",
+          "tier": "secondary",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "mastodon",
+          "tier": "bonus",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "gdelt_recent",
+          "tier": "bonus",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "reddit_rss",
+          "tier": "bonus",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        }
+      ],
+      "gaps": [
+        {
+          "source": "gdelt_recent",
+          "brand_id": "document360",
+          "reason": "GDELT HTTP 429"
+        },
+        {
+          "source": "reddit_rss",
+          "reason": "Reddit refused anonymous RSS (HTTP 429); disabled for 24h rather than retried"
+        }
+      ],
+      "total_candidates": 18,
+      "fix": null
+    },
+    {
+      "name": "SerpAPI",
+      "state": "WORKING",
+      "detail": "SerpAPI (Free Plan) — 246 search(es) left this month. It is the ONLY route to LinkedIn (site: operator), at one search per brand per sweep.",
+      "searches_left": 246,
+      "serves": [
+        "linkedin"
+      ],
+      "fix": null
+    },
+    {
+      "name": "twitterapi.io (X)",
+      "state": "BROKEN",
+      "detail": "-518 credit(s) — exhausted; every call answers HTTP 402 and the X channel reports unavailable",
+      "credits": -518,
+      "fix": "Recharge at twitterapi.io. Until then the X channel is unavailable, not zero."
     },
     {
       "name": "Octolens",
@@ -350,8 +451,8 @@
     },
     {
       "name": "Scraping chain",
-      "state": "WORKING",
-      "detail": "direct -> scrapingbee -> scrapebadger available",
+      "state": "DEGRADED",
+      "detail": "usable: direct -> scrapingbee; scrapebadger 0 credit(s) — EXHAUSTED; scrapingbee 743 credit(s) left of 1000",
       "routes": {
         "direct": {
           "available": true,
@@ -366,40 +467,45 @@
           "note": "POST /v1/web/scrape. Carries volume (998 credits, free tier). Declines hard bot walls with 422 blocking_page_detected, and is throttled to 5 requests/minute."
         }
       },
-      "fix": null
+      "usable": [
+        "direct",
+        "scrapingbee"
+      ],
+      "scrapingbee_credits_left": 743,
+      "fix": "A proxy route is the only way past the review-directory bot walls and DuckDuckGo's block page. With none, those sources report unavailable rather than zero. Top up whichever is exhausted."
     },
     {
       "name": "Windsor.ai",
       "state": "WORKING",
-      "detail": "GA4: 3400 AI-assistant session(s) of 360031 (0.94%) — ChatGPT=2567, Claude=391, Gemini=292, Perplexity=120, Copilot=30",
-      "ai_sessions": 3400,
-      "total_sessions": 360031,
-      "ai_share_pct": 0.94,
+      "detail": "GA4: 3367 AI-assistant session(s) of 350949 (0.96%) — ChatGPT=2610, Claude=349, Gemini=270, Perplexity=113, Copilot=25",
+      "ai_sessions": 3367,
+      "total_sessions": 350949,
+      "ai_share_pct": 0.96,
       "surfaces": [
         {
           "id": "chatgpt",
           "label": "ChatGPT",
-          "sessions": 2567
+          "sessions": 2610
         },
         {
           "id": "claude",
           "label": "Claude",
-          "sessions": 391
+          "sessions": 349
         },
         {
           "id": "gemini",
           "label": "Gemini",
-          "sessions": 292
+          "sessions": 270
         },
         {
           "id": "perplexity",
           "label": "Perplexity",
-          "sessions": 120
+          "sessions": 113
         },
         {
           "id": "copilot",
           "label": "Copilot",
-          "sessions": 30
+          "sessions": 25
         }
       ],
       "note": "First-party only — enriches Document360, says nothing about competitors. Free to query, so this layer survives an exhausted DataForSEO balance."
@@ -407,10 +513,10 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 106/1521 records (7%); queue files present",
-      "classified": 106,
-      "total": 1521,
-      "pct": 7,
+      "detail": "sentiment classified on 154/1562 records (10%); queue files present",
+      "classified": 154,
+      "total": 1562,
+      "pct": 10,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
     {

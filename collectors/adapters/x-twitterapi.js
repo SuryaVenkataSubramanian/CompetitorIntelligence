@@ -232,6 +232,11 @@ module.exports = {
   channel: "x",
   requires: ["TWITTERAPI_IO_KEY"],
   credentialStatus,
+  // Exported so the health check can read the balance WITHOUT running a
+  // collection. The plan goes negative rather than stopping at zero, so the
+  // balance is the only thing that distinguishes "no tweets this week" from
+  // "every call is answering 402".
+  credits,
   available() { return credentialStatus(); },
 
   coverageLimit: {

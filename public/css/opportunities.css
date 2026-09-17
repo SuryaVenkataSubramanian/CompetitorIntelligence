@@ -1,0 +1,287 @@
+/* ==========================================================================
+   Competitors — Negative Mentions — Opportunities
+   plus the live-refresh bars and the three-line brief on mention cards.
+
+   Built entirely from the existing colour tokens and card system. Nothing here
+   introduces a new visual language — the one new idea is `.op-play`, which is
+   deliberately set apart because it holds SUGGESTIONS rather than fetched
+   facts, and a reader must be able to see that difference without reading.
+   ========================================================================== */
+
+/* ------------------------------------------------------------- two columns */
+
+.op-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+/* One column below the point where two columns stop being readable rather
+   than at a device width — the cards carry quotes, and a 300px quote column
+   is worse than a stacked one. */
+@media (max-width: 1080px) {
+  .op-cols { grid-template-columns: 1fr; }
+}
+.op-col { min-width: 0; }
+.op-col .panel-h { margin-bottom: 10px; }
+
+/* --------------------------------------------------------------- the card */
+
+.op-card { padding: 14px 16px; margin-bottom: 12px; }
+.op-card.ours { border-left: 3px solid var(--brand); }
+
+.op-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink-2);
+  margin-bottom: 9px;
+}
+.op-sep { color: var(--ink-3); }
+.op-spacer { flex: 1 1 auto; }
+.op-comp { font-weight: 650; color: var(--ink); }
+
+.op-prio {
+  font-weight: 750;
+  font-size: 10.5px;
+  letter-spacing: .05em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.op-prio.p-HIGH { color: var(--neg); background: var(--neg-soft); border-color: color-mix(in srgb, var(--neg) 28%, transparent); }
+.op-prio.p-MEDIUM { color: var(--warn); background: rgba(232, 163, 23, .12); border-color: rgba(232, 163, 23, .3); }
+.op-prio.p-LOW { color: var(--ink-3); background: var(--neu-soft); }
+
+/* --------------------------------------------------------------- evidence */
+
+.op-quote {
+  margin: 0 0 8px;
+  padding: 9px 12px;
+  border-left: 3px solid var(--hair-2);
+  background: var(--surface-2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.op-basis {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+.op-basis em { font-style: normal; color: var(--ink-3); }
+
+.op-brief {
+  margin: 0 0 9px;
+  padding-left: 18px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.op-brief li { margin-bottom: 3px; }
+.op-brief li::marker { color: var(--ink-3); }
+
+.op-do {
+  margin: 0 0 9px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--brand-soft);
+}
+.op-do em { font-style: normal; color: var(--ink-3); font-size: 11px; }
+
+/* ----------------------------------------------------------------- advice */
+
+/* THE IMPORTANT ONE. Everything inside this block is proposed, not observed.
+   Dashed rather than solid, so it reads as a draft at a glance and cannot be
+   confused with the quoted evidence above it. */
+.op-play {
+  margin: 10px 0 9px;
+  padding: 10px 12px;
+  border: 1px dashed var(--hair-2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.op-play-h {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+.op-play-h em {
+  font-style: normal;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.op-play-angle { margin: 0 0 4px; font-size: 12.5px; color: var(--ink); }
+.op-play-reply { margin: 0 0 8px; font-size: 12.5px; line-height: 1.55; color: var(--ink-2); }
+
+.op-asset {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--ink);
+}
+.op-proof {
+  flex-basis: 100%;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------- foot */
+
+.op-foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 9px;
+  border-top: 1px solid var(--hair);
+  font-size: 11.5px;
+}
+.op-factors { color: var(--ink-3); font-size: 11px; }
+
+/* ------------------------------------------- the brief on a mention card */
+
+.pm-brief { margin: 2px 0 10px; }
+.pm-brief > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  user-select: none;
+}
+.pm-brief > summary::-webkit-details-marker { display: none; }
+.pm-brief > summary::before {
+  content: "▸";
+  font-size: 9px;
+  color: var(--ink-3);
+  transition: transform .12s ease;
+}
+.pm-brief[open] > summary::before { transform: rotate(90deg); }
+.pm-brief > summary span { font-weight: 600; color: var(--ink-2); }
+.pm-brief > summary em { font-style: normal; color: var(--ink-3); }
+.pm-brief ul {
+  margin: 8px 0 0;
+  padding: 9px 12px 9px 28px;
+  border-left: 3px solid var(--hair-2);
+  background: var(--surface-2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.pm-brief li { margin-bottom: 4px; }
+
+.pm-prio {
+  font-weight: 750;
+  font-size: 10px;
+  letter-spacing: .05em;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+.pm-prio.p-HIGH { color: var(--neg); background: var(--neg-soft); }
+.pm-prio.p-MEDIUM { color: var(--warn); background: rgba(232, 163, 23, .12); }
+
+/* --------------------------------------------------------- refresh states */
+
+.live-refresh { border-left: 3px solid var(--brand); }
+.login-msg.warn { color: var(--warn); }
+
+/* The collector log is diagnostic output, so it is monospaced, scrollable and
+   bounded — an unbounded log pushes the content the user came for off-screen. */
+.refresh-log {
+  max-height: 220px;
+  overflow: auto;
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--surface-3);
+  border-radius: var(--radius-sm);
+  padding: 9px 11px;
+  margin: 8px 0 0;
+  color: var(--ink-2);
+}
+
+/* The tab label is long by design — it names three things — so it is allowed
+   to shrink rather than forcing the tab row to scroll on a laptop. */
+.tabs-in .tab { white-space: nowrap; }
+@media (max-width: 1240px) {
+  .tabs-in .tab { font-size: 12.5px; }
+}
+
+/* ------------------------------------------------- refresh panel & button
+
+   THESE WERE NEVER DEFINED FOR THE DASHBOARD, AND THE TEST SUITE CAUGHT IT.
+
+   `.refresher` and `.login-btn` are used by every Refresh control in the app,
+   but `.login-btn` was only ever styled in login.css — which index.html does
+   not load. So every Refresh button on the dashboard has been rendering as a
+   bare browser button, and `.refresher` as an unstyled div, since the first one
+   was added. A button that looks like nothing is a button nobody presses.
+
+   Defined here rather than by linking login.css into the dashboard: that sheet
+   also styles a full-page centred card layout, which would be actively wrong
+   here.
+*/
+
+.refresher {
+  padding: 14px 16px;
+}
+.refresher .refresh-txt b {
+  display: block;
+  font-size: 13.5px;
+  margin-bottom: 3px;
+  color: var(--ink);
+}
+.refresher .refresh-txt span {
+  display: block;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 78ch;
+}
+
+.login-btn {
+  border: none;
+  border-radius: 10px;
+  background: var(--brand-grad);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 0 18px;
+  height: 38px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px -8px var(--brand);
+  transition: filter .12s, transform .12s;
+  white-space: nowrap;
+}
+.login-btn:hover:not(:disabled) { filter: brightness(1.06); }
+.login-btn:active:not(:disabled) { transform: translateY(1px); }
+.login-btn:disabled { opacity: .6; cursor: progress; }
+
+/* On the login page the same class is a full-width submit, and that page loads
+   login.css after this one is irrelevant — it never loads this sheet. Scoped
+   anyway so the two can never fight if that changes. */
+.login-card .login-btn { width: 100%; height: 44px; margin-top: 6px; }
+
+.login-msg { font-size: 12.5px; line-height: 1.5; min-height: 1em; color: var(--ink-2); }
+.login-msg.err { color: var(--neg); }
+.login-msg.ok { color: var(--pos); }

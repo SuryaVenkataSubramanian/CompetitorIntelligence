@@ -40,13 +40,33 @@ const { fetchUrl, fetchJson } = require("./fetch");
 const scrapingbee = require("./scrapingbee");
 
 /** Signs that a 200 response is a challenge, not the content. */
-const CHALLENGE = /captcha|are you a robot|access denied|cf-browser-verification|just a moment|checking your browser|enable javascript and cookies|attention required/i;
+/* MEASURED ADDITIONS, each from a page this regex previously waved through:
+ *   "anomaly"      DuckDuckGo's block page. It answers HTTP 202 — inside the
+ *                  2xx success range — with 14KB of "unusual traffic" markup
+ *                  and zero results. looksBlocked() passed it, so the chain
+ *                  returned a block page as content and the caller recorded a
+ *                  true zero. Through ScrapingBee the same query returned 36KB
+ *                  and 10 results.
+ *   "<title>Captcha" Mojeek serves a full captcha page, also HTTP 200. */
+const CHALLENGE = /captcha|are you a robot|access denied|cf-browser-verification|just a moment|checking your browser|enable javascript and cookies|attention required|unusual traffic|automated queries|<title>\s*captcha|detected an anomaly|anomaly in the request/i;
 
 /** Hosts measured to refuse a direct fetch, so the direct attempt is skipped. */
 const KNOWN_WALLED = /(^|\.)(g2|capterra|trustradius|softwareadvice|gartner)\.com$/i;
 
+/**
+ * Hosts that refuse a direct fetch but that ScrapeBadger will still attempt —
+ * unlike KNOWN_WALLED, where it declines with 422 and the credit is wasted.
+ * Kept separate so the chain skips only the attempt that cannot work.
+ */
+const DIRECT_HOPELESS = /(^|\.)(duckduckgo\.com|mojeek\.com)$/i;
+
 function looksBlocked(r) {
   if (!r || !r.ok) return true;
+  /* HTTP 202 is inside the success range but is not a served page — it means
+   * "accepted, nothing for you yet", and every observed instance here has been
+   * a block page. Treating it as success is what let DuckDuckGo's anomaly page
+   * through as content. */
+  if (r.status === 202) return true;
   // A small body containing challenge wording is a wall; a large page that
   // merely mentions "captcha" somewhere is not.
   if (CHALLENGE.test(r.body || "") && (r.bytes || 0) < 50000) return true;
@@ -204,7 +224,7 @@ async function fetchPage(url, {
 
   /* 1. Direct — unless this host is already known to refuse one, in which case
    *    the attempt is pure latency. */
-  const skipDirect = forceProxy || KNOWN_WALLED.test(host);
+  const skipDirect = forceProxy || KNOWN_WALLED.test(host) || DIRECT_HOPELESS.test(host);
   if (!skipDirect) {
     const r = await fetchUrl(url, { retries: 1, timeout: 25000 });
     if (!looksBlocked(r)) {
@@ -297,4 +317,4 @@ function routeStatus() {
   };
 }
 
-module.exports = { fetchPage, routeStatus, badgerStatus, looksBlocked, CHALLENGE, KNOWN_WALLED };
+module.exports = { fetchPage, routeStatus, badgerStatus, badgerAccount, looksBlocked, CHALLENGE, KNOWN_WALLED, DIRECT_HOPELESS };

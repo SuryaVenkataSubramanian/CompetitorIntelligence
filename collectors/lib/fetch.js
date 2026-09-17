@@ -10,6 +10,7 @@
 const https = require("https");
 const http = require("http");
 const crypto = require("crypto");
+const zlib = require("zlib");
 const { URL } = require("url");
 
 const UA =
@@ -18,7 +19,7 @@ const UA =
 
 // Per-host minimum gap between requests, in ms. GDELT explicitly asks for 1 req / 5s.
 const HOST_THROTTLE = {
-  "api.gdeltproject.org": 5500,
+  "api.gdeltproject.org": 8000,   // documented 1 req/5s; measured 429s at 5.5s across 7 brands
   /* DataForSEO enforces 6 requests per minute and answers a 7th with
    * "40202 The rates limit per minute has been exceeded: 6 >= 6" — a task-level
    * error inside an HTTP 200, so it does NOT look like a failure to a caller
@@ -30,11 +31,28 @@ const HOST_THROTTLE = {
    * three times while probing, which made real endpoints look like 404s.
    * 13s spaces requests safely under it. */
   "scrapebadger.com": 13000,
+  /* DuckDuckGo HTML rate-limits after roughly 8 requests in 2 minutes and then
+   * answers 200 with an empty result list — a silent zero, which is the worst
+   * possible failure shape for a discovery sweep. MEASURED: a 16-keyword sweep
+   * at the old 1.2s gap produced results for 1 keyword and nothing for the
+   * other 15, which surfaced in the UI as "the sweep failed". 11s keeps it
+   * under the limiter. */
+  "html.duckduckgo.com": 11000,
+  "duckduckgo.com": 11000,
+  /* GitHub allows 10 search requests per minute unauthenticated. */
+  "api.stackexchange.com": 1200,
+  "mastodon.social": 900,
+  "fosstodon.org": 900,
+  "hachyderm.io": 900,
+  "www.reddit.com": 3000,
+  "openalternative.co": 1500,
+  "alternativeto.net": 1500,
+  "www.mojeek.com": 1500,
   "hn.algolia.com": 300,
   "news.google.com": 1200,
   "www.youtube.com": 800,
   "public.api.bsky.app": 500,
-  "api.github.com": 1000,
+  "api.github.com": 7000,
   "web.archive.org": 1500,
   "archive.org": 1500,
   default: 600,
@@ -73,6 +91,12 @@ async function fetchUrl(rawUrl, opts = {}) {
     // memory. API downloads legitimately exceed the HTML default, so callers
     // can raise it — see collectors/lib/brightdata.js.
     maxBytes = 4 * 1024 * 1024,
+    /* Opt-in compression. Accept-Encoding is "identity" by default so the
+     * SHA-256 in the receipt hashes exactly the bytes a reader would see.
+     * Some APIs compress regardless of what is asked for (Stack Exchange
+     * always gzips), so those callers ask for it explicitly and the body is
+     * inflated before hashing — the hash then still covers the content. */
+    gzip = false,
   } = opts;
 
   let attempt = 0;
@@ -89,6 +113,7 @@ async function fetchUrl(rawUrl, opts = {}) {
         accept,
         body,
         maxBytes,
+        gzip,
       });
       // 429 / 5xx are worth retrying with backoff; 4xx (other) is a real answer.
       if ((receipt.status === 429 || receipt.status >= 500) && attempt <= retries) {
@@ -143,7 +168,7 @@ function once(rawUrl, opts, redirectsLeft) {
             "User-Agent": UA,
             Accept: opts.accept,
             "Accept-Language": "en-US,en;q=0.9",
-            "Accept-Encoding": "identity", // keep bodies plain so hashing is stable
+            "Accept-Encoding": opts.gzip ? "gzip" : "identity", // plain by default so hashing is stable
             ...opts.headers,
           },
           timeout: opts.timeout,
@@ -171,7 +196,17 @@ function once(rawUrl, opts, redirectsLeft) {
             if (total <= CAP) chunks.push(c);
           });
           res.on("end", () => {
-            const buf = Buffer.concat(chunks);
+            let buf = Buffer.concat(chunks);
+            // Inflate before hashing and before the truncation check, so both
+            // describe the content rather than the transfer encoding. A body
+            // that claims gzip and is not gzip is left as-is rather than
+            // throwing: the caller gets bytes and can judge them.
+            const enc = String(res.headers["content-encoding"] || "").toLowerCase();
+            if (enc.includes("gzip") || enc.includes("deflate")) {
+              try {
+                buf = enc.includes("gzip") ? zlib.gunzipSync(buf) : zlib.inflateSync(buf);
+              } catch (e) { /* not actually compressed — use the raw bytes */ }
+            }
             // Truncation must never be silent. A body cut mid-token produces a
             // JSON parse error hundreds of lines deep, which reads like a
             // provider bug; saying so here is what makes it debuggable.

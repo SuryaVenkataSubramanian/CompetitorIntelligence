@@ -68,6 +68,9 @@ const favLetter = d => (d || "?").replace(/^www\./, "").charAt(0).toUpperCase();
 const TABS = [
   { id: "mentions", label: "Mentions" },
   { id: "competitors", label: "New Competitors" },
+  // Placed straight after New Competitors because it answers the question that
+  // tab raises: now that we know who they are, where are they losing?
+  { id: "opportunities", label: "Competitors — Negative Mentions — Opportunities" },
   { id: "ai", label: "AI Visibility" },
   { id: "recommendations", label: "Recommendations" },
   { id: "sources", label: "Data quality" },
@@ -86,6 +89,14 @@ let STATE = {
   includeDiscovered: true,   // ranges use published-else-discovered by default
   recType: "all",
   recOwner: "all",
+  /* Recommendations come from two engines and the reader must be able to tell
+   * which they are looking at.
+   *   stored  a Claude pass over the whole evidence store - strategic, and
+   *           static, because regenerating it needs a person to run a queue.
+   *   live    computed now from the mention store for a window, so a Refresh
+   *           button has something real to refresh. */
+  recMode: "stored",
+  recDays: 7,
 };
 const brand = () => DATA.brands[STATE.brand];
 
@@ -435,6 +446,108 @@ const PER_PAGE = 10;
  * tiles, no donut, no bar chart — the matrix already answers "who leads where",
  * and the list answers "what was actually said".
  */
+/**
+ * Live refresh for the Mentions feed.
+ *
+ * Shown for every range, but WORDED for the one selected, because the two cases
+ * are genuinely different jobs: on "Last 7 days" the sweep re-queries every
+ * source for the window ending at this minute, which is the thing the stored
+ * data cannot give you. On a 365-day view the same sweep still runs, it just
+ * adds proportionally less.
+ *
+ * The button names the channels it will actually cover, because LinkedIn costs
+ * a metered SerpAPI query and the rest do not — a reader should know what a
+ * click spends before they spend it.
+ */
+function liveRefreshBar() {
+  const chans = STATE.channels.length ? STATE.channels : null;
+  const scope = chans ? chans.map(chLabel).join(", ") : "every channel";
+  const meter = (!chans || chans.includes("linkedin"))
+    ? " LinkedIn uses one metered SerpAPI query; every other source is keyless."
+    : " All sources for this selection are keyless.";
+
+  return `
+  <div class="card panel refresher live-refresh" id="mentionRefresh">
+    <div class="refresh-row">
+      <div class="refresh-txt">
+        <b>Live sweep — ${esc(brandName(STATE.brand))}, ${esc(RANGE_LABELS[STATE.range])}</b>
+        <span>Queries Google News, Hacker News, DuckDuckGo, YouTube, GitHub, Stack Overflow, Reddit,
+        Mastodon, GDELT, vendor status pages and alternatives aggregators for ${esc(scope)}, right now.
+        The window ends at this minute, not at the last scheduled run.${meter}</span>
+      </div>
+      <button class="login-btn refresh-go" id="mentionRefreshBtn">Refresh</button>
+    </div>
+    <div class="login-msg" id="mentionRefreshMsg" style="margin-top:10px"></div>
+    <pre class="refresh-log" id="mentionRefreshLog" hidden></pre>
+  </div>`;
+}
+
+/**
+ * Run the sweep and re-read the dashboard.
+ *
+ * Deliberately re-reads /api/data rather than splicing the returned records in:
+ * the counts, the brand-by-channel matrix and the briefs are all computed at
+ * build time, so patching the feed alone would leave the numbers above it
+ * disagreeing with the rows below.
+ */
+async function runMentionRefresh() {
+  const btn = $("#mentionRefreshBtn");
+  const msg = $("#mentionRefreshMsg");
+  const logBox = $("#mentionRefreshLog");
+  if (!btn) return;
+  const say = (t, k) => { if (msg) { msg.textContent = t; msg.className = "login-msg " + (k || ""); } };
+
+  const days = STATE.range === "all" ? 365 : STATE.range;
+  btn.disabled = true;
+  btn.textContent = "Sweeping…";
+  say(`Querying every live source for ${brandName(STATE.brand)} over the last ${days} day(s). Free sources are rate-limited, so this takes a minute or two — it is a real sweep, not a cache read.`);
+  if (logBox) logBox.hidden = true;
+
+  try {
+    const r = await fetch("/api/mentions/refresh", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        days,
+        brands: [STATE.brand],
+        channels: STATE.channels.length ? STATE.channels : null,
+      }),
+    });
+    const j = await r.json();
+
+    if (logBox && (j.log || []).length) { logBox.textContent = j.log.join("\n"); logBox.hidden = false; }
+    if (!j.ok) { say(j.error || "The sweep failed. The log is below.", "err"); return; }
+
+    const parts = [
+      `${j.candidates_found} candidate(s) found`,
+      `${j.records_verified} passed verification`,
+      `${j.added_to_store} new`,
+    ];
+    if (j.rejected) parts.push(`${j.rejected} rejected`);
+    // A gap is not a failure, but it IS the difference between "none exist"
+    // and "we could not look", so it is always reported.
+    const gapNote = (j.gaps || []).length
+      ? ` ${j.gaps.length} source(s) could not be queried this run — see the log.`
+      : "";
+
+    if (!j.persisted) {
+      say(`${parts.join(", ")}. ${j.persist_note}${gapNote}`, "warn");
+    } else if (j.added_to_store > 0) {
+      say(`${parts.join(", ")} in ${j.duration_seconds}s.${gapNote} Reloading…`, "ok");
+      const d = await (await fetch("/api/data")).json();
+      if (!d.error) { DATA = d; render(); }
+      return;
+    } else {
+      say(`${parts.join(", ")} in ${j.duration_seconds}s — nothing newer than what is already stored.${gapNote}`, "ok");
+    }
+  } catch (e) {
+    say("Request failed: " + e.message, "err");
+  } finally {
+    const b = $("#mentionRefreshBtn");
+    if (b) { b.disabled = false; b.textContent = "Refresh"; }
+  }
+}
+
 function viewMentions() {
   const b = brand();
   const order = DATA.meta.brand_order;
@@ -528,6 +641,8 @@ function viewMentions() {
       ${STATE.channels.length || STATE.sentiments.length ? `<button class="fchip clear" id="clearFilters">Clear</button>` : ""}
     </div>
   </div>
+
+  ${liveRefreshBar()}
 
   <div class="feed-top">
     <div class="feed-count" id="feedCount"></div>
@@ -701,15 +816,97 @@ function viewAI() {
  * per-prompt probes rather than the batch SERP snapshot. */
 
 /* ---------------------------------------------------- view: recommendations */
+/**
+ * Which engine produced what is on screen, and the control to switch.
+ *
+ * The two sets are NOT merged. A Claude pass over 1,539 records and a phrase
+ * match over the last week are different strengths of evidence, and interleaving
+ * them would leave the reader unable to tell which they were acting on. So they
+ * are separate modes, with the trade-off stated on the toggle.
+ */
+function recModeBar(R) {
+  const live = STATE.recMode === "live";
+  return `
+  <div class="card panel refresher" style="margin-bottom:14px">
+    <div class="refresh-row">
+      <div class="refresh-txt">
+        <b>${live ? `Last ${STATE.recDays} days - computed now` : "Strategic - Claude over the whole evidence store"}</b>
+        <span>${live
+          ? "Analyses every mention in the window and groups it by what was actually said: three complaints about the same thing are one piece of work, not three. Each card is triggered by a phrase found in a sentence naming the product, so it can be checked by reading its quote."
+          : "A full Claude pass over the whole store, run deliberately rather than on a timer. Deeper than the live pass, and static between runs - switch to the window view for this week's response list."}</span>
+      </div>
+      <label class="refresh-kw">
+        source
+        <select class="control" id="recModeSel">
+          <option value="stored"${live ? "" : " selected"}>Strategic (stored)</option>
+          <option value="live"${live ? " selected" : ""}>Last N days (live)</option>
+        </select>
+      </label>
+      ${live ? `
+      <label class="refresh-kw">
+        window
+        <select class="control" id="recDaysSel">
+          ${[7, 14, 30, 90].map(n => `<option value="${n}"${n === STATE.recDays ? " selected" : ""}>last ${n} days</option>`).join("")}
+        </select>
+      </label>` : ""}
+      <button class="login-btn refresh-go" id="recRefreshBtn">Refresh</button>
+    </div>
+    <div class="login-msg" id="recMsg" style="margin-top:10px"></div>
+  </div>`;
+}
+
+/**
+ * Refresh recommendations.
+ *
+ * In live mode this re-computes from the CURRENT store, which is instant. It
+ * deliberately does NOT sweep the web first: a sweep takes minutes and belongs
+ * behind the Mentions tab's button, where the user is told that is what they
+ * are starting. A button that silently costs two minutes is one people stop
+ * pressing.
+ */
+async function refreshRecs() {
+  const msg = $("#recMsg");
+  const btn = $("#recRefreshBtn");
+  const say = (t, k) => { if (msg) { msg.textContent = t; msg.className = "login-msg " + (k || ""); } };
+  if (btn) { btn.disabled = true; btn.textContent = "Working..."; }
+
+  try {
+    if (STATE.recMode === "live") {
+      say(`Analysing every mention from the last ${STATE.recDays} days...`);
+      const r = await fetch("/api/recommendations/live?days=" + STATE.recDays);
+      const j = await r.json();
+      window.__d360_liveRecs = j;
+      const n = (j.recommendations || []).length;
+      say(`${n} recommendation${n === 1 ? "" : "s"} from ${j.audit ? j.audit.mentions_considered : "?"} Document360 mention(s) in the window.`, "ok");
+    } else {
+      say("Re-reading the stored strategic set...");
+      const d = await (await fetch("/api/data")).json();
+      if (!d.error) DATA = d;
+      say("Re-read from the evidence store.", "ok");
+    }
+    render();
+  } catch (e) {
+    say("Request failed: " + e.message, "err");
+  } finally {
+    const b = $("#recRefreshBtn");
+    if (b) { b.disabled = false; b.textContent = "Refresh"; }
+  }
+}
+
 function viewRecs() {
-  const R = DATA.recommendations || {};
+  const R = STATE.recMode === "live"
+    ? (window.__d360_liveRecs || { recommendations: [], method: "Loading..." })
+    : (DATA.recommendations || {});
   const recs = R.recommendations || [];
   if (!recs.length) {
     return `<h1 class="vh">Recommendations</h1>
+    ${recModeBar(R)}
     <div class="empty big">
-      <h3>Not generated yet</h3>
-      <p>${esc(R.reason || "No recommendations have been generated.")}</p>
-      <p class="sub">Recommendations are only produced from the verified evidence store, and each must cite record ids that resolve against it. Run <code>/refresh-intel</code> in Claude Code.</p>
+      <h3>${STATE.recMode === "live" ? "Nothing to recommend for this window" : "Not generated yet"}</h3>
+      <p>${esc(R.reason || (STATE.recMode === "live"
+        ? `No mention in the last ${STATE.recDays} days carried a classifiable signal to act on. That is a real result for the connected sources, not a placeholder - widen the window, or run a live sweep from the Mentions tab.`
+        : "No recommendations have been generated."))}</p>
+      <p class="sub">Recommendations are only produced from the verified evidence store, and each must cite records that resolve against it.</p>
     </div>`;
   }
 
@@ -719,19 +916,24 @@ function viewRecs() {
     (STATE.recOwner === "all" || r.owner === STATE.recOwner)
   );
   const byType = t => recs.filter(r => r.type === t).length;
+  // A filter pill for a type with no rows is a dead control, so only the types
+  // actually present are offered.
+  const presentTypes = [...new Set(recs.map(r => r.type))];
 
   return `
   <h1 class="vh">Recommendations</h1>
   <p class="vsub">Every recommendation cites verified records from the evidence store. ${R.audit ? `${R.audit.accepted} accepted, ${R.audit.rejected} rejected for citing evidence that could not be resolved.` : ""}</p>
+  ${recModeBar(R)}
   <div class="note">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
     <div>${esc(R.method || "")}</div>
   </div>
   <div class="rec-filters">
     <button class="pill" data-rectype="all" aria-pressed="${STATE.recType === "all"}">All <span class="pc">${recs.length}</span></button>
-    <button class="pill" data-rectype="capitalize_competitor" aria-pressed="${STATE.recType === "capitalize_competitor"}">Capitalize <span class="pc">${byType("capitalize_competitor")}</span></button>
-    <button class="pill" data-rectype="accelerate_llm" aria-pressed="${STATE.recType === "accelerate_llm"}">Accelerate in AI <span class="pc">${byType("accelerate_llm")}</span></button>
-    <button class="pill" data-rectype="defend_position" aria-pressed="${STATE.recType === "defend_position"}">Defend <span class="pc">${byType("defend_position")}</span></button>
+    ${[["capitalize_competitor", "Capitalize"], ["accelerate_llm", "Accelerate in AI"], ["defend_position", "Defend"]]
+      .filter(([id]) => presentTypes.includes(id))
+      .map(([id, label]) => `<button class="pill" data-rectype="${id}" aria-pressed="${STATE.recType === id}">${label} <span class="pc">${byType(id)}</span></button>`)
+      .join("")}
     <span class="vdiv"></span>
     <select class="control" id="recOwnerSel"><option value="all"${STATE.recOwner === "all" ? " selected" : ""}>All owners</option>${owners.map(o => `<option value="${esc(o)}"${STATE.recOwner === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>
   </div>
@@ -752,6 +954,19 @@ function recCard(r) {
     <h3>${esc(r.title)}</h3>
     <p class="detail">${esc(r.detail)}</p>
     ${r.reasoning ? `<p class="reasoning"><b>Why:</b> ${esc(r.reasoning)}</p>` : ""}
+
+    ${r.asset ? `
+      <div class="op-play">
+        <div class="op-play-h">Solution asset <em>- proposed; this does not exist until someone builds it</em></div>
+        <div class="op-asset">
+          <span class="pm-tag">${esc(r.asset.kind)}</span>
+          <b>${esc(r.asset.title)}</b>
+          ${r.asset.proof_needed ? `<span class="op-proof">Needs first: ${esc(r.asset.proof_needed)}</span>` : ""}
+        </div>
+      </div>` : ""}
+
+    ${r.trigger_phrase ? `<p class="op-basis">Triggered by the phrase &ldquo;<b>${esc(r.trigger_phrase)}</b>&rdquo; appearing in a sentence that names the product.</p>` : ""}
+
     <div class="ev-list">
       <div class="ev-h">Grounded in ${r.evidence.length} verified record${r.evidence.length !== 1 ? "s" : ""}</div>
       ${r.evidence.map(e => `<div class="ev-item">
@@ -970,6 +1185,8 @@ function render() {
       mentions: filtered().length,
       recommendations: (DATA.recommendations && (DATA.recommendations.recommendations || []).length) || null,
       competitors: (DATA.competitors && (DATA.competitors.competitors || []).length) || null,
+      opportunities: (window.__d360_opps && window.__d360_opps.totals
+        && window.__d360_opps.totals.competitor_negatives) || null,
     }[t.id];
     return `<button class="tab" data-tab="${t.id}" aria-selected="${STATE.view === t.id}">${t.label}${cnt != null ? `<span class="cnt tnum">${cnt}</span>` : ""}</button>`;
   }).join("");
@@ -978,6 +1195,7 @@ function render() {
   const map = {
     mentions: viewMentions,
     competitors: () => window.D360Views.viewCompetitors(viewCtx()),
+    opportunities: () => window.D360Opportunities.view(viewCtx()),
     ai: viewAI,
     recommendations: viewRecs,
     sources: viewSources,
@@ -1028,6 +1246,16 @@ function render() {
         .catch(() => {});
     }
   }
+  if (STATE.view === "opportunities") {
+    try { window.D360Opportunities.bind(viewCtx()); } catch (err) { console.error("opportunities bind failed:", err); }
+    if (!window.__d360_opps) {
+      // Fetched on first visit rather than at boot: it is a second pass over
+      // the whole brands payload, and most sessions never open this tab.
+      window.D360Opportunities.load(7)
+        .then(() => { if (STATE.view === "opportunities") render(); })
+        .catch(err => console.error("opportunities load failed:", err));
+    }
+  }
   if (STATE.view === "competitors") {
     try { window.D360Views.bindCompetitors(viewCtx()); } catch (err) { console.error("competitors bind failed:", err); }
     if (!window.__d360_dirs_loaded) {
@@ -1071,6 +1299,13 @@ document.addEventListener("click", e => {
     STATE.page = 1; return render();
   }
   if (t.closest("#clearFilters")) { STATE.channels = []; STATE.sentiments = []; STATE.page = 1; return render(); }
+  if (t.closest("#mentionRefreshBtn")) return runMentionRefresh();
+  if (t.closest("#recRefreshBtn")) return refreshRecs();
+  // The unclassified caveat is a filter, not just a note: a reader told that
+  // 1,385 records are excluded from the sentiment figures should be one click
+  // away from reading them, rather than hunting for the chip.
+  const su = t.closest("[data-show-unclassified]");
+  if (su) { STATE.view = "mentions"; STATE.sentiments = ["unclassified"]; STATE.page = 1; return render(); }
   const rt = t.closest("[data-rectype]"); if (rt) { STATE.recType = rt.dataset.rectype; return render(); }
   const prov = t.closest("[data-prov]"); if (prov) return showProvenance(prov.dataset.prov);
   if (t.closest("[data-mclose]") || t.id === "modal") { $("#modal").classList.remove("open"); return; }
@@ -1095,6 +1330,15 @@ document.addEventListener("change", e => {
   if (t.id === "discoveredToggle") { STATE.includeDiscovered = t.checked; STATE.page = 1; return render(); }
   if (t.id === "sortSel") { STATE.sort = t.value; return renderMentionList(); }
   if (t.id === "recOwnerSel") { STATE.recOwner = t.value; return render(); }
+  if (t.id === "recModeSel") {
+    STATE.recMode = t.value;
+    STATE.recType = "all";
+    // Switching into live mode with nothing loaded would render an empty state
+    // that reads as "no recommendations" rather than "not fetched yet".
+    if (STATE.recMode === "live" && !window.__d360_liveRecs) return refreshRecs();
+    return render();
+  }
+  if (t.id === "recDaysSel") { STATE.recDays = parseInt(t.value, 10) || 7; return refreshRecs(); }
 });
 
 let openMenu = null;
@@ -1174,7 +1418,16 @@ async function boot() {
   $("#foot").innerHTML = `<b>Document360 Competitive Intelligence</b> — self-owned monitoring across ${DATA.meta.brand_order.length} products and ${DATA.meta.channels.length} channels. No third-party monitoring connector.
     Built ${fmtDateTime(DATA.meta.built_at)} from ${i.verified_records} verified records.
     Every mention links to its exact source and carries the excerpt its sentiment was judged from.
-    ${i.sentiment_unclassified ? `<b>${i.sentiment_unclassified} record(s) remain unclassified</b> and are excluded from all sentiment figures.` : ""}`;
+    ${i.sentiment_unclassified
+      ? `<b>${i.sentiment_unclassified} record(s) remain unclassified</b> and are excluded from all sentiment figures —
+         <button class="linky" data-show-unclassified="1">read them under the Unclassified filter</button>.
+         They are shown, never hidden, and never counted as neutral.`
+      : ""}
+    ${i.sentiment_classified_by_lexicon
+      ? `Of ${i.sentiment_classified} classified, ${i.sentiment_classified_by_claude} were read by Claude against a
+         grounded quote and ${i.sentiment_classified_by_lexicon} by phrase match anchored to a sentence naming the
+         brand — two different strengths of evidence, counted separately.`
+      : ""}`;
   render();
 }
 boot();

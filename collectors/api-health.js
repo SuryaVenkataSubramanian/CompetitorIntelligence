@@ -32,43 +32,146 @@ function report(name, state, detail, extra = {}) {
   console.log(`[${mark}] ${name.padEnd(30)} ${detail}`);
 }
 
-/* ------------------------------------------------------------------ SearXNG */
+/* ------------------------------------------------- keyless sources (the floor)
+
+   THIS IS THE MOST IMPORTANT CHECK IN THE FILE, and it is first for that
+   reason. Every metered provider here ran out or switched off inside one week:
+   Bright Data suspended, DataForSEO fell to $0.05, Octolens moved API access to
+   a paid tier, twitterapi.io went to negative credits. When that happened the
+   dashboard did not report an outage — it reported a quiet week, which is the
+   same shape and a completely different fact.
+
+   The keyless layer exists so freshness never depends on a billing balance. If
+   THIS is healthy the dashboard can still tell you what happened today, whatever
+   else is dark. So it is checked per source, live, with the count it returned.
+*/
+
+async function checkKeylessSources() {
+  const fresh = require("./lib/freshsources");
+  const t0 = Date.now();
+
+  // One brand, one week: enough to prove each source answers, cheap enough to
+  // run on every health check.
+  let r;
+  try {
+    r = await fresh.sweep({ brands: ["document360"], sinceDays: 7, log: () => {} });
+  } catch (e) {
+    return report("Keyless sources", "BROKEN", `the sweep threw: ${e.message}`, {
+      fix: "This is the freshness floor — everything else is a bonus layer. Investigate before deploying.",
+    });
+  }
+
+  const per = r.per_source || [];
+  const okCount = per.filter(p => p.ok).length;
+  const withData = per.filter(p => p.candidates > 0);
+  const failed = per.filter(p => !p.ok);
+  const total = per.reduce((a, p) => a + p.candidates, 0);
+  const secs = ((Date.now() - t0) / 1000).toFixed(0);
+
+  // A source returning zero is not broken — a quiet week is a real answer. Only
+  // a source that THREW or reported a gap is degraded, and the distinction is
+  // the whole point of this file.
+  const state = okCount === 0 ? "BROKEN" : failed.length ? "DEGRADED" : "WORKING";
+
+  report("Keyless sources", state,
+    `${okCount}/${per.length} source(s) answered in ${secs}s; ${withData.length} returned data, ` +
+    `${total} candidate(s) for Document360 over 7d` +
+    (r.gaps.length ? `; ${r.gaps.length} gap(s) reported` : ""),
+    {
+      sources: per.map(p => ({ id: p.id, tier: p.tier, candidates: p.candidates, ok: p.ok, error: p.error || null })),
+      gaps: r.gaps.slice(0, 10),
+      total_candidates: total,
+      fix: failed.length
+        ? `Failing: ${failed.map(f => f.id).join(", ")}. These need no key, so a failure is a network or markup change, not a billing problem.`
+        : null,
+    });
+}
+
+/* ---------------------------------------------------------------- SerpAPI */
+
+async function checkSerpApi() {
+  const serpapi = require("./lib/serpapi");
+  if (!serpapi.configured()) {
+    return report("SerpAPI", "BROKEN", serpapi.credentialStatus().reason,
+      { fix: "Add SERPAPI_KEY to .env." });
+  }
+  const p = await serpapi.probe();
+  if (!p.ok) {
+    return report("SerpAPI", "BROKEN", String(p.reason).slice(0, 120),
+      { fix: "Check the key and the monthly quota at serpapi.com." });
+  }
+  const left = p.searches_left;
+  // LinkedIn has no other route: Bright Data suspended, and DuckDuckGo refuses
+  // site: outright. So a spent SerpAPI quota means the LinkedIn channel stops,
+  // and that consequence is named here rather than left to be discovered.
+  const state = left === 0 ? "BROKEN" : left < 25 ? "DEGRADED" : "WORKING";
+  report("SerpAPI", state,
+    `${p.detail}. It is the ONLY route to LinkedIn (site: operator), at one search per brand per sweep.`,
+    {
+      searches_left: left,
+      serves: ["linkedin"],
+      fix: left < 25 ? "Fewer than 25 searches left this month. When it hits zero the LinkedIn channel reports unavailable rather than zero." : null,
+    });
+}
+
+/* ------------------------------------------------------------ twitterapi.io */
+
+async function checkTwitterApi() {
+  const adapter = require("./adapters/x-twitterapi");
+  const cred = adapter.credentialStatus();
+  if (!cred.ok) {
+    return report("twitterapi.io (X)", "BROKEN", cred.reason, { fix: cred.how_to_enable });
+  }
+  let c;
+  try { c = await adapter.credits(); } catch (e) {
+    return report("twitterapi.io (X)", "BROKEN", `credit check threw: ${e.message}`);
+  }
+  if (!c.ok) {
+    return report("twitterapi.io (X)", "BROKEN", c.reason,
+      { fix: "Check the key at twitterapi.io." });
+  }
+  // MEASURED: the balance goes NEGATIVE rather than stopping at zero, and every
+  // endpoint then answers 402. Without this check that reads as four per-brand
+  // failures instead of one account-level stop.
+  report("twitterapi.io (X)", c.exhausted ? "BROKEN" : c.credits < 500 ? "DEGRADED" : "WORKING",
+    `${c.credits} credit(s)` + (c.exhausted ? " — exhausted; every call answers HTTP 402 and the X channel reports unavailable" : ""),
+    { credits: c.credits, fix: c.exhausted ? "Recharge at twitterapi.io. Until then the X channel is unavailable, not zero." : null });
+}
+
+
+/* ------------------------------------------------------------------ SearXNG
+
+   SEARXNG IS NOW OPTIONAL, AND REPORTING IT AS BROKEN WAS ITSELF A BUG.
+
+   It was the backbone: web discovery, the directory audit, the Events channel
+   and the free SERP fallback all went through it. It is also a local Docker
+   service, which means it cannot run on the serverless host the team actually
+   opens, and when it stopped those channels went quiet rather than erroring —
+   ten days of stale data before anyone noticed.
+
+   The keyless layer replaced it as the freshness floor. So a stopped SearXNG is
+   now a missed bonus, not an outage, and this reports SKIPPED rather than
+   BROKEN. Calling an optional component "broken" trains people to ignore the
+   health check, which is how the genuinely broken row gets missed.
+*/
 
 async function checkSearxng() {
   const searx = require("./lib/searxng-client");
   let p;
   try { p = await searx.probe(); } catch (e) {
-    return report("SearXNG", "BROKEN", `probe threw: ${e.message}`,
-      { fix: "Start it with: npm run searxng:local" });
+    p = { ok: false, reason: String(e.message || e) };
   }
-  if (!p.ok) {
-    return report("SearXNG", "BROKEN", p.reason || "not reachable",
-      { fix: "Start it with: npm run searxng:local  (then: npm run searxng:status)" });
+  if (p.ok) {
+    return report("SearXNG (optional)", "WORKING",
+      `${p.detail}. Adds breadth to discovery; nothing depends on it now.`);
   }
-
-  // A probe that returns 200 with zero usable engines is the failure mode that
-  // matters most here — it looks healthy and measures nothing.
-  const r = await searx.search("Document360 knowledge base", { days: 365 });
-  const engines = {};
-  for (const x of r.results || []) {
-    for (const e of (x.engines || [x.engine]).filter(Boolean)) engines[e] = (engines[e] || 0) + 1;
-  }
-  const live = Object.keys(engines).length;
-  const dead = (r.unresponsive_engines || []).length;
-
-  if (!r.results.length) {
-    return report("SearXNG", "BROKEN",
-      `reachable but returned 0 results (${dead} engine(s) unresponsive)`,
-      { fix: "Upstream engines are rate-limited or CAPTCHA'd. Wait, or run: npm run searxng:engines", engines, unresponsive: r.unresponsive_engines });
-  }
-  if (live < 3) {
-    return report("SearXNG", "DEGRADED",
-      `${r.results.length} results from only ${live} engine(s); ${dead} unresponsive`,
-      { engines, unresponsive: r.unresponsive_engines });
-  }
-  report("SearXNG", "WORKING",
-    `${r.results.length} results from ${live} engines (${dead} unresponsive: ${(r.unresponsive_engines || []).map(e => Array.isArray(e) ? e[0] : e).join(", ") || "none"})`,
-    { engines, unresponsive: r.unresponsive_engines });
+  report("SearXNG (optional)", "SKIPPED",
+    `not running — ${String(p.reason).slice(0, 90)}. Superseded by the keyless sources above, which need no local service and work on a serverless host.`,
+    {
+      optional: true,
+      superseded_by: "lib/freshsources.js",
+      fix: null,
+    });
 }
 
 /* ----------------------------------------------------------------- Octolens */
@@ -211,25 +314,74 @@ async function checkDataForSeo() {
 /* ------------------------------------------------------------- scraping chain */
 
 async function checkScraping() {
-  const st = require("./lib/scrape").routeStatus();
-  const up = Object.entries(st).filter(([, v]) => v.available).map(([k]) => k);
-  const down = Object.entries(st).filter(([, v]) => !v.available).map(([k]) => k);
-  // One available route is enough to scrape; the chain exists so a dead
-  // provider costs an attempt rather than a channel.
-  // report(NAME, STATE, ...) - not (state, name). Getting this backwards is the
-  // second time in this session; it renders a bogus status mark and makes the
-  // row unfindable by name in the stored health JSON.
-  report("Scraping chain", up.length ? (down.length ? "DEGRADED" : "WORKING") : "BROKEN",
-    `${up.join(" -> ")} available` + (down.length ? `; unavailable: ${down.join(", ")}` : ""),
+  const scrape = require("./lib/scrape");
+  const st = scrape.routeStatus();
+
+  /* CONFIGURED IS NOT THE SAME AS USABLE, and this check used to conflate them.
+   * It reported "direct -> scrapingbee -> scrapebadger available" purely
+   * because both keys were set — while ScrapeBadger was answering
+   *   HTTP 402 {"error":"insufficient_credits"}
+   * on every request. A route that cannot fetch a page is not an available
+   * route, and saying it is turns the fallback chain into a chain of one.
+   *
+   * So the balances are read. They cost one cheap call each and they are the
+   * only thing that distinguishes a working chain from a configured one. */
+  const notes = [];
+  let badgerOk = false;
+  if (st.scrapebadger.available) {
+    try {
+      const acct = await scrape.badgerAccount();
+      badgerOk = acct.ok && (acct.credits == null || acct.credits > 0);
+      notes.push(acct.ok
+        ? `scrapebadger ${acct.credits == null ? "?" : acct.credits} credit(s)${badgerOk ? "" : " — EXHAUSTED"}`
+        : `scrapebadger unreachable (${String(acct.reason).slice(0, 40)})`);
+    } catch (e) {
+      notes.push(`scrapebadger check threw: ${e.message}`);
+    }
+  }
+
+  let beeOk = false;
+  let beeLeft = null;
+  if (st.scrapingbee.available) {
+    try {
+      const u = await fetchJson(`https://app.scrapingbee.com/api/v1/usage?api_key=${process.env.SCRAPINGBEE_KEY}`,
+        { retries: 1, timeout: 25000 });
+      if (u.ok && u.json) {
+        const used = u.json.used_api_credit;
+        const max = u.json.max_api_credit;
+        beeLeft = (max != null && used != null) ? max - used : null;
+        beeOk = beeLeft == null || beeLeft > 0;
+        notes.push(`scrapingbee ${beeLeft == null ? "?" : beeLeft} credit(s) left of ${max}`);
+      } else {
+        notes.push(`scrapingbee usage HTTP ${u.status}`);
+      }
+    } catch (e) {
+      notes.push(`scrapingbee check threw: ${e.message}`);
+    }
+  }
+
+  // Direct always works for most of the web; the proxies exist for the rest.
+  const usable = ["direct"];
+  if (badgerOk) usable.push("scrapebadger");
+  if (beeOk) usable.push("scrapingbee");
+
+  // No proxy route means the bot-walled hosts — every review directory, and
+  // DuckDuckGo from this network — become unreachable. That is a real
+  // degradation even though "direct" still works.
+  const state = usable.length >= 3 ? "WORKING" : usable.length === 2 ? "DEGRADED" : "BROKEN";
+
+  report("Scraping chain", state,
+    `usable: ${usable.join(" -> ")}` + (notes.length ? `; ${notes.join("; ")}` : ""),
     {
       routes: st,
-      fix: st.scrapebadger.needs_dashboard_setup
-        ? "ScrapeBadger: create a scraper in their dashboard, then set SCRAPEBADGER_SCRAPER to its name."
+      usable,
+      scrapingbee_credits_left: beeLeft,
+      fix: usable.length < 3
+        ? "A proxy route is the only way past the review-directory bot walls and DuckDuckGo's block page. " +
+          "With none, those sources report unavailable rather than zero. Top up whichever is exhausted."
         : null,
     });
 }
-
-/* ------------------------------------------------------------------ Windsor */
 
 async function checkWindsor() {
   const windsor = require("./lib/windsor");
@@ -296,7 +448,10 @@ async function checkSmtp() {
   console.log(`  billable calls: ${PAID ? "ENABLED (--paid)" : "skipped"}\n`);
 
   const checks = [
-    ["SearXNG", checkSearxng],
+    ["SearXNG (optional)", checkSearxng],
+    ["Keyless sources", checkKeylessSources],
+    ["SerpAPI", checkSerpApi],
+    ["twitterapi.io", checkTwitterApi],
     ["Octolens", checkOctolens],
     ["NewsAPI", checkNewsapi],
     ["Bright Data", checkBrightData],

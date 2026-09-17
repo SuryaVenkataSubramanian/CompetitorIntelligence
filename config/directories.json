@@ -223,9 +223,13 @@
   "_limits": {
     "results_per_query": 30,
     "query_gap_ms": 1400,
-    "max_website_resolutions_per_run": 12,
+    "max_website_resolutions_per_run": 25,
     "comment": [
-      "Website resolution costs an extra search per product, so it is bounded and",
+      "Website resolution is what PROMOTES a directory listing into the competitor",
+    "list: without a fetched homepage there is nothing to threat-assess, so the",
+    "product stays a listing. 86 of 91 products were unresolved at 12 per run,",
+    "so the budget is 25 — still bounded, but the backlog now clears in four",
+    "daily runs instead of eight. It costs an extra search per product, so it is",
       "spent only on genuinely new, category-confirmed candidates. Everything else",
       "is stored with its directory listing URL as evidence and no vendor site,",
       "which is reported as 'website not resolved' rather than guessed."

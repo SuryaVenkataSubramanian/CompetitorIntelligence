@@ -65,7 +65,11 @@
     "auth:passwords": "node collectors/auth-passwords.js",
     "refresh:recent": "node collectors/refresh-recent.js",
     "refresh:recent:full": "node collectors/refresh-recent.js --full",
-    "probe:providers": "node collectors/probe-providers.js"
+    "probe:providers": "node collectors/probe-providers.js",
+    "sweep": "node collectors/sweep-live.js",
+    "sweep:all": "node collectors/sweep-live.js --days=7",
+    "sweep:today": "node collectors/sweep-live.js --days=1",
+    "opportunities": "node -e \"require('./collectors/lib/env').load();const m=require('./data/meta.json'),b=require('./data/brands.json');const o=require('./collectors/lib/opportunities').build(b,m.brand_order,{days:7});console.log(JSON.stringify(o.totals,null,2))\""
   },
   "engines": {
     "node": ">=18"

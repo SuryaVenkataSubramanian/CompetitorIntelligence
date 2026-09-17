@@ -13,12 +13,20 @@
   /* ------------------------------------------------------ New Competitors */
 
   /** Competitive classification: label, chip class and display order. */
+  /* THREE buckets, not four.
+   *
+   * "Not a competitor" was a display category, and a list of products that are
+   * not competitors is not competitive intelligence — it pushed the real
+   * entrants down the page and invited the reader to scroll past them. Those
+   * candidates are still assessed and still counted; they are reported as a
+   * number with their reasons, not rendered as cards. See
+   * collectors/lib/competitor-merge.js, which drops them at the source so the
+   * API and the UI cannot disagree about it. */
   const CLASSES = {
     direct_competitor: { label: "Direct competitor", chip: "bad", order: 0 },
     emerging_competitor: { label: "Emerging competitor", chip: "warn", order: 1 },
     adjacent_competitor: { label: "Adjacent competitor", chip: "nc", order: 2 },
-    not_a_competitor: { label: "Not a competitor", chip: "zero", order: 3 },
-    unclassified: { label: "Unclassified", chip: "nc", order: 4 },
+    unclassified: { label: "Unclassified", chip: "nc", order: 3 },
   };
   const classOf = e => CLASSES[e.classification || "unclassified"] || CLASSES.unclassified;
 
@@ -60,9 +68,10 @@
     return `
     <div class="mv-head">
       <h1 class="vh">New Competitors</h1>
-      <p class="vsub">${list.length} market entrant(s) found by keyword discovery, excluding the 7 tracked
-      products and 92 known incumbents. Every entry is a homepage we fetched — the name, description and
-      every threat signal are the product's own words.</p>
+      <p class="vsub">${list.length} market entrant(s) from two routes — a ${esc(String(c.keywords_total || 233))}-term
+      keyword sweep and the review-directory audit — excluding the 7 tracked products and 92 known
+      incumbents. Every entry is a homepage we fetched: the name, description and every threat signal are
+      the product's own words.</p>
     </div>
 
     ${refreshBar(c, ctx)}
@@ -76,6 +85,20 @@
       <span>last scan <b>${c.scanned_at ? fmtDateTime(c.scanned_at) : "—"}</b></span>
       <span class="${(c.rejected_this_run || []).length ? "amber" : ""}"><b>${(c.rejected_this_run || []).length}</b> rejected last run</span>
     </div>
+
+    ${c.by_source ? `
+    <div class="istrip">
+      <span><b>${c.by_source.keyword_discovery || 0}</b> from keyword discovery</span>
+      <span><b>${c.by_source.review_directory || 0}</b> promoted from review directories</span>
+      <span><b>${c.by_source.both || 0}</b> found by both <em>(corroborated)</em></span>
+      <span><b>${c.ruled_out_count || 0}</b> assessed and ruled out</span>
+    </div>` : ""}
+
+    ${c.merge_note ? `
+    <div class="cav info" style="margin-bottom:14px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span>${esc(c.merge_note)}${c.ruled_out_note ? " " + esc(c.ruled_out_note) : ""}</span>
+    </div>` : ""}
 
     <div class="cav info" style="margin-bottom:14px">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -143,17 +166,11 @@
         <div class="refresh-txt">
           <b>Live discovery</b>
           <span>Searches the web for products launched, funded or opened to beta recently, fetches each
-          candidate's homepage, and scores it. Takes a few minutes — it is a real sweep, not a cache read.</span>
+          candidate's homepage, and scores it from the product's own words. The sweep advances a rotating
+          cursor through the full ${esc(String(c.keywords_total || 233))}-term taxonomy, so coverage
+          accumulates run over run rather than re-asking the same questions. Takes a few minutes — it is a
+          real sweep, not a cache read.</span>
         </div>
-        <label class="refresh-kw">
-          keywords
-          <select class="control" id="cmpKeywords">
-            <option value="8">8 (fast)</option>
-            <option value="16" selected>16</option>
-            <option value="24">24</option>
-            <option value="40">40 (deep)</option>
-          </select>
-        </label>
         <button class="login-btn refresh-go" id="cmpRefresh">Refresh</button>
       </div>
       <div class="login-msg" id="cmpMsg" style="margin-top:10px"></div>
@@ -197,6 +214,13 @@
       <div class="comp-class">
         <span class="chip ${cls.chip}">${esc(cls.label)}</span>
         ${(e.categories || []).slice(0, 1).map(x => `<span class="pm-tag">${esc(x)}</span>`).join("")}
+        ${(e.found_via || []).includes("review directory")
+          ? `<span class="pm-tag" title="${esc(e.promotion_basis || "Listed on a review directory and assessed from its own homepage.")}">
+               ${(e.directories || []).length ? esc(e.directories.join(", ").toUpperCase()) : "review directory"}</span>`
+          : ""}
+        ${(e.found_via || []).length > 1
+          ? `<span class="pm-tag" title="Found independently by keyword discovery and by the review-directory audit. Two routes agreeing is stronger evidence than either alone.">corroborated</span>`
+          : ""}
       </div>
 
       ${e.why_it_could_compete ? `
@@ -254,16 +278,19 @@
     if (!btn) return;
 
     btn.onclick = async () => {
-      const kw = parseInt((document.getElementById("cmpKeywords") || {}).value || "16", 10);
       btn.disabled = true;
       btn.textContent = "Sweeping…";
-      show(`Running a live discovery sweep over ${kw} keywords. This takes a few minutes — each candidate's homepage is fetched and scored.`);
+      show("Running a live discovery sweep. Each candidate's homepage is fetched and scored from its own words — this takes a few minutes.");
       if (logBox) logBox.hidden = true;
       try {
         const r = await fetch("/api/competitors/refresh", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ keywords: kw, recent: true }),
+          // The server picks the batch size. It was a dropdown, and it was a
+          // question the reader had no basis to answer: the right number
+          // depends on which SERP provider resolved and what its rate limit is,
+          // neither of which is visible in the UI.
+          body: JSON.stringify({ recent: true }),
         });
         const j = await r.json();
         if (logBox && (j.log || []).length) {
@@ -274,7 +301,19 @@
           show("The sweep is taking longer than 8 minutes. It is still running in the background — reload this tab shortly to see the result.", "err");
           return;
         }
-        if (!j.ok) { show("The sweep failed. The collector log is below.", "err"); return; }
+        if (!j.ok) {
+          // Name the likely cause rather than only that it failed. The dominant
+          // one by far is a rate-limited free search backend answering HTTP 200
+          // with an empty list, which is invisible unless it is said out loud.
+          const hint = (j.log || []).join(" ");
+          const why = /no search provider/i.test(hint)
+            ? "No search provider was available — DataForSEO is out of budget, SearXNG is not running, and SerpAPI's monthly quota is spent."
+            : /rate limit|429|anomaly/i.test(hint)
+              ? "The free search backend rate-limited this sweep. It answers HTTP 200 with an empty list, so it looks like a zero rather than an error. Wait a few minutes and run it again."
+              : "The collector log is below.";
+          show("The sweep did not complete. " + why, "err");
+          return;
+        }
 
         show(`Sweep complete: ${j.new_this_run || 0} new entrant(s), ${j.total} tracked in total, ${j.rejected} candidate(s) rejected.`, "ok");
         // Re-pull the competitor payload and re-render with the new data.

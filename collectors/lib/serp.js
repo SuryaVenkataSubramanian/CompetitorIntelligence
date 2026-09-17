@@ -178,24 +178,51 @@ function relevanceCheck(query, results) {
 
 async function queryEngine(engine, q) {
   const url = engine.url(q);
-  const r = await fetchUrl(url, {
+  let r = await fetchUrl(url, {
     retries: 1,
     timeout: 20000,
     accept: "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
   });
+  let via = "direct";
 
-  // DuckDuckGo serves its challenge with 202, which is not a 2xx failure, so the
-  // challenge check must run before (and independently of) the status check.
+  /* A CHALLENGE IS NOT THE END OF THE QUERY ANY MORE.
+   *
+   * This is the root cause of "the sweep failed" on the New Competitors tab.
+   * DuckDuckGo had started serving its block page to this network on EVERY
+   * query — HTTP 202, 14KB, zero results. The code above detected it correctly
+   * and reported `blocked`, which is right, but there was nowhere to go from
+   * there: with DDG blocked and Bing throttling, a 16-keyword sweep returned
+   * results for one keyword and nothing for the other fifteen.
+   *
+   * The project already owns a way past a bot wall — lib/scrape.js, the same
+   * chain the review-directory audit uses. MEASURED on the identical query:
+   * direct gave 202 and 0 results; through the chain, 36KB and 10 results.
+   *
+   * So a challenge now costs one proxied retry instead of the whole query. It
+   * is deliberately a RETRY rather than the default route: the proxy is metered
+   * and direct works fine whenever the engine has not flagged us. */
   if (r.body && CHALLENGE.test(r.body.slice(0, 30000))) {
-    return {
-      engine: engine.id,
-      ok: false,
-      status: r.status,
-      reason: `bot challenge served (HTTP ${r.status}) — this engine has rate-limited the host`,
-      results: [],
-      blocked: true,
-    };
+    const scrape = require("./scrape");
+    const viaProxy = await scrape.fetchPage(url, { forceProxy: true });
+    const stillBlocked = !viaProxy.ok ||
+      (viaProxy.body && CHALLENGE.test(String(viaProxy.body).slice(0, 30000)));
+
+    if (stillBlocked) {
+      return {
+        engine: engine.id,
+        ok: false,
+        status: r.status,
+        reason:
+          `bot challenge served (HTTP ${r.status}) and the proxy route could not get past it either ` +
+          `(${String(viaProxy.error || "still challenged").slice(0, 80)}) — this engine has blocked us`,
+        results: [],
+        blocked: true,
+      };
+    }
+    r = viaProxy;
+    via = viaProxy.via || "proxy";
   }
+
   if (!r.ok) {
     return { engine: engine.id, ok: false, status: r.status, reason: `HTTP ${r.status || "no response"}`, results: [] };
   }
@@ -240,7 +267,9 @@ async function queryEngine(engine, q) {
     };
   }
 
-  return { engine: engine.id, ok: true, status: r.status, results, url };
+  // `via` travels with the result so a caller can see which queries cost a
+  // proxy credit rather than having to infer it from the totals.
+  return { engine: engine.id, ok: true, status: r.status, results, url, via };
 }
 
 /* ------------------------------------------------------- rank fusion */

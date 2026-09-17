@@ -189,6 +189,39 @@ const SENT_FACE = { positive: "☺", negative: "☹", neutral: "◔" };
  * Takes its helpers as arguments rather than reaching into app.js, so this file
  * has no hidden coupling to load order.
  */
+/**
+ * The three-bullet brief.
+ *
+ * Every bullet is a VERBATIM sentence from the evidence above — selected by
+ * lib/signals.js, never rewritten. That is why it renders inside a quote style
+ * and says so: a summary a reader might mistake for our own words would be an
+ * invitation to treat a paraphrase as a quote, and these get pasted into Slack.
+ *
+ * Hidden when the brief would just repeat the body: a two-sentence mention does
+ * not need a summary of itself, and an accordion that adds nothing is friction.
+ */
+function briefBlock(m, ctx) {
+  const { esc } = ctx;
+  const b = m.brief || [];
+  if (b.length < 2) return "";
+  const body = String(m.evidence || "");
+  // If the bullets reconstruct almost the whole excerpt, the excerpt IS the
+  // summary and showing both is noise.
+  const covered = b.reduce((a, x) => a + x.text.length, 0);
+  if (body.length && covered / body.length > 0.85) return "";
+
+  const prio = m.priority && m.priority !== "LOW"
+    ? `<span class="pm-prio p-${esc(m.priority)}" title="${esc((m.priority_factors || []).join("; ") || "priority")}">${esc(m.priority)}</span>`
+    : "";
+
+  return `<details class="pm-brief">
+    <summary>${prio}<span>In three lines</span><em>verbatim from the source</em></summary>
+    <ul>
+      ${b.map(x => `<li title="${esc(x.why)}">${esc(x.text)}</li>`).join("")}
+    </ul>
+  </details>`;
+}
+
 function mentionCard(m, ctx) {
   const { esc, brandName, fmtDate, verifChip, aliasesFor } = ctx;
   const pid = platformOf(m);
@@ -237,6 +270,8 @@ function mentionCard(m, ctx) {
 
     <p class="pm-body">${highlightBrand(body, m.brand, aliases)}</p>
 
+    ${briefBlock(m, ctx)}
+
     ${m.relevance_comment
       ? `<p class="pm-note">${esc(m.relevance_comment)}</p>`
       : m.sentiment_quote
@@ -264,5 +299,5 @@ function mentionCard(m, ctx) {
 
 window.D360Premium = {
   PLATFORMS, platformOf, platformMark, highlightBrand, relTime, compactNum,
-  prettyTag, SENT_FACE, escP, mentionCard,
+  prettyTag, SENT_FACE, escP, mentionCard, briefBlock,
 };

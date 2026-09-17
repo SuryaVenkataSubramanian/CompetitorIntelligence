@@ -53,6 +53,11 @@ let probeInFlight = false;
 let refreshInFlight = false;
 // And the directory audit, which shares the seen-products state file.
 let dirAuditInFlight = false;
+/* And the live mention sweep. Two concurrent sweeps would double every
+ * rate-limited source's request rate — DuckDuckGo tolerates about 8 requests in
+ * 2 minutes, so a second concurrent sweep does not halve the time, it turns
+ * both into empty results. */
+let mentionSweepInFlight = false;
 
 /* ------------------------------------------------------------------ helpers */
 
@@ -128,6 +133,28 @@ function readStore(file, fallback) {
 
 /* --------------------------------------------------------------- payloads */
 
+/**
+ * The competitor list, from both discovery routes.
+ *
+ * Keyword discovery and the review-directory audit write separate files because
+ * they are separate collectors. They are not separate MARKETS, so the dashboard
+ * reads one merged list — a product found on G2 whose homepage assesses as a
+ * direct competitor is a direct competitor, whichever collector happened to see
+ * it first. See lib/competitor-merge.js for the promotion bar.
+ */
+function mergedCompetitors() {
+  const raw = readData("competitors.json", { status: "not_scanned", competitors: [] });
+  const dirs = readData("directory-listings.json", { products: [] });
+  try {
+    const merged = require("./collectors/lib/competitor-merge").merge(raw, dirs);
+    return Object.assign({}, raw, merged);
+  } catch (e) {
+    // A merge failure must not take the whole section down; the keyword-
+    // discovered list on its own is still correct, just narrower.
+    return Object.assign({}, raw, { merge_error: String(e.message || e) });
+  }
+}
+
 function buildData() {
   const meta = readData("meta.json", null);
   if (!meta) {
@@ -142,7 +169,7 @@ function buildData() {
     brands: readData("brands.json", {}),
     ai: readData("ai.json", { status: "not_measured" }),
     recommendations: readData("recommendations.json", { recommendations: [] }),
-    competitors: readData("competitors.json", { status: "not_scanned", competitors: [] }),
+    competitors: mergedCompetitors(),
   };
 }
 
@@ -286,7 +313,7 @@ async function handleRequest(req, res) {
     return json(res, 200, readData("audit.json", { excluded_unverified: [] }));
   }
   if (url === "/api/competitors") {
-    return json(res, 200, readData("competitors.json", { status: "not_scanned", competitors: [] }));
+    return json(res, 200, mergedCompetitors());
   }
 
   /** Review-directory listings: new products across 7 directories × 6 categories. */
@@ -501,6 +528,117 @@ async function handleRequest(req, res) {
     }));
   }
 
+  /* --------------------------------------------------- live mention refresh */
+
+  /**
+   * Sweep every live source for the chosen brand and channels, right now.
+   *
+   * This is the Mentions tab's Refresh button. It runs IN-PROCESS rather than
+   * spawning a collector, for two reasons that matter:
+   *
+   *   - A serverless host has no child processes, so a spawning endpoint would
+   *     answer 501 on the deployment the team actually uses. In-process, the
+   *     sweep runs and the records come back even where nothing can be written.
+   *   - The window is computed from Date.now() inside the call, so "the last 7
+   *     days" means to this minute rather than to the last cron tick.
+   */
+  if (url === "/api/mentions/refresh" && req.method === "POST") {
+    if (mentionSweepInFlight) {
+      return json(res, 429, {
+        ok: false,
+        error: "A live sweep is already running. They are serialised because the free sources rate-limit per client — two at once produces two empty results rather than one fast one.",
+      });
+    }
+    let body = {};
+    try { body = JSON.parse(await readBody(req) || "{}"); } catch (e) { /* invalid json */ }
+
+    const days = Math.min(90, Math.max(1, parseInt(body.days, 10) || 7));
+    const brands = Array.isArray(body.brands) ? body.brands.filter(b => /^[a-z0-9_]+$/.test(b)) : null;
+    const channels = Array.isArray(body.channels) ? body.channels.filter(c => /^[a-z0-9_]+$/.test(c)) : null;
+
+    mentionSweepInFlight = true;
+    const lines = [];
+    const log = m => { lines.push(String(m)); console.log("  [refresh]" + m); };
+    try {
+      const live = require("./collectors/lib/live-refresh");
+      const r = await live.refresh({ brands, channels, days, log });
+
+      // Rebuild so the whole dashboard — matrix, counts, briefs — reflects the
+      // new records. Skipped where it cannot run; the records still come back.
+      let rebuilt = null;
+      if (r.persisted && r.added_to_store > 0) {
+        rebuilt = await live.rebuild({ log });
+      }
+
+      const payload = Object.assign({ ok: true }, r);
+      // The full record set is large, and the browser re-reads /api/data after
+      // a successful rebuild, so only a preview travels here.
+      delete payload.records;
+      payload.preview = (r.records || []).slice(0, 12).map(x => ({
+        brand_id: x.brand_id, channel: x.channel, url: x.url, title: x.title,
+        published_at: x.published_at, author: x.author, source_adapter: x.source_adapter,
+      }));
+      payload.rebuilt = rebuilt
+        ? { ok: rebuilt.ok, skipped: !!rebuilt.skipped, reason: rebuilt.reason || null }
+        : null;
+      payload.log = lines.slice(-60);
+      return json(res, 200, payload);
+    } catch (e) {
+      return json(res, 500, { ok: false, error: String(e.message || e), log: lines.slice(-30) });
+    } finally {
+      mentionSweepInFlight = false;
+    }
+  }
+
+  /* --------------------------------------------------------- opportunities */
+
+  /**
+   * Competitors — Negative Mentions — Opportunities.
+   *
+   * Computed at request time from the built payload rather than stored, so it
+   * always reflects the current data and the caller's chosen window without
+   * needing a rebuild. The window bounds only OUR mentions — a competitor
+   * complaint from three weeks ago is still an opening.
+   */
+  if (url === "/api/opportunities") {
+    try {
+      const q = new URLSearchParams((req.url || "").split("?")[1] || "");
+      const days = Math.min(365, Math.max(1, parseInt(q.get("days"), 10) || 7));
+      const meta = readData("meta.json", null);
+      if (!meta) return json(res, 200, { status: "no_data", message: "data/ has not been built yet." });
+      const brands = readData("brands.json", {});
+      const opps = require("./collectors/lib/opportunities");
+      return json(res, 200, opps.build(brands, meta.brand_order, { days }));
+    } catch (e) {
+      return json(res, 500, { error: String(e.message || e) });
+    }
+  }
+
+  /* -------------------------------------------------- live recommendations */
+
+  /**
+   * Recommendations for a window, computed now.
+   *
+   * The stored recommendations are a Claude pass over the whole store: strategic
+   * and static, because regenerating them needs a person to run a queue. These
+   * are this week's response list, derived from the same grounded signals the
+   * Mentions tab already shows — so the Refresh button has something real to
+   * refresh rather than re-reading a file.
+   */
+  if (url === "/api/recommendations/live") {
+    try {
+      const q = new URLSearchParams((req.url || "").split("?")[1] || "");
+      const days = Math.min(365, Math.max(1, parseInt(q.get("days"), 10) || 7));
+      const meta = readData("meta.json", null);
+      if (!meta) return json(res, 200, { status: "no_data", recommendations: [] });
+      const brands = readData("brands.json", {});
+      const live = require("./collectors/lib/recommend-live");
+      return json(res, 200, live.build(brands, meta.brand_order, { days }));
+    } catch (e) {
+      return json(res, 500, { error: String(e.message || e), recommendations: [] });
+    }
+  }
+
   /* ------------------------------------------------- competitor live refresh */
 
   /**
@@ -523,13 +661,24 @@ async function handleRequest(req, res) {
     }
     let body = {};
     try { body = JSON.parse(await readBody(req) || "{}"); } catch (e) { /* invalid json */ }
-    const keywords = Math.min(40, Math.max(4, parseInt(body.keywords, 10) || 16));
+    /* The batch size is the COLLECTOR's decision, not the caller's.
+     *
+     * It used to come from a dropdown in the UI, defaulting to 16. SerpAPI's
+     * free plan allows 250 searches a month and each keyword costs one, so a
+     * daily 16-keyword sweep exhausts the quota in a fortnight and then finds
+     * nothing, silently. discover-competitors.js now sizes the batch from
+     * whatever budget the resolved provider actually has left, so the number is
+     * only forwarded when a caller explicitly asked for one. */
+    const keywords = body.keywords != null
+      ? Math.min(40, Math.max(4, parseInt(body.keywords, 10) || 16))
+      : null;
     const recent = body.recent !== false; // default to recent-launch bias
 
     refreshInFlight = true;
     const { spawn } = require("child_process");
     const started = new Date().toISOString();
-    const args = [path.join(__dirname, "collectors", "discover-competitors.js"), `--keywords=${keywords}`];
+    const args = [path.join(__dirname, "collectors", "discover-competitors.js")];
+    if (keywords != null) args.push(`--keywords=${keywords}`);
     if (recent) args.push("--recent");
 
     const child = spawn(process.execPath, args, { cwd: __dirname });
