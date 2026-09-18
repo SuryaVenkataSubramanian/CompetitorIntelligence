@@ -143,12 +143,23 @@ async function search(query, {
   num = 20,
   useCache = true,
   location = null,
+  /* Google's time filter, passed straight through as `tbs`.
+   *
+   * MEASURED, AND THE REASON THIS EXISTS: `site:linkedin.com/posts "Mintlify"`
+   * with no time filter returned posts from 2024-12, 2025-08 and 2026-04.
+   * Google's index is not time-ordered, so an unfiltered site: query answers
+   * "what exists" and we were reading it as "what is recent". 44 LinkedIn
+   * records were collected and exactly ONE fell inside the last 7 days — which
+   * looked like a dead channel and was actually the wrong question.
+   *
+   * Accepts "d" (day), "w" (week), "m" (month), "y" (year). */
+  recency = null,
   log = () => {},
 } = {}) {
   const cred = credentialStatus();
   if (!cred.ok) return { ok: false, results: [], error: cred.reason, skipped: "not_configured" };
 
-  const ck = cacheKey(["serpapi", query, num, location]);
+  const ck = cacheKey(["serpapi", query, num, location, recency]);
   if (useCache) {
     const c = readJsonSafe(CACHE_FILE, { entries: {} });
     const hit = c.entries[ck];
@@ -171,6 +182,9 @@ async function search(query, {
     api_key: key(),
   });
   if (location) params.set("location", location);
+  // qdr = "query date range". Google honours it on site: queries, which is what
+  // makes the LinkedIn channel a RECENT-posts channel rather than an archive.
+  if (recency) params.set("tbs", `qdr:${recency}`);
 
   const r = await fetchJson(`${BASE}/search?${params}`, {
     retries: 1, timeout: 60000, maxBytes: 16 * 1024 * 1024,

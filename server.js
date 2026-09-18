@@ -560,7 +560,10 @@ async function handleRequest(req, res) {
     const log = m => { lines.push(String(m)); console.log("  [refresh]" + m); };
     try {
       const live = require("./collectors/lib/live-refresh");
-      const r = await live.refresh({ brands, channels, days, log });
+      // force:true — a person is watching this request. The metered routes
+      // pace themselves for the 2-hourly cron, and a human pressing Refresh
+      // must not be told to come back in nineteen hours.
+      const r = await live.refresh({ brands, channels, days, force: true, log });
 
       // Rebuild so the whole dashboard — matrix, counts, briefs — reflects the
       // new records. Skipped where it cannot run; the records still come back.

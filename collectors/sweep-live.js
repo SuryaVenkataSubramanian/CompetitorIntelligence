@@ -46,7 +46,11 @@ function arg(k, d) {
   console.log(`  channels: ${channels ? channels.join(", ") : "all"}`);
   console.log("");
 
-  const r = await live.refresh({ brands, channels, days, log: m => console.log(m) });
+  // --force runs the paced metered routes (LinkedIn) regardless of when they
+  // last ran. Without it a scheduled sweep respects the pacing that makes
+  // SerpAPI's 250/month quota last the month.
+  const force = process.argv.includes("--force");
+  const r = await live.refresh({ brands, channels, days, force, log: m => console.log(m) });
 
   console.log("");
   console.log(`  window:    ${r.window_start}  ->  ${r.finished_at}`);

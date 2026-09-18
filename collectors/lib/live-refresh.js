@@ -74,6 +74,58 @@ async function sweepX({ brands, sinceDays, log }) {
 /* ----------------------------------------------------------------- LinkedIn */
 
 /**
+ * Who wrote a LinkedIn post, from what the SERP result already tells us.
+ *
+ * The digest format the team reads is "PRIORITY - CHANNEL - AUTHOR - AGE", and
+ * every LinkedIn row was rendering with no author because the candidate set
+ * author:null. The name was there the whole time, in two places:
+ *
+ *   the title   Google renders LinkedIn posts as "Saravana Kumar's Post",
+ *               "Saravana Kumar posted this", or "Name - Post title".
+ *   the URL     /posts/<author-slug>_<topic-slug>-activity-<id>
+ *
+ * Both are published by the source, so neither is a guess. The title is tried
+ * first because it carries real capitalisation and diacritics; the slug is the
+ * fallback and is reconstructed conservatively.
+ *
+ * Returns null rather than something plausible when neither pattern matches —
+ * an invented author on a real post is worse than a blank.
+ */
+function linkedinAuthor(title, url) {
+  const t = String(title || "").trim();
+
+  // "Saravana Kumar's Post" / "Han Wang's Post on ..."
+  let m = /^(.+?)(?:'|’)s\s+Post/i.exec(t);
+  if (m) return m[1].trim();
+
+  // "Saravana Kumar posted this"
+  m = /^(.+?)\s+posted\s+this/i.exec(t);
+  if (m) return m[1].trim();
+
+  // "Robert Hean - Confluence for Support Teams"  (name, then a dash)
+  m = /^([A-Z][\p{L}.'’-]+(?:\s+[A-Z][\p{L}.'’-]+){1,3})\s+[-–]\s+/u.exec(t);
+  if (m) return m[1].trim();
+
+  /* The URL slug. LinkedIn builds it from the author's profile handle, so
+   * "madalin-gheorghe-5026884a" is a real person; the trailing hex id and any
+   * role words are stripped. Only used when it looks like a name — a handle
+   * that is mostly digits is not one. */
+  try {
+    const seg = decodeURIComponent(new URL(url).pathname).split("/posts/")[1] || "";
+    const handle = seg.split("_")[0];
+    if (!handle) return null;
+    const parts = handle.split("-").filter(w => /^[\p{L}]{2,}$/u.test(w));
+    if (parts.length < 2) return null;
+    return parts.slice(0, 3)
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  } catch (e) {
+    return null;
+  }
+}
+
+
+/**
  * LinkedIn, via the one provider left that can reach it.
  *
  * LinkedIn has no usable public API here, Bright Data's dataset suspended with
@@ -82,10 +134,41 @@ async function sweepX({ brands, sinceDays, log }) {
  * plan allows 250 searches a MONTH, so this spends exactly one query per brand
  * and only when the caller actually asked for LinkedIn.
  */
-async function sweepLinkedIn({ brands, log }) {
-  const out = { candidates: [], gaps: [], ran: false, reason: null };
+/**
+ * How long to wait between unattended LinkedIn sweeps.
+ *
+ * SerpAPI's free plan is 250 searches a MONTH and LinkedIn costs one per brand,
+ * so seven per sweep. The refresh cron runs every 2 hours — twelve sweeps a day,
+ * 84 searches a day — which drains a month's quota in THREE DAYS and then
+ * silently stops finding LinkedIn posts at all.
+ *
+ * So an unattended sweep runs LinkedIn at most once per this interval, which
+ * paces seven searches a day and makes the quota last the month. A person
+ * pressing Refresh passes force:true and is never throttled — they are watching,
+ * they asked, and it is one query.
+ */
+const LINKEDIN_MIN_GAP_MS = 20 * 3600e3;
+
+async function sweepLinkedIn({ brands, log, force = false, days = 7 }) {
+  const out = { candidates: [], gaps: [], ran: false, reason: null, throttled: false };
   const serpapi = require("./serpapi");
   if (!serpapi.configured()) { out.reason = serpapi.credentialStatus().reason; return out; }
+
+  const freshsources = require("./freshsources");
+  const state = freshsources.loadState();
+  const last = state.last_linkedin_sweep ? Date.parse(state.last_linkedin_sweep) : 0;
+  const since = Date.now() - last;
+
+  if (!force && last && since < LINKEDIN_MIN_GAP_MS) {
+    const hrs = Math.round((LINKEDIN_MIN_GAP_MS - since) / 36e5);
+    out.throttled = true;
+    out.reason =
+      "paced: LinkedIn costs one SerpAPI search per brand and the plan allows 250 a month. " +
+      "Last swept " + Math.round(since / 36e5) + "h ago; next unattended sweep in ~" + hrs + "h. " +
+      "Press Refresh to run it now.";
+    log("      linkedin: " + out.reason);
+    return out;
+  }
 
   const probe = await serpapi.probe();
   if (!probe.ok) { out.reason = probe.reason; return out; }
@@ -93,13 +176,37 @@ async function sweepLinkedIn({ brands, log }) {
   for (const id of brands) {
     const b = brand(id);
     const q = 'site:linkedin.com/posts "' + b.aliases[0] + '"';
-    const r = await serpapi.search(q, { log, num: 20 });
+    /* ASK FOR RECENT POSTS, not for every post that exists.
+     *
+     * Without this the query returned LinkedIn posts from 2024 and 2025 — real,
+     * correctly dated, and useless for a 7-day view. 44 records collected, 1
+     * inside the window. Google maps the window onto its own buckets, so a
+     * 7-day ask becomes qdr:w. */
+    const recency = days <= 1 ? "d" : days <= 7 ? "w" : days <= 31 ? "m" : "y";
+    const r = await serpapi.search(q, { log, num: 20, recency });
     if (!r.ok) { out.gaps.push({ brand_id: id, reason: "SerpAPI: " + String(r.error).slice(0, 90) }); continue; }
 
     for (const hit of r.results || []) {
       if (!hit.url || !/linkedin\.com\/posts/i.test(hit.url)) continue;
-      const text = [hit.title, hit.snippet].filter(Boolean).join(". ");
-      if (!freshsources.firstAliasIn(text, id)) continue;
+      const text = [hit.title, hit.snippet, hit.content].filter(Boolean).join(". ");
+
+      /* THE ALIAS MAY BE IN THE URL RATHER THAN THE SNIPPET.
+       *
+       * Google truncates a LinkedIn snippet to ~150 characters, and a post that
+       * mentions the brand once in its third paragraph shows a snippet that
+       * never repeats it. Requiring the alias in the snippet alone dropped real
+       * posts — measured: 27 SERP results for three brands yielded 4 candidates.
+       *
+       * LinkedIn post URLs embed an author-and-topic slug
+       * (/posts/document360_apidocumentation-apis-...), so the URL itself
+       * frequently names the brand. That is still evidence from the source
+       * rather than an assumption, so it counts. The shared pipeline then
+       * confirms the mention against the fetched page before anything is
+       * stored, so a URL-only match cannot become a record on its own. */
+      const inText = freshsources.firstAliasIn(text, id);
+      const slug = decodeURIComponent(hit.url).replace(/[^A-Za-z0-9]+/g, " ");
+      const inUrl = freshsources.firstAliasIn(slug, id);
+      if (!inText && !inUrl) continue;
 
       out.candidates.push({
         brand_id: id,
@@ -114,12 +221,56 @@ async function sweepLinkedIn({ brands, log }) {
         source_verified: true,
         source_adapter: "linkedin_serpapi",
         discovered_via: "serpapi: " + q,
-        author: null,
-        extra: { serp_position: hit.position || null, matched_alias: freshsources.firstAliasIn(text, id) },
+        author: linkedinAuthor(hit.title, hit.url),
+        extra: {
+          serp_position: hit.position || hit.rank || null,
+          matched_alias: inText || inUrl,
+          // Which of the two matched, so a reader can weigh it.
+          matched_in: inText ? "title/snippet" : "post URL slug",
+        },
       });
     }
     out.ran = true;
     log("      linkedin: " + b.name + " — " + out.candidates.filter(c => c.brand_id === id).length + " post(s) via SerpAPI");
+  }
+
+  if (out.ran) {
+    const st = freshsources.loadState();
+    st.last_linkedin_sweep = new Date().toISOString();
+    freshsources.saveState(st);
+  }
+  return out;
+}
+
+/* -------------------------------------------------------------- blog feeds */
+
+/**
+ * First-party blog and changelog RSS.
+ *
+ * THIS WAS MISSING FROM THE LIVE SWEEP ENTIRELY, and it is why the Blog column
+ * read 0 for the last 7 days while four brands were publishing. The adapter
+ * existed and worked — it was simply only wired into collect.js, the slow
+ * full-backfill path that nobody runs on a schedule any more.
+ *
+ * It belongs here more than almost anything else does: it is first-party, it
+ * carries exact publication dates, it needs no credential and no proxy, and it
+ * is not rate limited. The highest-quality source in the project was absent
+ * from the path that actually keeps the dashboard current.
+ *
+ * Brands with no resolved feed (GitBook, Guru, KnowledgeOwl) report a gap
+ * rather than contributing a silent zero.
+ */
+async function sweepBlogs({ brands, sinceDays, log }) {
+  const out = { candidates: [], gaps: [], ran: false, reason: null };
+  try {
+    const adapter = require("../adapters/blogfeed");
+    const r = await adapter.collect({ sinceDays, log });
+    // The adapter has no brand filter of its own, so apply the caller's here.
+    out.candidates = (r.candidates || []).filter(c => !brands || brands.includes(c.brand_id));
+    out.gaps = (r.gaps || []).filter(g => !brands || !g.brand_id || brands.includes(g.brand_id));
+    out.ran = true;
+  } catch (e) {
+    out.reason = "blog sweep threw: " + String(e.message || e);
   }
   return out;
 }
@@ -137,6 +288,10 @@ async function refresh({
   brands = null,
   channels = null,
   days = 7,
+  // A person pressing Refresh is never throttled on the metered routes: they
+  // are watching, they asked for it, and it is a handful of queries. An
+  // unattended cron IS throttled, because it runs twelve times a day.
+  force = false,
   log = () => {},
 } = {}) {
   const startedAt = new Date().toISOString();
@@ -170,17 +325,43 @@ async function refresh({
     });
   }
 
-  /* 3. LinkedIn, one metered query per brand, only if asked for. */
-  if (want && want.includes("linkedin")) {
+  /* 3. Blog and changelog RSS. Free, first-party, exact dates — it should have
+   *    been here from the start. Its absence is why Blog read 0 for 7 days. */
+  if (!want || want.includes("blog")) {
+    log("  > Brand blog / changelog RSS");
+    const bl = await sweepBlogs({ brands: ids, sinceDays: days, log });
+    candidates = candidates.concat(bl.candidates);
+    gaps.push(...bl.gaps.map(g => Object.assign({ source: "blogfeed" }, g)));
+    perSource.push({
+      id: "blogfeed", label: "Brand blog / changelog RSS", tier: "primary",
+      candidates: bl.candidates.length, gaps: bl.gaps.length, ok: bl.ran,
+      error: bl.ran ? null : bl.reason,
+    });
+  }
+
+  /* 4. LinkedIn.
+   *
+   *    THE CONDITION USED TO BE `want && want.includes("linkedin")`, which is
+   *    inverted: with no channel filter — the normal case, and what the cron
+   *    and the digest both do — `want` is null, so LinkedIn NEVER RAN. One
+   *    LinkedIn record in seven days across all seven brands was not a quiet
+   *    week on LinkedIn; it was a channel that was never queried.
+   *
+   *    Now it runs by default, paced so it cannot drain the monthly quota. */
+  if (!want || want.includes("linkedin")) {
     log("  > LinkedIn (SerpAPI site: query)");
-    const li = await sweepLinkedIn({ brands: ids, log });
+    const li = await sweepLinkedIn({ brands: ids, log, force, days });
     candidates = candidates.concat(li.candidates);
     gaps.push(...li.gaps.map(g => Object.assign({ source: "linkedin_serpapi" }, g)));
     perSource.push({
       id: "linkedin_serpapi", label: "LinkedIn (SerpAPI)", tier: "metered",
-      candidates: li.candidates.length, gaps: li.gaps.length, ok: li.ran,
+      candidates: li.candidates.length, gaps: li.gaps.length,
+      // Throttled is not failed. It must not render as a broken source.
+      ok: li.ran || li.throttled,
+      throttled: !!li.throttled,
       error: li.ran ? null : li.reason,
     });
+    if (li.throttled) gaps.push({ source: "linkedin_serpapi", reason: li.reason });
   }
 
   const found = candidates.length;
@@ -219,6 +400,24 @@ async function refresh({
       persistError = String(e.message || e);
     }
   }
+
+  /* A receipt, so the dashboard can say WHEN each channel was last asked.
+   * Written even when nothing was found — that is precisely the case where
+   * knowing the sweep ran is the whole point. */
+  try {
+    const { writeJson, STORE_DIR } = require("./store");
+    writeJson(path.join(STORE_DIR, "live-sweep-receipt.json"), {
+      finished_at: new Date().toISOString(),
+      window_days: days,
+      brands: ids,
+      channels: want || "all",
+      candidates_found: found,
+      records_verified: records.length,
+      added: added,
+      per_source: perSource,
+      gaps: gaps.slice(0, 40),
+    });
+  } catch (e) { /* a missing receipt must never fail the sweep */ }
 
   return {
     ok: true,
@@ -268,4 +467,4 @@ function rebuild({ log = () => {} } = {}) {
   });
 }
 
-module.exports = { refresh, rebuild, sweepX, sweepLinkedIn };
+module.exports = { refresh, rebuild, sweepX, sweepLinkedIn, sweepBlogs, linkedinAuthor };

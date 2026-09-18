@@ -154,6 +154,41 @@ function enrich(r) {
   };
 }
 
+/**
+ * Recover a LinkedIn author from the page's own text.
+ *
+ * The SERP-time extractor gets the name from the result title or the URL
+ * handle, and both legitimately fail: a title like "#nuclei #grasshopper3d" has
+ * no name in it, and a handle like `saravanamv` is a single token that could be
+ * anything — guessing a person's name from it would be inventing one.
+ *
+ * But LinkedIn's own page markup says it plainly: "View profile for Saravana
+ * Kumar". That is the source naming the author, not us inferring it, so it is
+ * fair to read. Recovering it here rather than in the collector means it also
+ * fixes records already in the store, without a re-fetch.
+ *
+ * Returns null when the text does not say. A digest row reading "unknown" is
+ * correct; one reading a made-up name is not.
+ */
+function linkedinAuthorFromEvidence(text) {
+  const t = String(text || "").replace(/\s+/g, " ");
+
+  /* The name class deliberately excludes "." — including it made the match run
+   * straight through a sentence boundary: LinkedIn renders the profile card as
+   * "View profile for Saravana Kumar - Saravana Kumar." and the greedy class
+   * swallowed both, yielding "Saravana Kumar. Saravana Kumar". A person's name
+   * is letters, apostrophes and hyphens; a full stop ends it. */
+  const NAME = "\\p{Lu}[\\p{L}'\u2019-]+(?:\\s+\\p{Lu}[\\p{L}'\u2019-]+){0,3}";
+
+  let m = new RegExp("View profile for (" + NAME + ")", "u").exec(t);
+  if (m) return m[1].trim();
+
+  m = new RegExp("(" + NAME + ")(?:'|\u2019)s Post\\b", "u").exec(t);
+  if (m) return m[1].trim();
+
+  return null;
+}
+
 function brandNameOf(id) {
   try { return require("./lib/brands").brand(id).name; } catch (e) { return id; }
 }
@@ -169,7 +204,6 @@ function toWire(r) {
     url: r.url,
     domain: r.domain,
     title: r.title,
-    author: r.author || null,
     date: r.published_at || null,
     date_confidence: r.date_confidence,
     date_method: r.date_method || null,
@@ -182,6 +216,17 @@ function toWire(r) {
 
     // API-provider + classification fields, surfaced so the UI can show which
     // system produced each value rather than presenting them all as equivalent.
+    // A LinkedIn record with no author is recoverable from the page text, which
+    // names the poster even when the URL handle and the SERP title do not.
+    author: r.author || (normaliseChannel(r.channel) === "linkedin"
+      ? linkedinAuthorFromEvidence(r.evidence)
+      : null),
+    author_source: r.author
+      ? "collector"
+      : (normaliseChannel(r.channel) === "linkedin" && linkedinAuthorFromEvidence(r.evidence)
+        ? "recovered from the page's own profile markup"
+        : null),
+
     api_source: r.api_source || r.source_adapter,
     verification_status: verificationStatus(r),
     relevance_score: r.relevance_score ?? null,
@@ -722,6 +767,26 @@ w("meta.json", {
       newest_published_age_days: newest ? daysAgo(newest, nowMs) : null,
       store_updated_at: store.updated_at,
       last_collector_run: (coverage && coverage.finished_at) || null,
+      /* When the live sweep last ran, and over which channels.
+       *
+       * The UI needs this to tell a MEASURED zero from an UNQUERIED one. A
+       * channel showing 0 for the last 7 days is either "we asked and nobody
+       * said anything" or "nothing has asked since Tuesday", and those render
+       * identically without it. That ambiguity is what made the LinkedIn and
+       * Blog columns look broken when one of them was genuinely quiet and the
+       * other was genuinely never queried. */
+      last_live_sweep: (() => {
+        try {
+          const r = readJson(path.join(STORE_DIR, "live-sweep-receipt.json"), null);
+          return r && r.finished_at ? r.finished_at : null;
+        } catch (e) { return null; }
+      })(),
+      last_live_sweep_channels: (() => {
+        try {
+          const r = readJson(path.join(STORE_DIR, "live-sweep-receipt.json"), null);
+          return r ? (r.channels || "all") : null;
+        } catch (e) { return null; }
+      })(),
     };
   })(),
 });

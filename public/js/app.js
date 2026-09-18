@@ -194,10 +194,19 @@ function channelNotes(channelId) {
   const cav = (DATA.meta.caveats && DATA.meta.caveats.by_channel) || {};
   const dormant = (DATA.meta.caveats && DATA.meta.caveats.dormant) || [];
   const notes = cav[channelId] || [];
-  const rel = dormant.find(d =>
-    (channelId === "linkedin" && d.adapter === "linkedin") ||
-    (channelId === "x" && d.adapter === "x_twikit")
-  );
+  /* Map a channel to the adapter whose dormancy explains it.
+   *
+   * This used to name `linkedin` and `x_twikit` — two credential-driven
+   * adapters that have since been deleted, because neither ever collected.
+   * A stale mapping here is not harmless: it is how a channel served by a
+   * perfectly healthy route gets a "not connected" note attached to it. */
+  const CHANNEL_ADAPTER = {
+    linkedin: "linkedin_serpapi",
+    x: "x_twitterapi",
+    blog: "blogfeed",
+    web: "searxng",
+  };
+  const rel = dormant.find(d => d.adapter === CHANNEL_ADAPTER[channelId]);
   if (!notes.length && !rel) return null;
   return { notes, dormant: rel };
 }
@@ -219,8 +228,15 @@ function channelConnected(channelId) {
 function channelStatusChip(channelId, count) {
   if (count > 0) return "";
   if (!channelConnected(channelId)) return `<span class="chip nc">no source connected</span>`;
-  // Connected, just nothing in the current filter — a real, honest zero.
-  return `<span class="chip zero">none in range</span>`;
+
+  /* Connected, and nothing in the current filter. Say WHEN it was last asked,
+   * because "we looked on Thursday and found nothing" and "nobody has looked
+   * since Thursday" are different facts that render as the same zero — and
+   * that ambiguity is exactly what makes a reader distrust the number. */
+  const fr = (DATA.meta.data_freshness || {});
+  const swept = fr.last_live_sweep || fr.last_successful_sync || null;
+  const when = swept ? ` · last swept ${fmtDateTime(swept)}` : "";
+  return `<span class="chip zero" title="This channel has a working source and returned nothing for the selected range${when}. It is a measured zero, not an unqueried one.">none in range</span>`;
 }
 
 /* -------------------------------------------------------------- caveat UI */

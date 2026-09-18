@@ -1,0 +1,212 @@
+{
+  "finished_at": "2026-09-18T08:22:06.597Z",
+  "window_days": 7,
+  "brands": [
+    "document360",
+    "mintlify",
+    "gitbook",
+    "confluence",
+    "guru",
+    "bloomfire",
+    "knowledgeowl"
+  ],
+  "channels": "all",
+  "candidates_found": 424,
+  "records_verified": 132,
+  "added": 6,
+  "per_source": [
+    {
+      "id": "googlenews_rss",
+      "label": "Google News RSS",
+      "tier": "primary",
+      "candidates": 107,
+      "gaps": 0,
+      "seconds": 7.5,
+      "ok": true
+    },
+    {
+      "id": "hn_recent",
+      "label": "Hacker News (Algolia, by date)",
+      "tier": "primary",
+      "candidates": 11,
+      "gaps": 0,
+      "seconds": 4.2,
+      "ok": true
+    },
+    {
+      "id": "duckduckgo_week",
+      "label": "Web search (SearXNG, else DuckDuckGo)",
+      "tier": "primary",
+      "candidates": 54,
+      "gaps": 0,
+      "seconds": 79,
+      "ok": true
+    },
+    {
+      "id": "youtube_week",
+      "label": "YouTube (uploaded this week)",
+      "tier": "primary",
+      "candidates": 26,
+      "gaps": 2,
+      "seconds": 10.2,
+      "ok": true
+    },
+    {
+      "id": "github_recent",
+      "label": "GitHub issues & PRs",
+      "tier": "secondary",
+      "candidates": 124,
+      "gaps": 0,
+      "seconds": 42.6,
+      "ok": true
+    },
+    {
+      "id": "stackexchange",
+      "label": "Stack Overflow / Software Engineering",
+      "tier": "secondary",
+      "candidates": 0,
+      "gaps": 0,
+      "seconds": 16,
+      "ok": true
+    },
+    {
+      "id": "status_page",
+      "label": "Vendor status pages",
+      "tier": "secondary",
+      "candidates": 0,
+      "gaps": 0,
+      "seconds": 4,
+      "ok": true
+    },
+    {
+      "id": "alternatives_page",
+      "label": "Alternatives aggregators",
+      "tier": "secondary",
+      "candidates": 0,
+      "gaps": 0,
+      "seconds": 9.4,
+      "ok": true
+    },
+    {
+      "id": "mastodon",
+      "label": "Mastodon hashtag timelines",
+      "tier": "bonus",
+      "candidates": 54,
+      "gaps": 0,
+      "seconds": 14.8,
+      "ok": true
+    },
+    {
+      "id": "gdelt_recent",
+      "label": "GDELT news index",
+      "tier": "bonus",
+      "candidates": 0,
+      "gaps": 5,
+      "seconds": 167.9,
+      "ok": true
+    },
+    {
+      "id": "reddit_rss",
+      "label": "Reddit (OAuth if configured, else RSS)",
+      "tier": "bonus",
+      "candidates": 0,
+      "gaps": 1,
+      "seconds": 0.3,
+      "ok": true
+    },
+    {
+      "id": "x_twitterapi",
+      "label": "X (twitterapi.io)",
+      "tier": "metered",
+      "candidates": 0,
+      "gaps": 1,
+      "ok": true,
+      "error": null
+    },
+    {
+      "id": "blogfeed",
+      "label": "Brand blog / changelog RSS",
+      "tier": "primary",
+      "candidates": 8,
+      "gaps": 3,
+      "ok": true,
+      "error": null
+    },
+    {
+      "id": "linkedin_serpapi",
+      "label": "LinkedIn (SerpAPI)",
+      "tier": "metered",
+      "candidates": 40,
+      "gaps": 1,
+      "ok": true,
+      "throttled": false,
+      "error": null
+    }
+  ],
+  "gaps": [
+    {
+      "source": "youtube_week",
+      "brand_id": "bloomfire",
+      "reason": "YouTube results HTTP 302"
+    },
+    {
+      "source": "youtube_week",
+      "brand_id": "knowledgeowl",
+      "reason": "YouTube results HTTP 302"
+    },
+    {
+      "source": "gdelt_recent",
+      "brand_id": "mintlify",
+      "reason": "GDELT HTTP 429"
+    },
+    {
+      "source": "gdelt_recent",
+      "brand_id": "confluence",
+      "reason": "GDELT HTTP 429"
+    },
+    {
+      "source": "gdelt_recent",
+      "brand_id": "guru",
+      "reason": "GDELT HTTP 429"
+    },
+    {
+      "source": "gdelt_recent",
+      "brand_id": "bloomfire",
+      "reason": "GDELT HTTP 429"
+    },
+    {
+      "source": "gdelt_recent",
+      "brand_id": "knowledgeowl",
+      "reason": "GDELT HTTP 429"
+    },
+    {
+      "source": "reddit_rss",
+      "reason": "Reddit disabled until 2026-09-18T18:53:59.361Z — HTTP 429 on search.rss — anonymous access refused"
+    },
+    {
+      "source": "x_twitterapi",
+      "brand_id": null,
+      "reason": "twitterapi.io credits are exhausted (balance -518). Every endpoint returns HTTP 402 \"Credits is not enough. Please recharge\", so nothing can be collected. This is a billing stop, NOT an absence of tweets — recharge at twitterapi.io to resume."
+    },
+    {
+      "source": "blogfeed",
+      "brand_id": "gitbook",
+      "reason": "No discoverable RSS/Atom feed — probed 8 candidate paths plus <head> autodiscovery, all 404. Blog coverage for GitBook comes from SearXNG + GDELT web discovery instead."
+    },
+    {
+      "source": "blogfeed",
+      "brand_id": "guru",
+      "reason": "No discoverable RSS/Atom feed — probed 6 candidate paths plus <head> autodiscovery, all 404. Blog coverage comes from SearXNG + GDELT."
+    },
+    {
+      "source": "blogfeed",
+      "brand_id": "knowledgeowl",
+      "reason": "No discoverable RSS/Atom feed — probed 9 candidate paths plus <head> autodiscovery, all 404 (one 200 returned HTML, not a feed). Blog coverage comes from SearXNG + GDELT."
+    },
+    {
+      "source": "linkedin_serpapi",
+      "brand_id": "knowledgeowl",
+      "reason": "SerpAPI: SerpAPI: Google hasn't returned any results for this query."
+    }
+  ]
+}

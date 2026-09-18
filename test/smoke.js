@@ -136,6 +136,28 @@ function signalTests() {
   t("a suggested response carries the complaint it answers",
     !!play && !!play.answers_complaint && !!play.matched_phrase);
 
+  /* LINKEDIN AUTHOR EXTRACTION.
+   *
+   * The digest the team reads is "PRIORITY - CHANNEL - AUTHOR - AGE", and every
+   * LinkedIn row rendered with a blank author because the candidate set
+   * author:null while the name sat in the title and the URL slug the whole
+   * time. The last case is the important one: an unparseable title must return
+   * null, never a plausible-looking guess. */
+  const { linkedinAuthor } = require(P("collectors", "lib", "live-refresh.js"));
+  const authorCases = [
+    ["Saravana Kumar's Post", "https://www.linkedin.com/posts/saravana-kumar_x-activity-1", "Saravana Kumar"],
+    ["Saravana Kumar posted this", "https://www.linkedin.com/posts/saravana-kumar_x-activity-1", "Saravana Kumar"],
+    ["Robert Hean - Confluence for Support Teams", "https://www.linkedin.com/posts/robert-hean_x-activity-1", "Robert Hean"],
+    ["#nuclei #grasshopper3d", "https://www.linkedin.com/posts/madalin-gheorghe-5026884a_x-activity-1", "Madalin Gheorghe"],
+    ["Some Title", "https://www.linkedin.com/posts/12345_x-activity-1", null],
+  ];
+  const authorWrong = authorCases.filter(([t, u, want]) => linkedinAuthor(t, u) !== want);
+  t("LinkedIn author is extracted from the title or the URL slug",
+    authorWrong.length === 0,
+    authorWrong.map(([t2]) => t2).join("; ") || `${authorCases.length} cases correct`);
+  t("an unparseable LinkedIn title yields no author rather than a guess",
+    linkedinAuthor("Some Title", "https://www.linkedin.com/posts/12345_x-activity-1") === null);
+
   /* THE OPPORTUNITIES PAYLOAD. */
   const opps = opportunities.build(brands, meta.brand_order, { days: 7 });
   t("no competitor-negative card is emitted without evidence to show",
