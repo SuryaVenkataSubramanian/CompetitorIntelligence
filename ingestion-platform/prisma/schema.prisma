@@ -1,0 +1,167 @@
+// Brand mention ingestion — persistence layer.
+//
+// Differences from the specification's §5 schema, each for a stated reason:
+//
+//   identityHash / contentHash   The spec has ONE hash over
+//                                platform+platformId+content, so an edited post
+//                                becomes a second record. Identity and content
+//                                are separated: identity is unique, content
+//                                changes are an UPDATE with an editedAt stamp.
+//
+//   publishedAt is NULLABLE      The spec types it non-null, which forces
+//                                adapters to invent a date when the source has
+//                                none — and its SearXNG adapter duly defaults to
+//                                now(). A fabricated publication date is
+//                                indistinguishable from a real one downstream.
+//
+//   dateConfidence               Says which axis a range filter may trust.
+//
+//   relevanceMethod / Evidence   A score with no provenance cannot be audited.
+//                                Records WHICH tier decided and the span it
+//                                decided on.
+//
+//   retention fields             §11 requires a retention policy and an answer
+//                                for erasure requests; the spec's own model has
+//                                neither. Added below.
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum PlatformType {
+  SEARXNG
+  GOOGLE_AIO
+  BLUESKY
+  REDDIT
+  HACKERNEWS
+  TWITTER
+  LINKEDIN
+}
+
+enum JobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum DateConfidence {
+  exact
+  approximate
+  unknown
+}
+
+enum RelevanceMethod {
+  negative_keyword
+  llm
+  keyword_boundary
+  undecided
+}
+
+model TrackedProduct {
+  id              String   @id @default(uuid())
+  name            String   @unique
+  keywords        String[] // aliases, hashtags, product lines
+  excludeKeywords String[] // negative keywords for homonym elimination
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  /// Days to retain mentions. Null means indefinite — set it deliberately.
+  retentionDays Int?
+
+  mentions   Mention[]
+  scrapeJobs ScrapeJob[]
+}
+
+model PlatformSession {
+  id       String       @id @default(uuid())
+  platform PlatformType @unique
+
+  /// ENCRYPTED AT REST. This holds live account credentials (li_at,
+  /// JSESSIONID, auth_token, ct0); a leak is an account takeover, not a data
+  /// leak. Store ciphertext produced by the application, never raw JSON, and
+  /// never log this column.
+  authDataEncrypted String
+  /// AES-GCM initialisation vector and auth tag for the above.
+  authDataIv  String
+  authDataTag String
+
+  proxyUrl     String?
+  isActive     Boolean   @default(true)
+  lastTestedAt DateTime?
+  /// Sessions rot every 2-4 weeks (§11). Past this, the adapter must report
+  /// STALE rather than returning the empty feed an expired cookie produces.
+  expiresAt DateTime?
+  updatedAt DateTime  @updatedAt
+}
+
+model ScrapeJob {
+  id        String         @id @default(uuid())
+  productId String
+  product   TrackedProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  status    JobStatus      @default(PENDING)
+  platforms PlatformType[]
+
+  errorMessage  String?
+  startedAt     DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  mentionsFound Int       @default(0)
+
+  /// Platforms that were actually reached, and why the others were not.
+  /// Without this a job that queried two of six sources and a job that queried
+  /// all six look identical in the history.
+  queriedPlatforms PlatformType[]
+  gaps             Json?
+
+  @@index([productId, createdAt])
+}
+
+model Mention {
+  id        String         @id @default(uuid())
+  productId String
+  product   TrackedProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  platform   PlatformType
+  platformId String
+
+  /// SHA-256(platform:platformId). The post's identity, stable across edits.
+  identityHash String @unique
+  /// SHA-256(normalised content). Changes when the post is edited.
+  contentHash String
+
+  url       String
+  author    String?
+  authorUrl String?
+  content   String  @db.Text
+
+  /// NULL when the source published no date. Never defaulted to now().
+  publishedAt    DateTime?
+  dateConfidence DateConfidence @default(unknown)
+  /// Always known, so a range filter always has an axis to fall back to.
+  discoveredAt DateTime @default(now())
+  editedAt     DateTime?
+
+  relevanceScore    Float           @default(1.0)
+  relevanceMethod   RelevanceMethod @default(keyword_boundary)
+  relevanceEvidence String?
+  isRelevant        Boolean         @default(true)
+
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  /// GDPR (§11). Set when an erasure request is honoured; the row is retained
+  /// tombstoned so the same mention is not re-ingested on the next crawl.
+  redactedAt DateTime?
+
+  @@index([productId, publishedAt])
+  @@index([productId, discoveredAt])
+  @@index([platform, publishedAt])
+  @@index([contentHash])
+}

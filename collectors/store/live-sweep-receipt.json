@@ -1,5 +1,5 @@
 {
-  "finished_at": "2026-09-18T08:22:06.597Z",
+  "finished_at": "2026-09-18T10:16:25.712Z",
   "window_days": 7,
   "brands": [
     "document360",
@@ -11,15 +11,15 @@
     "knowledgeowl"
   ],
   "channels": "all",
-  "candidates_found": 424,
-  "records_verified": 132,
-  "added": 6,
+  "candidates_found": 695,
+  "records_verified": 227,
+  "added": 131,
   "per_source": [
     {
       "id": "googlenews_rss",
       "label": "Google News RSS",
       "tier": "primary",
-      "candidates": 107,
+      "candidates": 111,
       "gaps": 0,
       "seconds": 7.5,
       "ok": true
@@ -28,9 +28,9 @@
       "id": "hn_recent",
       "label": "Hacker News (Algolia, by date)",
       "tier": "primary",
-      "candidates": 11,
+      "candidates": 12,
       "gaps": 0,
-      "seconds": 4.2,
+      "seconds": 3.5,
       "ok": true
     },
     {
@@ -39,23 +39,23 @@
       "tier": "primary",
       "candidates": 54,
       "gaps": 0,
-      "seconds": 79,
+      "seconds": 78.6,
       "ok": true
     },
     {
       "id": "youtube_week",
       "label": "YouTube (uploaded this week)",
       "tier": "primary",
-      "candidates": 26,
+      "candidates": 33,
       "gaps": 2,
-      "seconds": 10.2,
+      "seconds": 10.7,
       "ok": true
     },
     {
       "id": "github_recent",
       "label": "GitHub issues & PRs",
       "tier": "secondary",
-      "candidates": 124,
+      "candidates": 107,
       "gaps": 0,
       "seconds": 42.6,
       "ok": true
@@ -75,7 +75,7 @@
       "tier": "secondary",
       "candidates": 0,
       "gaps": 0,
-      "seconds": 4,
+      "seconds": 5,
       "ok": true
     },
     {
@@ -84,16 +84,34 @@
       "tier": "secondary",
       "candidates": 0,
       "gaps": 0,
-      "seconds": 9.4,
+      "seconds": 9.8,
+      "ok": true
+    },
+    {
+      "id": "bluesky",
+      "label": "Bluesky (AT Protocol)",
+      "tier": "primary",
+      "candidates": 0,
+      "gaps": 7,
+      "seconds": 3.4,
+      "ok": true
+    },
+    {
+      "id": "reddit_replica",
+      "label": "Reddit (PullPush / Arctic Shift replicas)",
+      "tier": "secondary",
+      "candidates": 278,
+      "gaps": 4,
+      "seconds": 21.2,
       "ok": true
     },
     {
       "id": "mastodon",
       "label": "Mastodon hashtag timelines",
       "tier": "bonus",
-      "candidates": 54,
+      "candidates": 51,
       "gaps": 0,
-      "seconds": 14.8,
+      "seconds": 11.8,
       "ok": true
     },
     {
@@ -101,8 +119,8 @@
       "label": "GDELT news index",
       "tier": "bonus",
       "candidates": 0,
-      "gaps": 5,
-      "seconds": 167.9,
+      "gaps": 6,
+      "seconds": 151.5,
       "ok": true
     },
     {
@@ -136,8 +154,8 @@
       "id": "linkedin_serpapi",
       "label": "LinkedIn (SerpAPI)",
       "tier": "metered",
-      "candidates": 40,
-      "gaps": 1,
+      "candidates": 41,
+      "gaps": 0,
       "ok": true,
       "throttled": false,
       "error": null
@@ -153,6 +171,66 @@
       "source": "youtube_week",
       "brand_id": "knowledgeowl",
       "reason": "YouTube results HTTP 302"
+    },
+    {
+      "source": "bluesky",
+      "brand_id": "document360",
+      "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+    },
+    {
+      "source": "bluesky",
+      "brand_id": "mintlify",
+      "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+    },
+    {
+      "source": "bluesky",
+      "brand_id": "gitbook",
+      "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+    },
+    {
+      "source": "bluesky",
+      "brand_id": "confluence",
+      "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+    },
+    {
+      "source": "bluesky",
+      "brand_id": "guru",
+      "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+    },
+    {
+      "source": "bluesky",
+      "brand_id": "bloomfire",
+      "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+    },
+    {
+      "source": "bluesky",
+      "brand_id": "knowledgeowl",
+      "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+    },
+    {
+      "source": "reddit_replica",
+      "brand_id": "document360",
+      "reason": "pullpush: HTTP 429"
+    },
+    {
+      "source": "reddit_replica",
+      "brand_id": "document360",
+      "reason": "arctic-shift: HTTP 400"
+    },
+    {
+      "source": "reddit_replica",
+      "brand_id": "document360",
+      "reason": "no Reddit replica answered (both PullPush and Arctic Shift failed)"
+    },
+    {
+      "source": "reddit_replica",
+      "brand_id": "knowledgeowl",
+      "reason": "arctic-shift: HTTP 400"
+    },
+    {
+      "source": "gdelt_recent",
+      "brand_id": "document360",
+      "reason": "GDELT HTTP 429"
     },
     {
       "source": "gdelt_recent",
@@ -202,11 +280,6 @@
       "source": "blogfeed",
       "brand_id": "knowledgeowl",
       "reason": "No discoverable RSS/Atom feed — probed 9 candidate paths plus <head> autodiscovery, all 404 (one 200 returned HTML, not a feed). Blog coverage comes from SearXNG + GDELT."
-    },
-    {
-      "source": "linkedin_serpapi",
-      "brand_id": "knowledgeowl",
-      "reason": "SerpAPI: SerpAPI: Google hasn't returned any results for this query."
     }
   ]
 }

@@ -46,8 +46,32 @@ function w(file, obj) {
   console.log("  ✓ data/" + file);
 }
 
+/**
+ * Whole days between a stored date and now.
+ *
+ * ACCEPTS BOTH SHAPES, AND THAT IS THE POINT. This used to unconditionally
+ * append "T00:00:00Z", which is correct for the "YYYY-MM-DD" that lib/verify's
+ * toIsoDate() produces and catastrophic for a full ISO timestamp: appending it
+ * to "2026-09-17T18:11:07.000Z" yields an unparseable string, `new Date` gives
+ * Invalid Date, the arithmetic gives NaN — and `JSON.stringify(NaN)` writes
+ * `null`.
+ *
+ * So the record silently became UNDATED. Not an error, not a warning: a real,
+ * exactly-dated Reddit comment landed in the store dated, and came out of the
+ * build indistinguishable from a page with no date at all. 99 records at the
+ * point this was caught, all of them excluded from every range bucket.
+ *
+ * A date helper that only accepts one of the two formats this codebase produces
+ * is a trap for every adapter written after it, so the fix belongs here rather
+ * than in the adapter that happened to step on it.
+ */
 function daysAgo(iso, now) {
-  return Math.floor((now - new Date(iso + "T00:00:00Z")) / 864e5);
+  if (!iso) return null;
+  const raw = String(iso);
+  // A bare date needs the time appended to be read as UTC rather than local.
+  const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw + "T00:00:00Z" : raw);
+  if (Number.isNaN(d.getTime())) return null;
+  return Math.floor((now - d.getTime()) / 864e5);
 }
 
 /* ------------------------------------------------------------------ load */

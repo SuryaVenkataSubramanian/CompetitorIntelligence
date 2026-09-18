@@ -966,6 +966,221 @@ async function redditRss({ brands, sinceMs, state, log }) {
   return { candidates, gaps };
 }
 
+/* ============================================================== L. Bluesky */
+
+/**
+ * Bluesky, via the public AT Protocol AppView.
+ *
+ * The best-shaped source in this whole file, and the reason is structural: the
+ * AT Protocol is DESIGNED for public consumption. No key, no account, no
+ * session to rot, no fingerprinting, no bot wall, and no terms-of-service
+ * exposure. Everything the X channel costs in credits and the LinkedIn channel
+ * costs in metered SERP queries, this gives away.
+ *
+ * It is NOT a replacement for X. It is a different network with a different
+ * population, and saying otherwise would overstate the coverage. But with
+ * twitterapi.io at -518 credits, it is the only microblog source that works at
+ * all right now.
+ */
+async function bluesky({ brands, sinceMs, sinceDays, log }) {
+  const candidates = [];
+  const gaps = [];
+
+  for (const id of brands) {
+    const b = brand(id);
+    const url =
+      "https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=" +
+      encodeURIComponent('"' + b.aliases[0] + '"') +
+      "&limit=100&sort=latest&since=" + new Date(sinceMs).toISOString();
+
+    const r = await fetchJson(url, { retries: 1, timeout: 25000 });
+    if (r.status === 429) {
+      gaps.push({ brand_id: id, reason: "Bluesky rate limited this client (burst limit, not a quota)" });
+      continue;
+    }
+    if (!r.ok || !r.json) {
+      /* A 403 carrying an HTML body is a NETWORK interstitial, not Bluesky
+       * refusing the query. MEASURED from this host: every variant — quoted,
+       * unquoted, with and without `since` — returns the same 2.3KB HTML 403
+       * with a fonts.bunny.net stylesheet, which no JSON API serves. The
+       * AppView itself is unauthenticated and has no reason to refuse.
+       *
+       * Worth distinguishing, because the two have opposite fixes: a query
+       * problem is fixed here, an egress block is fixed by running the sweep
+       * from somewhere else. The scheduled GitHub Actions runner has a
+       * different IP and is the obvious place to find out. */
+      const htmlBlock = r.status === 403 && /<html/i.test(String(r.body || ""));
+      gaps.push({
+        brand_id: id,
+        reason: htmlBlock
+          ? "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network " +
+            "level, not by the API. The adapter is fine; run it from a different IP (the " +
+            "scheduled runner) to confirm."
+          : "Bluesky XRPC HTTP " + r.status,
+      });
+      continue;
+    }
+
+    let kept = 0;
+    for (const post of r.json.posts || []) {
+      const text = (post.record && post.record.text) || "";
+      const matched = firstAliasIn(text, id);
+      if (!matched) continue;
+
+      const handle = (post.author && (post.author.handle || post.author.did)) || null;
+      const rkey = String(post.uri || "").split("/").pop();
+      if (!handle || !rkey) continue;
+
+      // createdAt is self-reported by the posting client; indexedAt is the
+      // AppView's own observation. Prefer the claim, fall back to the
+      // observation, and never invent one.
+      const published = toIsoDate(post.record && post.record.createdAt) ||
+        toIsoDate(post.indexedAt);
+      if (published && !withinWindow(published, sinceMs)) continue;
+
+      candidates.push({
+        brand_id: id,
+        channel: "x",   // microblog; grouped with the other short-form social
+        url: "https://bsky.app/profile/" + handle + "/post/" + rkey,
+        title: null,
+        published_at: published,
+        date_method: published ? "bluesky:createdAt" : null,
+        source_text: clip(text, 2000),
+        source_verified: true,
+        source_adapter: "bluesky",
+        discovered_via: url,
+        author: (post.author && post.author.displayName) || handle,
+        extra: {
+          bluesky_handle: handle,
+          bluesky_did: (post.author && post.author.did) || null,
+          likes: post.likeCount == null ? null : post.likeCount,
+          reposts: post.repostCount == null ? null : post.repostCount,
+          replies: post.replyCount == null ? null : post.replyCount,
+          matched_alias: matched,
+        },
+      });
+      kept++;
+    }
+    log("      bluesky: " + b.name + " — " + kept + " post(s)");
+  }
+  return { candidates, gaps };
+}
+
+/* ================================================= M. Reddit archive replicas */
+
+/**
+ * Reddit through Pushshift-compatible replicas.
+ *
+ * WHY THIS EXISTS ALONGSIDE reddit_rss: because reddit_rss does not work.
+ * Reddit answers this network's anonymous RSS requests with 429, the source
+ * self-disables for 24 hours, and the Reddit channel has been contributing
+ * nothing. api.pushshift.io itself is dead to the public — its surviving
+ * endpoints sit behind a researcher approval queue.
+ *
+ * PullPush and Arctic Shift are independent replicas with independent
+ * operators, so an outage at one is not an outage at both. They also do the
+ * thing Reddit's own search is worst at: full-text search across ALL
+ * subreddits' COMMENTS, which is where people actually discuss tools.
+ *
+ * Both are best-effort community infrastructure. A replica being down is a
+ * gap, not a zero.
+ */
+const REDDIT_REPLICAS = [
+  {
+    id: "pullpush",
+    build: (alias, sinceSec) =>
+      "https://api.pullpush.io/reddit/search/comment/?q=" + encodeURIComponent(alias) +
+      "&size=100&sort=desc&after=" + sinceSec,
+    rows: j => (j && j.data) || [],
+  },
+  {
+    id: "arctic-shift",
+    build: (alias, sinceSec) =>
+      "https://arctic-shift.photon-reddit.com/api/comments/search?body=" +
+      encodeURIComponent(alias) + "&limit=100&sort=desc&after=" + sinceSec,
+    rows: j => (j && j.data) || [],
+  },
+];
+
+async function redditReplicas({ brands, sinceMs, log }) {
+  const candidates = [];
+  const gaps = [];
+  const sinceSec = Math.floor(sinceMs / 1000);
+  const seen = new Set();
+
+  for (const id of brands) {
+    const b = brand(id);
+    const alias = b.aliases[0];
+    let kept = 0;
+    let served = false;
+
+    for (const replica of REDDIT_REPLICAS) {
+      const url = replica.build(alias, sinceSec);
+      const r = await fetchJson(url, {
+        retries: 1,
+        timeout: 30000,
+        headers: { "User-Agent": "node:d360-competitive-intel:v2.0 (internal research tool)" },
+      });
+      if (!r.ok || !r.json) {
+        gaps.push({ brand_id: id, reason: replica.id + ": HTTP " + r.status });
+        continue;
+      }
+      served = true;
+
+      for (const c of replica.rows(r.json)) {
+        if (!c || !c.id || !c.body) continue;
+        const matched = firstAliasIn(c.body, id);
+        if (!matched) continue;
+
+        const permalink = c.permalink ||
+          ("/comments/" + String(c.link_id || "").replace(/^t3_/, "") + "/_/" + c.id);
+        const full = "https://www.reddit.com" + permalink;
+        // The two replicas index the same comments, so the second pass would
+        // duplicate the first without this.
+        if (seen.has(full)) continue;
+        seen.add(full);
+
+        // toIsoDate, like every other adapter — one date shape across the
+        // codebase is what stops the next helper from having to guess.
+        const published = c.created_utc
+          ? toIsoDate(new Date(c.created_utc * 1000).toISOString())
+          : null;
+        if (published && !withinWindow(published, sinceMs)) continue;
+
+        candidates.push({
+          brand_id: id,
+          channel: "web",
+          url: full,
+          title: null,
+          published_at: published,
+          date_method: published ? "reddit:created_utc" : null,
+          source_text: clip(c.body, 2000),
+          source_verified: true,
+          source_adapter: "reddit_replica",
+          discovered_via: url,
+          author: c.author && c.author !== "[deleted]" ? c.author : null,
+          extra: {
+            subreddit: c.subreddit || null,
+            score: c.score == null ? null : c.score,
+            replica: replica.id,
+            matched_alias: matched,
+          },
+        });
+        kept++;
+      }
+
+      // One replica answering is enough; the second is for when it does not.
+      if (kept) break;
+    }
+
+    if (!served) {
+      gaps.push({ brand_id: id, reason: "no Reddit replica answered (both PullPush and Arctic Shift failed)" });
+    }
+    log("      reddit replicas: " + b.name + " — " + kept + " comment(s)");
+  }
+  return { candidates, gaps };
+}
+
 /* ========================================================= J. Status pages */
 
 const STATUS_FEEDS = {
@@ -1091,6 +1306,8 @@ const SOURCES = [
   { id: "stackexchange", label: "Stack Overflow / Software Engineering", run: stackExchange, tier: "secondary" },
   { id: "status_page", label: "Vendor status pages", run: statusPages, tier: "secondary" },
   { id: "alternatives_page", label: "Alternatives aggregators", run: alternativesPages, tier: "secondary" },
+  { id: "bluesky", label: "Bluesky (AT Protocol)", run: bluesky, tier: "primary" },
+  { id: "reddit_replica", label: "Reddit (PullPush / Arctic Shift replicas)", run: redditReplicas, tier: "secondary" },
   { id: "mastodon", label: "Mastodon hashtag timelines", run: mastodon, tier: "bonus" },
   { id: "gdelt_recent", label: "GDELT news index", run: gdeltRecent, tier: "bonus" },
   { id: "reddit_rss", label: "Reddit (OAuth if configured, else RSS)", run: redditRss, tier: "bonus" },
