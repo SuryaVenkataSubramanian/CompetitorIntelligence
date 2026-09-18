@@ -174,100 +174,6 @@ async function checkSearxng() {
     });
 }
 
-/* ----------------------------------------------------------------- Octolens */
-
-async function checkOctolens() {
-  const key = process.env.OCTOLENS_API_KEY;
-  if (!key) return report("Octolens", "BROKEN", "OCTOLENS_API_KEY not set", { fix: "Add OCTOLENS_API_KEY to .env" });
-
-  const ad = require("./adapters/octolens");
-  const page = await ad._fetchPage(null);
-  if (!page.ok) {
-    return report("Octolens", "BROKEN", `API error: ${page.error}`, {
-      plan_limited: !!page.plan_limited,
-      fix: page.plan_limited
-        ? "Octolens API access requires a Pro, Scale or Enterprise plan. The key is valid; the plan does not include API access."
-        : "Verify the key in the Octolens dashboard",
-    });
-  }
-  const kws = {};
-  for (const m of page.data) for (const k of (m.keywords || [])) kws[k.keyword] = (kws[k.keyword] || 0) + 1;
-  const tracked = Object.keys(kws);
-
-  // The coverage limit is the real finding, not the HTTP status.
-  const { allBrands } = require("./lib/brands");
-  const uncovered = allBrands()
-    .filter(b => !tracked.some(k => b.aliases.some(a => k.toLowerCase().includes(a.toLowerCase()))))
-    .map(b => b.name);
-
-  report("Octolens", uncovered.length ? "DEGRADED" : "WORKING",
-    `${page.data.length} mentions on page 1; watches [${tracked.join(", ") || "none"}]` +
-    (uncovered.length ? `; NO coverage for ${uncovered.length}/7: ${uncovered.join(", ")}` : ""),
-    {
-      tracked_keywords: tracked,
-      uncovered_products: uncovered,
-      fix: uncovered.length ? "Add these products as keywords in the Octolens dashboard — the API cannot do it." : null,
-    });
-}
-
-/* ------------------------------------------------------------------ NewsAPI */
-
-async function checkNewsapi() {
-  const key = process.env.NEWSAPI_KEY;
-  if (!key) return report("NewsAPI", "BROKEN", "NEWSAPI_KEY not set", { fix: "Add NEWSAPI_KEY to .env" });
-
-  const r = await fetchJson(
-    "https://newsapi.org/v2/everything?q=%22Document360%22&pageSize=5&sortBy=publishedAt&language=en",
-    { headers: { "X-Api-Key": key }, retries: 1, timeout: 30000 }
-  );
-  if (!r.ok || !r.json) {
-    let msg = `HTTP ${r.status}`;
-    try { msg = JSON.parse(r.body).message || msg; } catch (e) { /* keep */ }
-    return report("NewsAPI", "BROKEN", msg, { fix: "Verify the key at newsapi.org/account" });
-  }
-  if (r.json.status !== "ok") {
-    return report("NewsAPI", "BROKEN", `${r.json.code}: ${r.json.message}`, { fix: "Check plan limits at newsapi.org/account" });
-  }
-  // The developer plan caps at page 1 (page 2 → HTTP 426), which bounds coverage.
-  report("NewsAPI", "DEGRADED",
-    `${r.json.totalResults} total results for "Document360", ${(r.json.articles || []).length} returned`,
-    {
-      total_results: r.json.totalResults,
-      note: "Developer plan: only page 1 is retrievable (page 2 returns HTTP 426), and article content is a ~200-char snippet. Both bound coverage.",
-    });
-}
-
-/* --------------------------------------------------------------- Bright Data */
-
-async function checkBrightData() {
-  const bd = require("./lib/brightdata");
-  if (!bd.configured()) return report("Bright Data", "BROKEN", "BRIGHTDATA_API_KEY not set", { fix: "Add BRIGHTDATA_API_KEY to .env" });
-
-  const st = await fetchJson("https://api.brightdata.com/status", {
-    headers: { Authorization: "Bearer " + process.env.BRIGHTDATA_API_KEY }, retries: 1, timeout: 30000,
-  });
-  if (!st.ok || !st.json) return report("Bright Data", "BROKEN", `status endpoint HTTP ${st.status}`);
-
-  const rapi = bd.requestApi();
-  // The scraper API is what this project actually uses, so prove that rather
-  // than only reading /status.
-  const t = await bd.trigger(bd.DATASETS.linkedin_posts.id,
-    [{ url: "https://www.linkedin.com/posts/document360_apidocumentation-apis-developerexperience-activity-7497949284437344256-OMya" }]);
-
-  if (!t.ok) {
-    return report("Bright Data", "BROKEN", `scraper trigger failed: ${String(t.error).slice(0, 80)}`,
-      { fix: "Check the Bright Data account is active and the dataset is accessible" });
-  }
-  report("Bright Data", rapi.available ? "WORKING" : "DEGRADED",
-    `Web Scraper API works (snapshot ${t.snapshot_id}); /request API ${rapi.available ? `available (zone ${rapi.zone})` : "UNAVAILABLE — no zone provisioned"}`,
-    {
-      customer: st.json.customer,
-      scraper_ok: true,
-      request_api: rapi.available,
-      fix: rapi.available ? null : "Create a SERP API or Web Unlocker zone in the Bright Data control panel, then: npm run brightdata:probe",
-    });
-}
-
 /* --------------------------------------------------------------- DataForSEO */
 
 async function checkDataForSeo() {
@@ -431,6 +337,39 @@ async function checkClaudeRuntime() {
     { classified, total, pct, fix: pct < 80 ? "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment" : null });
 }
 
+/* ------------------------------------------------ account-backed collection */
+
+/**
+ * Optional by design. Reported so a STALE credential is visible — an expired
+ * session cookie returns an empty feed rather than an error, which is how an
+ * account-backed channel reports "no mentions" while being completely broken.
+ */
+async function checkSocialAuth() {
+  const social = require("./lib/social-auth");
+  const st = social.status();
+
+  if (!st.available_here) {
+    return report("Account-backed collection", "SKIPPED",
+      "disabled on a hosted deployment by design — a personal session cookie must not live in a Vercel env var",
+      { available_here: false });
+  }
+  const active = st.platforms.filter(p => p.state === "active");
+  const stale = st.platforms.filter(p => p.state === "stale");
+
+  report("Account-backed collection",
+    stale.length ? "DEGRADED" : "SKIPPED",
+    stale.length
+      ? `${stale.map(p => p.label).join(", ")} STALE — not being used; an expired session returns an empty feed, not an error`
+      : active.length
+        ? `${active.map(p => `${p.label} (${p.days_left}d left)`).join(", ")}`
+        : "none configured — optional; every channel has a keyless route",
+    {
+      active: active.map(p => p.platform),
+      stale: stale.map(p => p.platform),
+      fix: stale.length ? `Refresh: ${stale.map(p => p.how_to_enable).join("  |  ")}` : null,
+    });
+}
+
 /* -------------------------------------------------------------------- SMTP */
 
 async function checkSmtp() {
@@ -452,13 +391,11 @@ async function checkSmtp() {
     ["Keyless sources", checkKeylessSources],
     ["SerpAPI", checkSerpApi],
     ["twitterapi.io", checkTwitterApi],
-    ["Octolens", checkOctolens],
-    ["NewsAPI", checkNewsapi],
-    ["Bright Data", checkBrightData],
     ["DataForSEO", checkDataForSeo],
     ["Scraping chain", checkScraping],
     ["Windsor.ai", checkWindsor],
     ["Claude runtime", checkClaudeRuntime],
+    ["Account-backed collection", checkSocialAuth],
     ["SMTP", checkSmtp],
   ];
   for (const [name, fn] of checks) {

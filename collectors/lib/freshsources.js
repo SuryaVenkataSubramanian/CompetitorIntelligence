@@ -405,6 +405,67 @@ async function duckduckgo({ brands, state, log }) {
   const candidates = [];
   const gaps = [];
   const scrape = require("./scrape");
+  const searxng = require("./searxng-client");
+
+  /* SEARXNG FIRST, WHEN IT IS UP.
+   *
+   * Both routes answer the same question — "what does the open web say about
+   * this brand this week" — and SearXNG answers it better for three reasons
+   * that are all about cost rather than quality:
+   *
+   *   - it is free and unmetered, where DuckDuckGo from this network needs a
+   *     ScrapingBee credit per query to get past the block page;
+   *   - its instance IP is not the one DuckDuckGo has flagged;
+   *   - it aggregates several engines behind one parser, so a single engine
+   *     going down degrades the result instead of emptying it.
+   *
+   * It is OPTIONAL, not required. It is a local service and cannot run on a
+   * serverless host, so when it is absent this falls through to DuckDuckGo
+   * exactly as before. Probed ONCE per sweep, not once per brand. */
+  let searxUp = false;
+  try {
+    const probe = await searxng.probe();
+    searxUp = probe.ok;
+    if (searxUp) log("      web search: using SearXNG (free, unblocked) instead of DuckDuckGo");
+  } catch (e) { searxUp = false; }
+
+  if (searxUp) {
+    for (const id of brands) {
+      const b = brand(id);
+      const q = '"' + b.aliases[0] + '"';
+      const r = await searxng.search(q, { days: 7 });
+      if (!r.ok) {
+        gaps.push({ brand_id: id, reason: "SearXNG query failed: " + String(r.error).slice(0, 110) });
+        continue;
+      }
+      let kept = 0;
+      for (const hit of r.results || []) {
+        if (!hit.url) continue;
+        const text = [hit.title, hit.content].filter(Boolean).join(". ");
+        const matched = firstAliasIn(text, id);
+        if (!matched) continue;
+        candidates.push({
+          brand_id: id,
+          channel: null,
+          url: hit.url,
+          title: hit.title || null,
+          // SearXNG has no reliable per-result date; the pipeline proves one
+          // from the page or the record stays undated.
+          published_at: null,
+          date_method: null,
+          source_text: text,
+          source_verified: true,
+          source_adapter: "searxng_week",
+          discovered_via: "searxng: " + q,
+          author: null,
+          extra: { matched_alias: matched, searxng_engine: hit.engine || null, fetched_via: "searxng" },
+        });
+        kept++;
+      }
+      log("      web search: " + b.name + " — " + kept + " result(s) via SearXNG");
+    }
+    return { candidates, gaps };
+  }
 
   for (const id of brands) {
     const b = brand(id);
@@ -717,9 +778,133 @@ async function gdeltRecent({ brands, sinceDays, log }) {
  * hours and the sweep moves on. Never retried in a loop — retrying against a
  * source that has decided to block you is how an IP gets banned outright.
  */
+/**
+ * Reddit's OAuth route, used when a script-app credential is in the vault.
+ *
+ * WHY THIS IS THE ONE ACCOUNT-BACKED ROUTE WORTH HAVING
+ * ----------------------------------------------------
+ * The other two platforms need a scraped session cookie — a personal login,
+ * against the platform's terms, breaking every 2-4 weeks. Reddit publishes a
+ * SUPPORTED app credential with documented rate limits. It is a first-party
+ * API key that happens to live in the same vault, not a borrowed identity.
+ *
+ * It also has the largest effect: anonymous Reddit access was blocked in May
+ * 2026 and the RSS fallback now self-disables for 24h on the 403 it gets. So
+ * this is the difference between a Reddit channel and no Reddit channel, where
+ * LinkedIn and X both already have working anonymous routes.
+ *
+ * Returns null when no credential is stored, and the caller falls back to RSS.
+ */
+async function redditOAuthToken(log) {
+  let social;
+  try { social = require("./social-auth"); } catch (e) { return null; }
+
+  const cred = social.get("reddit");
+  if (!cred.ok) {
+    // A STALE credential is reported, not silently skipped. An expired token
+    // returns an empty listing rather than an error, which is exactly the
+    // failure this project keeps having to fix.
+    if (cred.state === "stale") log("      reddit: " + cred.reason);
+    return null;
+  }
+
+  const [id, secret] = String(cred.value).split(":");
+  if (!id || !secret) {
+    log("      reddit: stored credential is not in <client_id>:<client_secret> form");
+    return null;
+  }
+
+  const body = "grant_type=client_credentials";
+  const r = await fetchJson("https://www.reddit.com/api/v1/access_token", {
+    method: "POST",
+    headers: {
+      Authorization: "Basic " + Buffer.from(id + ":" + secret).toString("base64"),
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Length": Buffer.byteLength(body),
+      "User-Agent": "Document360-CompetitiveIntel/2.0 (internal research tool)",
+    },
+    body,
+    retries: 1,
+    timeout: 25000,
+  });
+
+  if (!r.ok || !r.json || !r.json.access_token) {
+    log("      reddit: OAuth token request failed (HTTP " + r.status + ") — falling back to RSS");
+    return null;
+  }
+  return r.json.access_token;
+}
+
+async function redditViaOAuth({ brands, sinceMs, token, log }) {
+  const candidates = [];
+  const gaps = [];
+
+  for (const id of brands) {
+    const b = brand(id);
+    const url = "https://oauth.reddit.com/search?q=" +
+      encodeURIComponent('"' + b.aliases[0] + '"') + "&sort=new&t=week&limit=100";
+
+    const r = await fetchJson(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+        "User-Agent": "Document360-CompetitiveIntel/2.0 (internal research tool)",
+      },
+      retries: 1,
+      timeout: 25000,
+    });
+    if (!r.ok || !r.json) {
+      gaps.push({ brand_id: id, reason: "Reddit OAuth search HTTP " + r.status });
+      continue;
+    }
+
+    let kept = 0;
+    for (const child of (r.json.data && r.json.data.children) || []) {
+      const d = child.data || {};
+      const text = [d.title, d.selftext].filter(Boolean).join(". ");
+      const matched = firstAliasIn(text, id);
+      if (!matched) continue;
+      const published = d.created_utc ? new Date(d.created_utc * 1000).toISOString() : null;
+      if (published && !withinWindow(published, sinceMs)) continue;
+
+      candidates.push({
+        brand_id: id,
+        channel: "web",
+        url: d.permalink ? "https://www.reddit.com" + d.permalink : d.url,
+        title: d.title || null,
+        published_at: published,
+        date_method: "reddit:created_utc",
+        source_text: clip(text, 2000),
+        source_verified: true,
+        source_adapter: "reddit_oauth",
+        discovered_via: url,
+        author: d.author || null,
+        extra: {
+          subreddit: d.subreddit || null,
+          score: d.score == null ? null : d.score,
+          num_comments: d.num_comments == null ? null : d.num_comments,
+          matched_alias: matched,
+          // Provenance: this record came through an account, and a reader
+          // should be able to see that.
+          auth_backed: true,
+          auth_platform: "reddit",
+        },
+      });
+      kept++;
+    }
+    log("      reddit (oauth): " + b.name + " — " + kept + " post(s)");
+  }
+  return { candidates, gaps };
+}
+
 async function redditRss({ brands, sinceMs, state, log }) {
   const candidates = [];
   const gaps = [];
+
+  /* OAUTH FIRST when a credential is stored. It is a supported API with
+   * published limits, where the anonymous RSS route is a 403 waiting to
+   * happen. */
+  const token = await redditOAuthToken(log);
+  if (token) return redditViaOAuth({ brands, sinceMs, token, log });
 
   if (isDisabled(state, "reddit")) {
     gaps.push({ reason: "Reddit disabled until " + state.disabled_until.reddit + " — " + state.disabled_reason.reddit });
@@ -900,7 +1085,7 @@ async function alternativesPages({ brands, sinceMs, log }) {
 const SOURCES = [
   { id: "googlenews_rss", label: "Google News RSS", run: googleNewsRss, tier: "primary" },
   { id: "hn_recent", label: "Hacker News (Algolia, by date)", run: hnAlgolia, tier: "primary" },
-  { id: "duckduckgo_week", label: "DuckDuckGo (past week)", run: duckduckgo, tier: "primary" },
+  { id: "duckduckgo_week", label: "Web search (SearXNG, else DuckDuckGo)", run: duckduckgo, tier: "primary" },
   { id: "youtube_week", label: "YouTube (uploaded this week)", run: youtubeWeek, tier: "primary" },
   { id: "github_recent", label: "GitHub issues & PRs", run: githubSearch, tier: "secondary" },
   { id: "stackexchange", label: "Stack Overflow / Software Engineering", run: stackExchange, tier: "secondary" },
@@ -908,7 +1093,7 @@ const SOURCES = [
   { id: "alternatives_page", label: "Alternatives aggregators", run: alternativesPages, tier: "secondary" },
   { id: "mastodon", label: "Mastodon hashtag timelines", run: mastodon, tier: "bonus" },
   { id: "gdelt_recent", label: "GDELT news index", run: gdeltRecent, tier: "bonus" },
-  { id: "reddit_rss", label: "Reddit search RSS", run: redditRss, tier: "bonus" },
+  { id: "reddit_rss", label: "Reddit (OAuth if configured, else RSS)", run: redditRss, tier: "bonus" },
 ];
 
 /**

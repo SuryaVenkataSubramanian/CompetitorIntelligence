@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-09-18T06:53:56.458Z",
+  "built_at": "2026-09-18T07:24:07.901Z",
   "store_updated_at": "2026-09-18T06:53:56.168Z",
   "brand_order": [
     "document360",
@@ -159,10 +159,10 @@
     },
     "by_channel": {
       "linkedin": [
-        "The 551 LinkedIn record(s) shown come from SearXNG `site:linkedin.com` discovery, which finds only publicly indexed posts — so this is a FLOOR, not a total. The credential-based collector (joeyism/linkedin_scraper) is not connected, so engagement metrics (reactions, comments, reposts) are unavailable and non-indexed posts are missed."
+        "Not measurable with the current SERP provider (the built-in metasearch does not honour site: or qualifier terms). Run SearXNG — npm run searxng:local — to populate this channel."
       ],
       "x": [
-        "The 149 X record(s) shown come from SearXNG `site:x.com` discovery, which finds only publicly indexed posts — a FLOOR, not a total. The credential-based collector (twikit) is not connected, so like/repost counts are unavailable and unindexed posts are missed."
+        "Not measurable with the current SERP provider (the built-in metasearch does not honour site: or qualifier terms). Run SearXNG — npm run searxng:local — to populate this channel."
       ],
       "event": [
         "Not measurable with the current SERP provider (the built-in metasearch does not honour site: or qualifier terms). Run SearXNG — npm run searxng:local — to populate this channel."
@@ -172,24 +172,6 @@
       ]
     },
     "dormant": [
-      {
-        "adapter": "linkedin",
-        "label": "LinkedIn company posts",
-        "blockers": [
-          "LINKEDIN_LI_AT not set — LinkedIn channel is not connected."
-        ],
-        "how_to_enable": "Log in to LinkedIn, copy the `li_at` cookie value from DevTools → Application → Cookies, put it in .env as LINKEDIN_LI_AT, then run: npm run collect:linkedin",
-        "fallback_in_use": "SearXNG `site:linkedin.com` discovery supplies partial LinkedIn coverage without credentials. It finds publicly indexed posts only, so counts are a floor, not a total."
-      },
-      {
-        "adapter": "x_twikit",
-        "label": "X / Twitter (twikit)",
-        "blockers": [
-          "X channel not connected — missing X_USERNAME, X_EMAIL, X_PASSWORD."
-        ],
-        "how_to_enable": "Add X_USERNAME, X_EMAIL and X_PASSWORD to .env (a burner account is strongly advised), install the Python sidecar (npm run setup:python), then run: npm run collect:x",
-        "fallback_in_use": "SearXNG `site:x.com OR site:twitter.com` discovery supplies partial X coverage without credentials. Search engines index only a fraction of posts, so counts are a floor, not a total."
-      },
       {
         "adapter": "searxng",
         "label": "SearXNG metasearch (self-hosted)",
@@ -628,7 +610,7 @@
       }
     ]
   },
-  "last_updated": "2026-09-18T06:53:56.684Z",
+  "last_updated": "2026-09-18T07:24:08.043Z",
   "data_freshness": {
     "newest_published": "2026-09-17",
     "newest_published_age_days": 1,

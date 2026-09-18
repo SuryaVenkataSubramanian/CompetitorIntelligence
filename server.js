@@ -22,7 +22,6 @@ const aiProbe = require("./collectors/lib/ai-probe");
 const aiHistory = require("./collectors/lib/ai-history");
 const aiCitations = require("./collectors/lib/ai-citations");
 const mailer = require("./collectors/lib/mailer");
-const brightdata = require("./collectors/lib/brightdata");
 const deployment = require("./collectors/lib/deployment");
 
 load();
@@ -803,10 +802,11 @@ async function handleRequest(req, res) {
     return json(res, 200, {
       latest,
       email: mailer.status(),
-      brightdata: {
-        configured: brightdata.configured(),
-        request_api: brightdata.requestApi(),
-      },
+      // Bright Data was removed: /status answered 200 but the scraper trigger
+      // every adapter depended on failed with "Customer is not active".
+      // Reported here so a reader of an old digest payload is not left
+      // wondering where the field went.
+      brightdata: { configured: false, removed: true, reason: "account not active; adapters removed 2026-09-18" },
     });
   }
   if (url === "/api/status") {

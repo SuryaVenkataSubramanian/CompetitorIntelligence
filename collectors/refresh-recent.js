@@ -38,8 +38,15 @@ const fs = require("fs");
 
 const ROOT = path.join(__dirname, "..");
 
-const FAST = ["octolens", "blogfeed", "youtube", "hackernews", "x_brightdata"];
-const FULL = [...FAST, "newsapi", "linkedin_brightdata", "searxng", "googlenews", "gdelt"];
+/* The removed providers are gone from both lists. FAST previously led with
+ * octolens and x_brightdata — both now dead — which is how a "successful"
+ * scheduled refresh came to collect almost nothing while reporting exit 0.
+ *
+ * For most purposes prefer `npm run sweep` (collectors/sweep-live.js): eleven
+ * keyless sources in one process, none of which can be switched off by a
+ * billing balance. This entry point remains for adapter-specific runs. */
+const FAST = ["blogfeed", "youtube", "hackernews", "x_twitterapi"];
+const FULL = [...FAST, "searxng", "googlenews", "gdelt"];
 
 function arg(k, d) {
   const a = process.argv.find(x => x.startsWith(`--${k}=`));

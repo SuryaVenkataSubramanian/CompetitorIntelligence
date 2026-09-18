@@ -8,8 +8,6 @@
     "start": "node server.js",
     "collect": "node collectors/collect.js --days=365",
     "collect:90": "node collectors/collect.js --days=90",
-    "collect:linkedin": "node collectors/collect.js --days=365 --only=linkedin_brightdata",
-    "collect:x": "node collectors/collect.js --days=90 --only=x_brightdata",
     "reverify:legacy": "node collectors/reverify-legacy.js",
     "resolve:feeds": "node collectors/resolve-feeds.js",
     "build:data": "node collectors/build.js",
@@ -37,9 +35,6 @@
     "auth:status": "node -e \"console.log(JSON.stringify(require(\"./collectors/lib/auth\").status(),null,2))\"",
     "discover": "node collectors/discover-competitors.js",
     "discover:recent": "node collectors/discover-competitors.js --keywords=16 --recent",
-    "brightdata:probe": "node collectors/brightdata-probe.js",
-    "collect:linkedin:bd": "node collectors/collect.js --days=365 --only=linkedin_brightdata",
-    "collect:linkedin:company": "node collectors/collect.js --days=365 --only=linkedin_brightdata --stages=company",
     "assets:build": "node collectors/claude/rank-assets.js build",
     "assets:apply": "node collectors/claude/rank-assets.js apply",
     "digest": "node collectors/daily-digest.js run",
@@ -69,7 +64,12 @@
     "sweep": "node collectors/sweep-live.js",
     "sweep:all": "node collectors/sweep-live.js --days=7",
     "sweep:today": "node collectors/sweep-live.js --days=1",
-    "opportunities": "node -e \"require('./collectors/lib/env').load();const m=require('./data/meta.json'),b=require('./data/brands.json');const o=require('./collectors/lib/opportunities').build(b,m.brand_order,{days:7});console.log(JSON.stringify(o.totals,null,2))\""
+    "opportunities": "node -e \"require('./collectors/lib/env').load();const m=require('./data/meta.json'),b=require('./data/brands.json');const o=require('./collectors/lib/opportunities').build(b,m.brand_order,{days:7});console.log(JSON.stringify(o.totals,null,2))\"",
+    "audit:providers": "node collectors/provider-audit.js",
+    "collect:x": "node collectors/collect.js --days=90 --only=x_twitterapi",
+    "social:status": "node collectors/social-login.js status",
+    "social:login": "node collectors/social-login.js login",
+    "social:logout": "node collectors/social-login.js logout"
   },
   "engines": {
     "node": ">=18"

@@ -22,9 +22,20 @@ const { isVerified, isDateUsable, rejectionReason, CHANNELS, CHANNEL_IDS, CHANNE
 const { keyStatus } = require("./lib/env");
 const { allBrands, brandOrder, brand, config } = require("./lib/brands");
 
-// Credential-gated adapters are asked directly whether they are connected, so
-// dormancy reflects the current environment rather than the last collector run.
-const CREDENTIAL_ADAPTERS = [require("./adapters/linkedin"), require("./adapters/x_twikit")];
+/* Credential-gated adapters are asked directly whether they are connected, so
+ * dormancy reflects the current environment rather than the last collector run.
+ *
+ * THE LIST IS NOW EMPTY, AND THAT IS THE POINT. It held adapters/linkedin (a
+ * li_at session cookie) and adapters/x_twikit (an X username and password).
+ * Neither ever collected: a personal login cannot go to a hosted deployment,
+ * and both flows die on a CAPTCHA or 2FA prompt. They existed only to report
+ * "not connected" on the dashboard, permanently.
+ *
+ * Both channels are now served without an account — LinkedIn by SerpAPI's
+ * site: query, X by twitterapi.io. If an account-backed collector is ever
+ * added back (see lib/social-auth.js), register it here so its connection
+ * state is reported from the environment rather than assumed. */
+const CREDENTIAL_ADAPTERS = [];
 
 const DATA = path.join(__dirname, "..", "data");
 const RANGES = [7, 30, 90, 365];

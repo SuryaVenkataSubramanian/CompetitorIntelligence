@@ -594,19 +594,35 @@ setTimeout(async () => {
   t("mailer dot-stuffs a message body so SMTP DATA cannot be truncated early",
     mailer.buildMessage({ from: "a@b.c", to: "d@e.f", subject: "s", text: "line1\n.\nline2" }).includes("\r\n..\r\n"));
 
-  // Bright Data capability reporting must be honest about what is unavailable.
-  // .env is loaded first so this exercises the configured path rather than the
-  // "no key" path — without it the test silently checked a different branch.
-  require(P("collectors", "lib", "env.js")).load();
-  const bd = require(P("collectors", "lib", "brightdata.js"));
-  const rapi = bd.requestApi();
-  t("Bright Data reports an unavailable capability with a reason, never as zero",
-    typeof rapi.available === "boolean" &&
-    (rapi.available ? !!rapi.zone : !!(rapi.reason && rapi.reason.trim())),
-    rapi.available ? `zone ${rapi.zone}` : `unavailable: ${String(rapi.reason).slice(0, 60)}…`);
-  t("Bright Data dataset discovery modes are recorded per dataset",
-    Object.values(bd.DATASETS).every(d => d.id && Array.isArray(d.discover)),
-    Object.keys(bd.DATASETS).join(", "));
+  /* The Bright Data capability tests were removed with the provider. It is
+   * replaced by a test that the removal is COMPLETE: a half-removed integration
+   * that still has a require() somewhere is worse than either state, because it
+   * throws at runtime on a path nobody exercises until it matters. */
+  const REMOVED_MODULES = [
+    "collectors/lib/brightdata.js", "collectors/adapters/octolens.js",
+    "collectors/adapters/newsapi.js", "collectors/adapters/x_twikit.js",
+    "collectors/adapters/linkedin.js", "collectors/adapters/x-brightdata.js",
+    "collectors/adapters/linkedin-brightdata.js",
+  ];
+  const stillThere = REMOVED_MODULES.filter(m => fs.existsSync(P(...m.split("/"))));
+  t("removed providers are actually gone from disk", stillThere.length === 0, stillThere.join(", ") || "all removed");
+
+  const dangling = [];
+  for (const dir of ["collectors", "collectors/lib", "collectors/adapters", "."]) {
+    const abs = P(...dir.split("/"));
+    if (!fs.existsSync(abs)) continue;
+    for (const f of fs.readdirSync(abs)) {
+      if (!f.endsWith(".js")) continue;
+      const src = fs.readFileSync(path.join(abs, f), "utf8");
+      for (const m of REMOVED_MODULES) {
+        const base = m.split("/").pop().replace(".js", "");
+        if (new RegExp(`require\\(["'][^"']*/${base}["']\\)`).test(src)) {
+          dangling.push(`${dir}/${f} -> ${base}`);
+        }
+      }
+    }
+  }
+  t("nothing still requires a removed provider", dangling.length === 0, dangling.join(", ") || "no dangling requires");
 
   // AI history metrics must divide by measured checks, never by attempted.
   const hist = require(P("collectors", "lib", "ai-history.js"));

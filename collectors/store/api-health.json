@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-09-17T18:54:46.647Z",
+  "checked_at": "2026-09-18T07:29:12.216Z",
   "paid_calls": false,
   "summary": {
-    "SKIPPED": 2,
+    "SKIPPED": 3,
     "WORKING": 3,
-    "BROKEN": 3,
-    "DEGRADED": 5
+    "BROKEN": 1,
+    "DEGRADED": 4
   },
   "sources": [
     {
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "11/11 source(s) answered in 35s; 3 returned data, 18 candidate(s) for Document360 over 7d; 2 gap(s) reported",
+      "detail": "11/11 source(s) answered in 40s; 3 returned data, 15 candidate(s) for Document360 over 7d; 2 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -38,14 +38,14 @@
         {
           "id": "duckduckgo_week",
           "tier": "primary",
-          "candidates": 8,
+          "candidates": 9,
           "ok": true,
           "error": null
         },
         {
           "id": "youtube_week",
           "tier": "primary",
-          "candidates": 8,
+          "candidates": 4,
           "ok": true,
           "error": null
         },
@@ -107,17 +107,17 @@
         },
         {
           "source": "reddit_rss",
-          "reason": "Reddit refused anonymous RSS (HTTP 429); disabled for 24h rather than retried"
+          "reason": "Reddit disabled until 2026-09-18T18:53:59.361Z — HTTP 429 on search.rss — anonymous access refused"
         }
       ],
-      "total_candidates": 18,
+      "total_candidates": 15,
       "fix": null
     },
     {
       "name": "SerpAPI",
       "state": "WORKING",
-      "detail": "SerpAPI (Free Plan) — 246 search(es) left this month. It is the ONLY route to LinkedIn (site: operator), at one search per brand per sweep.",
-      "searches_left": 246,
+      "detail": "SerpAPI (Free Plan) — 239 search(es) left this month. It is the ONLY route to LinkedIn (site: operator), at one search per brand per sweep.",
+      "searches_left": 239,
       "serves": [
         "linkedin"
       ],
@@ -129,26 +129,6 @@
       "detail": "-518 credit(s) — exhausted; every call answers HTTP 402 and the X channel reports unavailable",
       "credits": -518,
       "fix": "Recharge at twitterapi.io. Until then the X channel is unavailable, not zero."
-    },
-    {
-      "name": "Octolens",
-      "state": "BROKEN",
-      "detail": "API error: HTTP 403: API access is not available on your current plan. Upgrade to Pro, Scale, or Enterprise.",
-      "plan_limited": true,
-      "fix": "Octolens API access requires a Pro, Scale or Enterprise plan. The key is valid; the plan does not include API access."
-    },
-    {
-      "name": "NewsAPI",
-      "state": "DEGRADED",
-      "detail": "1 total results for \"Document360\", 1 returned",
-      "total_results": 1,
-      "note": "Developer plan: only page 1 is retrievable (page 2 returns HTTP 426), and article content is a ~200-char snippet. Both bound coverage."
-    },
-    {
-      "name": "Bright Data",
-      "state": "BROKEN",
-      "detail": "scraper trigger failed: Customer is not active",
-      "fix": "Check the Bright Data account is active and the dataset is accessible"
     },
     {
       "name": "DataForSEO",
@@ -452,7 +432,7 @@
     {
       "name": "Scraping chain",
       "state": "DEGRADED",
-      "detail": "usable: direct -> scrapingbee; scrapebadger 0 credit(s) — EXHAUSTED; scrapingbee 743 credit(s) left of 1000",
+      "detail": "usable: direct -> scrapingbee; scrapebadger 0 credit(s) — EXHAUSTED; scrapingbee 733 credit(s) left of 1000",
       "routes": {
         "direct": {
           "available": true,
@@ -471,26 +451,26 @@
         "direct",
         "scrapingbee"
       ],
-      "scrapingbee_credits_left": 743,
+      "scrapingbee_credits_left": 733,
       "fix": "A proxy route is the only way past the review-directory bot walls and DuckDuckGo's block page. With none, those sources report unavailable rather than zero. Top up whichever is exhausted."
     },
     {
       "name": "Windsor.ai",
       "state": "WORKING",
-      "detail": "GA4: 3367 AI-assistant session(s) of 350949 (0.96%) — ChatGPT=2610, Claude=349, Gemini=270, Perplexity=113, Copilot=25",
-      "ai_sessions": 3367,
-      "total_sessions": 350949,
+      "detail": "GA4: 3363 AI-assistant session(s) of 350319 (0.96%) — ChatGPT=2615, Claude=344, Gemini=270, Perplexity=109, Copilot=25",
+      "ai_sessions": 3363,
+      "total_sessions": 350319,
       "ai_share_pct": 0.96,
       "surfaces": [
         {
           "id": "chatgpt",
           "label": "ChatGPT",
-          "sessions": 2610
+          "sessions": 2615
         },
         {
           "id": "claude",
           "label": "Claude",
-          "sessions": 349
+          "sessions": 344
         },
         {
           "id": "gemini",
@@ -500,7 +480,7 @@
         {
           "id": "perplexity",
           "label": "Perplexity",
-          "sessions": 113
+          "sessions": 109
         },
         {
           "id": "copilot",
@@ -513,11 +493,19 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 154/1562 records (10%); queue files present",
-      "classified": 154,
-      "total": 1562,
-      "pct": 10,
+      "detail": "sentiment classified on 155/1653 records (9%); queue files present",
+      "classified": 155,
+      "total": 1653,
+      "pct": 9,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
+    },
+    {
+      "name": "Account-backed collection",
+      "state": "SKIPPED",
+      "detail": "none configured — optional; every channel has a keyless route",
+      "active": [],
+      "stale": [],
+      "fix": null
     },
     {
       "name": "SMTP (digest email)",

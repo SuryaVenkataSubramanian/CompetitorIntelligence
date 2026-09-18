@@ -33,30 +33,45 @@ require("./lib/env").load();
 
 /* Registered adapters.
  *
- * linkedin.js and x_twikit.js are DELIBERATELY ABSENT. Both drove a real user
- * session — a li_at cookie and an X username/password — and both had been
- * dormant since they were written, reporting "not connected" on the dashboard
- * forever. That approach cannot work here: the credential is a personal login,
- * it cannot go to a hosted deployment safely, and any login flow dies on a
- * CAPTCHA or 2FA challenge at which point the channel stops collecting in
- * silence.
+ * SIX ADAPTERS WERE REMOVED HERE, each for a reason recorded by
+ * `npm run audit:providers` rather than by opinion:
  *
- * Their Bright Data replacements need no account at all, which removes the
- * whole class of problem rather than scheduling around it. The files are kept
- * on disk for reference; they are simply not run.
+ *   octolens            The key is VALID and the API answers HTTP 403: API
+ *                       access is not on this plan. There is no call protocol
+ *                       to fix in code.
+ *   newsapi             Up, authenticating, and contributing nothing — it
+ *                       returned 1 result for a brand where free Google News
+ *                       RSS returns the same. The developer plan also caps
+ *                       retrieval at page 1 and truncates content to ~200
+ *                       chars. An integration that is up and adds nothing is
+ *                       technical debt wearing a green tick.
+ *   linkedin_brightdata }  Bright Data /status answers 200, but the scraper
+ *   x_brightdata        }  TRIGGER these depend on fails with "Customer is not
+ *                          active". Reading works; collecting does not.
+ *   x_twikit            Drove a real X account with a username and password.
+ *                       Never collected once: the credential cannot go to a
+ *                       hosted deployment and the flow dies on a CAPTCHA.
+ *   linkedin            Needed a li_at session cookie. Same class of problem,
+ *                       same outcome — dormant since the day it was written.
+ *
+ * Nothing was lost by removing them. LinkedIn is served by SerpAPI's site:
+ * query, X by twitterapi.io, and news by Google News RSS — all in
+ * lib/freshsources.js and lib/live-refresh.js. Historical records collected by
+ * the removed adapters remain in the store and still render; they are simply
+ * no longer added to.
+ *
+ * Their files are deleted rather than left unregistered. An unregistered
+ * adapter is a file people keep reading, re-enabling and re-debugging; git
+ * history is the right place for code that cannot run.
  */
 const ADAPTERS = [
-  require("./adapters/octolens"),
-  require("./adapters/newsapi"),
   require("./adapters/blogfeed"),
   require("./adapters/youtube"),
   require("./adapters/hackernews"),
   require("./adapters/googlenews"),
   require("./adapters/gdelt"),
   require("./adapters/searxng"),
-  require("./adapters/linkedin-brightdata"),
   require("./adapters/x-twitterapi"),
-  require("./adapters/x-brightdata"),
 ];
 
 function parseArgs(argv) {
@@ -83,7 +98,7 @@ function parseArgs(argv) {
   // within seconds; the rate-limited discovery sources then add breadth on top.
   // linkedin_brightdata runs late: its Bright Data collections legitimately take
   // minutes, so the fast sources should already have refreshed the dashboard.
-  const PRIORITY = ["octolens", "newsapi", "blogfeed", "youtube", "hackernews", "x_twitterapi", "searxng", "googlenews", "gdelt", "linkedin_brightdata", "x_brightdata"];
+  const PRIORITY = ["blogfeed", "youtube", "hackernews", "x_twitterapi", "searxng", "googlenews", "gdelt"];
   const adapters = (args.only ? ADAPTERS.filter(a => args.only.includes(a.id)) : ADAPTERS)
     .slice()
     .sort((a, b) => PRIORITY.indexOf(a.id) - PRIORITY.indexOf(b.id));
