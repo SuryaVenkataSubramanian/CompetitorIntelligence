@@ -572,7 +572,27 @@ async function handleRequest(req, res) {
         rebuilt = await live.rebuild({ log });
       }
 
-      const payload = Object.assign({ ok: true }, r);
+      /* WHEN THE HOST CANNOT SAVE, ESCALATE RATHER THAN SHRUG.
+       *
+       * On Vercel the sweep collects real mentions and then cannot keep them.
+       * Reporting that honestly was right, but it left the user with nothing:
+       * "13 found, 0 new, they will not be here on the next page load."
+       *
+       * The collection runner HAS a filesystem and already commits data/ back
+       * to the repo, which redeploys this app. So a read-only host asks it to
+       * do the run properly. The records in this response are still live and
+       * real; the dispatch is what makes them durable. */
+      let dispatched = null;
+      if (!r.persisted && r.records_verified > 0) {
+        try {
+          const gh = require("./collectors/lib/github-dispatch");
+          dispatched = await gh.trigger({ days, log });
+        } catch (e) {
+          dispatched = { ok: false, reason: String(e.message || e) };
+        }
+      }
+
+      const payload = Object.assign({ ok: true, dispatched }, r);
       // The full record set is large, and the browser re-reads /api/data after
       // a successful rebuild, so only a preview travels here.
       delete payload.records;
@@ -823,6 +843,12 @@ async function handleRequest(req, res) {
       collector_run: audit ? audit.collector_run : null,
       auth: auth.status(),
       webhook: webhook.publicConfig(),
+      // How a read-only deployment gets durable data. Surfaced so the UI can
+      // say what Refresh will actually do BEFORE it is pressed.
+      collection_runner: (() => {
+        try { return require("./collectors/lib/github-dispatch").status(); }
+        catch (e) { return { available: false, reason: String(e.message || e) }; }
+      })(),
     });
   }
 

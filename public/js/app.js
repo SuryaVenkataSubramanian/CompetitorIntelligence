@@ -547,7 +547,17 @@ async function runMentionRefresh() {
       : "";
 
     if (!j.persisted) {
-      say(`${parts.join(", ")}. ${j.persist_note}${gapNote}`, "warn");
+      /* A read-only host cannot save, so the server asks the collection runner
+       * to do the run properly. Say which of those happened — "not stored" on
+       * its own leaves the reader with no next step. */
+      const d = j.dispatched;
+      if (d && d.ok) {
+        say(`${parts.join(", ")}. This host cannot save, so a collection run was started on the runner — it commits the results and redeploys, usually within a few minutes.${gapNote}`, "ok");
+      } else if (d && d.reason) {
+        say(`${parts.join(", ")}. ${j.persist_note} Could not start a runner collection: ${d.reason}`, "warn");
+      } else {
+        say(`${parts.join(", ")}. ${j.persist_note}${gapNote}`, "warn");
+      }
     } else if (j.added_to_store > 0) {
       say(`${parts.join(", ")} in ${j.duration_seconds}s.${gapNote} Reloading…`, "ok");
       const d = await (await fetch("/api/data")).json();

@@ -1374,6 +1374,10 @@ async function sweep({
   sinceDays = 7,
   sources = null,
   tiers = null,
+  /* Per-source deadline. Sized by the caller, because the right answer depends
+   * on where this runs: a serverless function has a hard ceiling, a scheduled
+   * runner has all day. */
+  sourceTimeoutMs = 45000,
   log = () => {},
 } = {}) {
   const state = loadState();
@@ -1389,30 +1393,81 @@ async function sweep({
   const gaps = [];
   const perSource = [];
 
-  for (const s of list) {
+  /* SOURCES RUN CONCURRENTLY, AND THIS IS SAFE FOR A SPECIFIC REASON.
+   *
+   * This loop used to be sequential, which made the sweep's wall-clock the SUM
+   * of every source: DuckDuckGo's 11s throttle, GDELT's 8s, plus seven brands
+   * of GitHub at 7s each. On a serverless function with a hard ceiling that is
+   * the difference between finishing and being killed mid-run.
+   *
+   * Concurrency is safe here because RATE LIMITING LIVES IN lib/fetch.js AND IS
+   * PER HOST. Two sources running at once hit different hosts and do not
+   * contend; two requests to the SAME host still serialise behind that host's
+   * throttle regardless of how many callers are waiting. So parallelism buys
+   * wall-clock without spending politeness — which is the only reason it is
+   * acceptable against sources that have blocked us before.
+   *
+   * Bounded rather than unbounded: a fan-out of every source at once opens
+   * dozens of sockets and, on a small Lambda, memory is the next wall after
+   * time. Six is comfortably below that and still collapses the critical path.
+   *
+   * EACH SOURCE GETS ITS OWN DEADLINE. One pathological source must not consume
+   * the whole budget — a timeout is reported as a GAP, which is the honest
+   * shape: we could not ask, rather than nobody said anything.
+   */
+  const CONCURRENCY = 6;
+  const perSourceBudgetMs = Math.max(15000, Number(sourceTimeoutMs) || 45000);
+
+  async function runOne(src) {
     const t0 = Date.now();
-    log("    > " + s.label);
+    log("    > " + src.label);
     try {
-      const r = await s.run({ brands: ids, sinceMs, sinceDays, state, log });
+      const r = await Promise.race([
+        src.run({ brands: ids, sinceMs, sinceDays, state, log }),
+        new Promise((_, reject) =>
+          setTimeout(
+            () => reject(new Error("exceeded its " + Math.round(perSourceBudgetMs / 1000) + "s budget")),
+            perSourceBudgetMs
+          )
+        ),
+      ]);
       candidates.push(...(r.candidates || []));
-      (r.gaps || []).forEach(g => gaps.push(Object.assign({ source: s.id }, g)));
+      (r.gaps || []).forEach(g => gaps.push(Object.assign({ source: src.id }, g)));
       perSource.push({
-        id: s.id, label: s.label, tier: s.tier,
+        id: src.id, label: src.label, tier: src.tier,
         candidates: (r.candidates || []).length,
         gaps: (r.gaps || []).length,
         seconds: Number(((Date.now() - t0) / 1000).toFixed(1)),
         ok: true,
       });
     } catch (e) {
-      log("      ERROR: " + e.message);
+      const msg = String((e && e.message) || e);
+      log("      ERROR: " + msg);
       perSource.push({
-        id: s.id, label: s.label, tier: s.tier, candidates: 0, gaps: 0,
+        id: src.id, label: src.label, tier: src.tier, candidates: 0, gaps: 0,
         seconds: Number(((Date.now() - t0) / 1000).toFixed(1)),
-        ok: false, error: String(e.message || e),
+        ok: false, error: msg,
       });
-      gaps.push({ source: s.id, reason: "threw: " + String(e.message || e) });
+      // A source that could not be asked is a GAP, never a zero.
+      gaps.push({ source: src.id, reason: msg });
     }
   }
+
+  const queue = list.slice();
+  const workers = Array.from({ length: Math.min(CONCURRENCY, queue.length) }, async () => {
+    while (queue.length) {
+      const next = queue.shift();
+      if (!next) return;
+      await runOne(next);
+    }
+  });
+  // allSettled, not all: runOne already catches, but a bug in the worker itself
+  // must not lose the sources that did finish.
+  await Promise.allSettled(workers);
+
+  // Restore the declared order so the report reads the same way every run.
+  const declaredOrder = new Map(list.map((x, i) => [x.id, i]));
+  perSource.sort((a, b) => (declaredOrder.get(a.id) ?? 99) - (declaredOrder.get(b.id) ?? 99));
 
   // Belt and braces: the results are already collected at this point, and
   // nothing about persisting a counter is worth losing them for.
