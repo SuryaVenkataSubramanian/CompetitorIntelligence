@@ -308,6 +308,12 @@ async function refresh({
    *    switched off by a billing balance. */
   log("  keyless sources");
   const fresh = await freshsources.sweep({ brands: ids, sinceDays: days, log });
+  /* Whether the sweep's backoff and pacing counters survived. On a read-only
+   * host they are written to os.tmpdir(), which lives only as long as the warm
+   * instance. Surfaced rather than swallowed: it is the difference between
+   * "LinkedIn pacing is holding" and "pacing resets on every cold start", and
+   * that determines how fast the SerpAPI quota actually drains. */
+  const stateP1 = fresh.state_persisted !== false;
   candidates = candidates.concat(fresh.candidates);
   gaps.push(...fresh.gaps);
   perSource.push(...fresh.per_source);
@@ -444,6 +450,14 @@ async function refresh({
     per_source: perSource,
     gaps,
     records,
+
+    state_persisted: stateP1,
+    state_note: stateP1
+      ? null
+      : "Backoff and pacing counters could not be durably saved — this host has a read-only " +
+        "filesystem, so they live in os.tmpdir() and reset on a cold start. The MENTIONS above " +
+        "are unaffected; what resets is the Reddit 24h backoff and the LinkedIn 20h pacing, " +
+        "which means an unattended sweep may spend SerpAPI quota sooner than planned.",
   };
 }
 

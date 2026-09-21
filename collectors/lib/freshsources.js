@@ -79,6 +79,40 @@ function loadState() {
   };
 }
 
+/**
+ * Persist the sweep's state. NEVER THROWS.
+ *
+ * MEASURED FAILURE: on Vercel this threw
+ *   EROFS: read-only file system, open '/var/task/collectors/store/freshsources-state.json'
+ * from the last line of sweep(), AFTER every source had been queried
+ * successfully. The exception escaped, the request 500'd, and a complete set of
+ * collected mentions was thrown away because a cache file could not be written.
+ *
+ * lib/store.writeJson now redirects to os.tmpdir() on a read-only filesystem and
+ * returns a receipt rather than throwing, but the guarantee is restated here
+ * because this call site is the one that cost real data.
+ *
+ * WHAT IS IN THIS FILE, AND WHAT LOSING IT COSTS. On a serverless host /tmp is
+ * per-instance and is discarded on a cold start, so both of these reset:
+ *
+ *   disabled_until.reddit    the 24h backoff after Reddit answers 403/429.
+ *                            Reset early, the next cold start re-probes Reddit
+ *                            sooner than intended. One extra refused request,
+ *                            then it backs off again. Tolerable.
+ *   last_linkedin_sweep      the 20h pacing that makes SerpAPI's 250
+ *                            searches/month last. Reset early, an unattended
+ *                            sweep may spend 7 searches sooner than planned.
+ *                            Worth knowing, because the quota is the binding
+ *                            constraint on the LinkedIn channel.
+ *   google_redirects         a resolution cache. Losing it costs nothing but
+ *                            repeated work.
+ *
+ * Neither reset corrupts data or fabricates anything — they cost requests, not
+ * accuracy. Making them durable needs a database, and this project has none by
+ * design. If the SerpAPI spend becomes a problem the honest fix is a scheduled
+ * runner with a real filesystem (.github/workflows/refresh.yml), not a
+ * datastore added for one integer.
+ */
 function saveState(s) {
   s.updated_at = new Date().toISOString();
   // The redirect cache is unbounded otherwise; 3000 entries is months of news.
@@ -88,7 +122,22 @@ function saveState(s) {
     for (const k of keys.slice(-3000)) trimmed[k] = s.google_redirects[k];
     s.google_redirects = trimmed;
   }
-  writeJson(STATE_FILE, s);
+
+  try {
+    const receipt = writeJson(STATE_FILE, s);
+    if (!receipt.ok) {
+      console.warn(
+        "  ! sweep state not saved (" + receipt.error + "). The sweep's RESULTS are " +
+        "unaffected; only the backoff and pacing counters were lost."
+      );
+    }
+    return receipt;
+  } catch (e) {
+    // writeJson is contracted not to throw, but this call site must survive it
+    // even if that contract is ever broken.
+    console.warn("  ! sweep state not saved: " + String(e && e.message || e));
+    return { ok: false, persisted: false, error: String(e && e.message || e) };
+  }
 }
 
 function isDisabled(state, id) {
@@ -1365,9 +1414,18 @@ async function sweep({
     }
   }
 
-  saveState(state);
+  // Belt and braces: the results are already collected at this point, and
+  // nothing about persisting a counter is worth losing them for.
+  let statePersisted = true;
+  try {
+    const receipt = saveState(state);
+    statePersisted = !!(receipt && receipt.ok);
+  } catch (e) {
+    statePersisted = false;
+  }
 
   return {
+    state_persisted: statePersisted,
     candidates,
     gaps,
     per_source: perSource,

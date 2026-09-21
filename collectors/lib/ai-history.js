@@ -31,9 +31,26 @@ function readHistory() {
   }
 }
 
+/**
+ * NEVER THROWS. This was the second EROFS waiting to happen: an unguarded
+ * writeFileSync into the deployment bundle, reached from POST /api/ai/probe.
+ * A probe that successfully measured six AI surfaces would have 500'd while
+ * writing its own history — losing a metered DataForSEO call that had already
+ * been paid for.
+ *
+ * Routed through lib/store.writeJson, which mirrors into os.tmpdir() on a
+ * read-only filesystem and returns a receipt. On a serverless host the history
+ * therefore accumulates only within a warm instance; server.js already reports
+ * that via deployment.capabilities().persistent_writes, so a reader is not told
+ * a resetting history is a complete one.
+ */
 function writeHistory(h) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(HISTORY, JSON.stringify(h, null, 2));
+  const { writeJson } = require("./store");
+  const receipt = writeJson(HISTORY, h);
+  if (!receipt.ok) {
+    console.warn("  ! AI probe history not saved: " + receipt.error);
+  }
+  return receipt;
 }
 
 /**

@@ -158,6 +158,80 @@ function signalTests() {
   t("an unparseable LinkedIn title yields no author rather than a guess",
     linkedinAuthor("Some Title", "https://www.linkedin.com/posts/12345_x-activity-1") === null);
 
+  /* READ-ONLY FILESYSTEM SURVIVAL.
+   *
+   * Vercel mounts the deployment bundle read-only, and this failed in
+   * production:
+   *
+   *   EROFS: read-only file system,
+   *   open '/var/task/collectors/store/freshsources-state.json'
+   *
+   * The damage was not the missing file. The sweep had ALREADY finished — every
+   * source queried, Reddit had returned 7 posts — and the write threw on the
+   * last line, the exception escaped, and the request 500'd. A complete set of
+   * collected mentions was discarded because a cache file could not be written.
+   *
+   * Two properties, tested separately, because either one alone is insufficient:
+   * a write must land somewhere writable, AND a failed write must never throw. */
+  const storeLib = require(P("collectors", "lib", "store.js"));
+
+  let writeThrew = false;
+  let receipt = null;
+  try {
+    // A path no filesystem will accept.
+    receipt = storeLib.writeJson("\u0000/impossible/\u0000.json", { a: 1 });
+  } catch (e) {
+    writeThrew = true;
+  }
+  t("writeJson never throws, even on an impossible path",
+    !writeThrew && receipt && receipt.ok === false,
+    writeThrew ? "it threw" : "returned a receipt with ok:false");
+
+  /* The mirror must be OUTSIDE the project, or it is the same read-only file. */
+  const mirrored = storeLib.writePathFor(path.join(storeLib.STORE_DIR, "probe.json"));
+  const insideRepo = !path.relative(ROOT, mirrored).startsWith("..");
+  t("on a writable root, writes stay in the repo",
+    !storeLib.rootIsReadOnly() ? insideRepo : true,
+    storeLib.rootIsReadOnly() ? "root is read-only here" : "writes to collectors/store");
+
+  /* Simulate the hosted case in a child process: VERCEL=1 must redirect writes
+   * to os.tmpdir() and must not touch the bundled copy. Run out-of-process
+   * because rootIsReadOnly() caches its answer for the life of the module. */
+  const probe = require("child_process").spawnSync(
+    process.execPath,
+    ["-e", `
+      process.env.VERCEL = "1";
+      const path = require("path");
+      const store = require(${JSON.stringify(P("collectors", "lib", "store.js"))});
+      const target = path.join(store.STORE_DIR, "__erofs_probe.json");
+      const w = store.writePathFor(target);
+      const r = store.writeJson(target, { probe: Date.now() });
+      const tmp = require("os").tmpdir();
+      console.log(JSON.stringify({
+        readOnly: store.rootIsReadOnly(),
+        wroteUnderTmp: w.startsWith(tmp),
+        ok: r.ok,
+        persistedFlag: r.persisted,
+        readBack: !!store.readJson(target, null),
+        bundleUntouched: !require("fs").existsSync(target),
+      }));
+    `],
+    { encoding: "utf8" }
+  );
+
+  let hosted = null;
+  try { hosted = JSON.parse((probe.stdout || "").trim().split("\n").pop()); } catch (e) { /* reported below */ }
+
+  t("under VERCEL, state writes are redirected to os.tmpdir()",
+    !!hosted && hosted.readOnly === true && hosted.wroteUnderTmp === true && hosted.ok === true,
+    hosted ? JSON.stringify(hosted) : "probe produced no parseable output");
+  t("under VERCEL, the read-only bundle is never written to",
+    !!hosted && hosted.bundleUntouched === true);
+  t("under VERCEL, a written file reads back from the mirror",
+    !!hosted && hosted.readBack === true);
+  t("a redirected write reports persisted:false, so nothing claims durability",
+    !!hosted && hosted.persistedFlag === false);
+
   /* THE OPPORTUNITIES PAYLOAD. */
   const opps = opportunities.build(brands, meta.brand_order, { days: 7 });
   t("no competitor-negative card is emitted without evidence to show",
