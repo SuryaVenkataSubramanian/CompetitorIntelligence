@@ -127,6 +127,22 @@ jobs:
       - name: Rebuild data
         run: node collectors/build.js
 
+      - name: Normalise the store before auditing
+        # SELF-HEAL, because a single bad row froze the dashboard for three days.
+        #
+        # The accuracy audit gates the commit step, and it is right to: data that
+        # cannot be traced to evidence must not be served as fact. But on 2026-09-18
+        # ONE duplicate row started failing it, every scheduled run since collected
+        # fresh data and committed nothing, and the dashboard silently froze while
+        # the crons kept firing every three hours.
+        #
+        # The identity bug behind that duplicate is fixed in lib/record.recordKey.
+        # This step exists so the NEXT mechanical inconsistency costs one run
+        # instead of three days: it collapses duplicates before the gate sees them.
+        # It cannot mask a real problem — the audit still runs, still gates, and
+        # anything it cannot mechanically resolve still fails the run.
+        run: node collectors/dedupe-store.js
+
       - name: Audit accuracy
         # Fails the run: a structural accuracy problem must not be committed
         # and then served to the team as fact.

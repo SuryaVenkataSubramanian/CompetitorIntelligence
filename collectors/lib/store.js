@@ -12,6 +12,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { recordKey, mergeRecord, isVerified } = require("./record");
+const { channelFromUrl } = require("./classify");
 
 const STORE_DIR = path.join(__dirname, "..", "store");
 const ROOT = path.join(__dirname, "..", "..");
@@ -166,7 +167,37 @@ function loadMentions() {
  */
 function upsertMentions(fresh) {
   const store = loadMentions();
-  const byKey = new Map(store.records.map(r => [recordKey(r), r]));
+
+  /* FOLD, DO NOT OVERWRITE.
+   *
+   * `new Map(records.map(r => [key, r]))` silently keeps the LAST record for a
+   * repeated key. That was harmless while the key contained the channel and
+   * collisions were impossible; now that identity is channel-free (see
+   * record.recordKey), records already in the store CAN collide — and dropping
+   * one of them would discard a real mention and its provenance without a word.
+   *
+   * Merging instead means the migration to the new key is lossless: the older
+   * first_seen survives, and the richer record's fields win. */
+  const byKey = new Map();
+  let collapsed = 0;
+  for (const r of store.records) {
+    const k = recordKey(r);
+    const prior = byKey.get(k);
+    if (!prior) { byKey.set(k, r); continue; }
+    collapsed++;
+    // Order by first_seen so mergeRecord's "keep the earliest sighting" holds.
+    const [older, newer] = String(prior.first_seen || "") <= String(r.first_seen || "")
+      ? [prior, r] : [r, prior];
+    const merged = mergeRecord(older, newer);
+    /* The channel a URL implies beats the channel a collector guessed. A
+     * linkedin.com/posts URL is a LinkedIn post whichever adapter found it. */
+    const fromUrl = channelFromUrl(merged.url);
+    if (fromUrl) merged.channel = fromUrl;
+    byKey.set(k, merged);
+  }
+  if (collapsed) {
+    console.log(`    collapsed ${collapsed} record(s) that shared a brand and URL under different channels`);
+  }
   let added = 0;
   let updated = 0;
 

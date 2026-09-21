@@ -44,6 +44,7 @@ jobs:
       - name: Tests
         run: npm test
 
+
       - name: Accuracy audit
         run: node collectors/audit-mentions.js
 

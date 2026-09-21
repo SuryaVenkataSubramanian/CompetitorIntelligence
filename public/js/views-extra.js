@@ -66,6 +66,7 @@
     const sweepPct = c.keywords_total ? Math.round((c.cursor_index / c.keywords_total) * 100) : 0;
 
     return `
+    ${typeof stalenessBanner === "function" ? stalenessBanner("competitors", "press Refresh below") : ""}
     <div class="mv-head">
       <h1 class="vh">New Competitors</h1>
       <p class="vsub">${list.length} market entrant(s) from two routes — a ${esc(String(c.keywords_total || 233))}-term

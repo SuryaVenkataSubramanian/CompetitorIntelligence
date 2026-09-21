@@ -181,6 +181,33 @@ function donut(segs, centerVal, centerLab) {
   </div>`;
 }
 
+/**
+ * A banner naming how old a panel's data is.
+ *
+ * The mention pipeline runs on a cron; nothing else does. Without this the
+ * dashboard showed AI-visibility numbers measured 42 days ago next to mentions
+ * collected an hour ago, with nothing to distinguish them — and a reader who
+ * cannot tell fresh from stale is right to distrust both.
+ *
+ * Silent under a week: a panel refreshed on a weekly cadence is not stale, and
+ * a banner on every panel all the time is a banner nobody reads.
+ */
+function stalenessBanner(panelKey, howToRefresh) {
+  const panels = (DATA.meta.data_freshness && DATA.meta.data_freshness.panels) || {};
+  const p = panels[panelKey];
+  if (!p || p.age_days == null || p.age_days < 7) return "";
+
+  const severe = p.age_days >= 21;
+  return `<div class="cav ${severe ? "warn" : "info"}" style="margin-bottom:14px">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    <span><b>This panel is ${p.age_days} days old.</b> Measured ${esc(fmtDate(String(p.as_of).slice(0, 10)))}${
+      severe ? " — old enough that it describes a different week than the Mentions tab does." : "."
+    } It is real data that was collected then, not an estimate of now.${
+      howToRefresh ? " To refresh: " + esc(howToRefresh) : ""
+    }</span>
+  </div>`;
+}
+
 function emptyMini(msg) {
   return `<div class="empty mini"><p>${esc(msg)}</p></div>`;
 }
@@ -753,11 +780,13 @@ function aiCustomPanels() {
 }
 
 function viewAI() {
+  // Rendered inside the view below via aiCustomPanels(); see stalenessBanner.
   const ai = DATA.ai || {};
   if (!ai.claude || ai.claude.status !== "measured") {
     // The prompt search still works with no batch measurement — it is a live,
     // independent measurement path, so it must not be gated behind one.
     return `<h1 class="vh">AI Answer Visibility</h1>
+    ${stalenessBanner("ai_visibility", "node collectors/claude/ai-visibility.js build")}
     ${aiCustomPanels()}
     <div class="empty big">
       <h3>The batch measurement has not been run</h3>
@@ -948,6 +977,7 @@ function viewRecs() {
 
   return `
   <h1 class="vh">Recommendations</h1>
+  ${STATE.recMode === "live" ? "" : stalenessBanner("recommendations", "switch the source selector below to “Last N days (live)”, which computes from the current mention store")}
   <p class="vsub">Every recommendation cites verified records from the evidence store. ${R.audit ? `${R.audit.accepted} accepted, ${R.audit.rejected} rejected for citing evidence that could not be resolved.` : ""}</p>
   ${recModeBar(R)}
   <div class="note">

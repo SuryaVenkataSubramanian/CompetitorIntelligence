@@ -236,8 +236,34 @@ function rejectionReason(r) {
 }
 
 /** Stable key for cross-run dedupe. */
+/**
+ * A mention's identity: one brand, one page. THE CHANNEL IS NOT PART OF IT.
+ *
+ * THIS COST THREE DAYS OF DATA, so the reasoning is worth keeping.
+ *
+ * The key used to be `brand::channel::url`, while the accuracy audit's
+ * uniqueness rule was `brand + canonical(url)` — no channel. Those disagree the
+ * moment two collectors classify the same page into different channels, and on
+ * 2026-09-18 two did:
+ *
+ *   knowledgeowl::event::<post>      linkedin_brightdata called it an event,
+ *                                    because the post mentions a conference
+ *   knowledgeowl::linkedin::<post>   linkedin_serpapi called it a LinkedIn post
+ *
+ * Two keys, so upsert stored both. One canonical URL, so the audit flagged a
+ * duplicate — correctly. The audit exits non-zero on any structural problem,
+ * which is right, and it gates the commit step in all three workflows, which is
+ * also right. The result was that every scheduled run from Friday onward
+ * collected fresh data, failed the audit on ONE duplicate row, and committed
+ * nothing. The dashboard froze for three days while the crons kept firing.
+ *
+ * The lesson is not "loosen the audit". It is that IDENTITY MUST BE DEFINED
+ * ONCE. A channel is a classification OF a mention, not part of which mention
+ * it is — the same post does not become two posts because a second collector
+ * labelled it differently. Both rules now read the same way.
+ */
 function recordKey(r) {
-  return `${r.brand_id}::${r.channel}::${r.canonical_url}`;
+  return `${r.brand_id}::${r.canonical_url}`;
 }
 
 /**

@@ -805,6 +805,42 @@ w("meta.json", {
           return r && r.finished_at ? r.finished_at : null;
         } catch (e) { return null; }
       })(),
+      /* THE AGE OF EVERY PANEL, not just the mentions.
+       *
+       * The mention pipeline runs on a cron; nothing else does. So the
+       * dashboard renders fresh mentions beside AI-visibility measurements from
+       * 42 days ago and recommendations from 42 days ago, with nothing on
+       * screen saying which is which. A reader reasonably concludes the numbers
+       * are made up — they are not, they are just OLD, and stale data presented
+       * without its age is indistinguishable from fabricated data.
+       *
+       * This is the same rule the project already applies to a mention: show
+       * the evidence and its date, never the claim alone. */
+      panels: (() => {
+        const out = {};
+        const files = {
+          ai_visibility: ["ai.json", "measured_at"],
+          recommendations: ["recommendations.json", "generated_at"],
+          competitors: ["competitors.json", "scanned_at"],
+          directories: ["directory-listings.json", "audited_at"],
+          ai_history: ["ai-history.json", "updated_at"],
+          rank_assets: ["rank-assets.json", "generated_at"],
+        };
+        for (const [key, [file, stampField]] of Object.entries(files)) {
+          try {
+            const j = readJson(path.join(DATA, file), null);
+            const stamp = j && (j[stampField] || j.built_at || j.updated_at) || null;
+            out[key] = {
+              file,
+              as_of: stamp,
+              age_days: stamp ? Math.round((nowMs - Date.parse(stamp)) / 864e5) : null,
+            };
+          } catch (e) {
+            out[key] = { file, as_of: null, age_days: null };
+          }
+        }
+        return out;
+      })(),
       last_live_sweep_channels: (() => {
         try {
           const r = readJson(path.join(STORE_DIR, "live-sweep-receipt.json"), null);
