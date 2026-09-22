@@ -1,17 +1,17 @@
 {
-  "checked_at": "2026-09-18T07:29:12.216Z",
+  "checked_at": "2026-09-22T10:30:32.325Z",
   "paid_calls": false,
   "summary": {
-    "SKIPPED": 3,
-    "WORKING": 3,
-    "BROKEN": 1,
-    "DEGRADED": 4
+    "SKIPPED": 2,
+    "WORKING": 1,
+    "BROKEN": 5,
+    "DEGRADED": 2
   },
   "sources": [
     {
       "name": "SearXNG (optional)",
       "state": "SKIPPED",
-      "detail": "not running — no SearXNG instance at http://localhost:8888 (HTTP no response). Start one: npm run searxn. Superseded by the keyless sources above, which need no local service and work on a serverless host.",
+      "detail": "not running — SearXNG at http://localhost:8888 is reachable but search failed: HTTP 403. Superseded by the keyless sources above, which need no local service and work on a serverless host.",
       "optional": true,
       "superseded_by": "lib/freshsources.js",
       "fix": null
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "11/11 source(s) answered in 40s; 3 returned data, 15 candidate(s) for Document360 over 7d; 2 gap(s) reported",
+      "detail": "13/13 source(s) answered in 41s; 3 returned data, 6 candidate(s) for Document360 over 7d; 6 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -38,14 +38,14 @@
         {
           "id": "duckduckgo_week",
           "tier": "primary",
-          "candidates": 9,
+          "candidates": 0,
           "ok": true,
           "error": null
         },
         {
           "id": "youtube_week",
           "tier": "primary",
-          "candidates": 4,
+          "candidates": 1,
           "ok": true,
           "error": null
         },
@@ -78,6 +78,20 @@
           "error": null
         },
         {
+          "id": "bluesky",
+          "tier": "primary",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
+          "id": "reddit_replica",
+          "tier": "secondary",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
           "id": "mastodon",
           "tier": "bonus",
           "candidates": 0,
@@ -94,409 +108,101 @@
         {
           "id": "reddit_rss",
           "tier": "bonus",
-          "candidates": 0,
+          "candidates": 3,
           "ok": true,
           "error": null
         }
       ],
       "gaps": [
         {
+          "source": "bluesky",
+          "brand_id": "document360",
+          "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+        },
+        {
+          "source": "duckduckgo_week",
+          "brand_id": "document360",
+          "reason": "DuckDuckGo unreachable: All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.com is known to refuse a direct fetch | scrapebadger: SCRAPEBA"
+        },
+        {
+          "source": "reddit_replica",
+          "brand_id": "document360",
+          "reason": "pullpush: HTTP 403"
+        },
+        {
+          "source": "reddit_replica",
+          "brand_id": "document360",
+          "reason": "arctic-shift: HTTP 400"
+        },
+        {
+          "source": "reddit_replica",
+          "brand_id": "document360",
+          "reason": "no Reddit replica answered (both PullPush and Arctic Shift failed)"
+        },
+        {
           "source": "gdelt_recent",
           "brand_id": "document360",
           "reason": "GDELT HTTP 429"
-        },
-        {
-          "source": "reddit_rss",
-          "reason": "Reddit disabled until 2026-09-18T18:53:59.361Z — HTTP 429 on search.rss — anonymous access refused"
         }
       ],
-      "total_candidates": 15,
+      "total_candidates": 6,
       "fix": null
     },
     {
       "name": "SerpAPI",
-      "state": "WORKING",
-      "detail": "SerpAPI (Free Plan) — 239 search(es) left this month. It is the ONLY route to LinkedIn (site: operator), at one search per brand per sweep.",
-      "searches_left": 239,
-      "serves": [
-        "linkedin"
-      ],
-      "fix": null
+      "state": "BROKEN",
+      "detail": "SERPAPI_KEY is not set — SerpAPI is not connected.",
+      "fix": "Add SERPAPI_KEY to .env."
     },
     {
       "name": "twitterapi.io (X)",
       "state": "BROKEN",
-      "detail": "-518 credit(s) — exhausted; every call answers HTTP 402 and the X channel reports unavailable",
-      "credits": -518,
-      "fix": "Recharge at twitterapi.io. Until then the X channel is unavailable, not zero."
+      "detail": "TWITTERAPI_IO_KEY not set — the X channel is not connected.",
+      "fix": "Add TWITTERAPI_IO_KEY to .env (from the twitterapi.io dashboard — it is a separate value from the user ID), then run: npm run collect:x"
     },
     {
       "name": "DataForSEO",
-      "state": "DEGRADED",
-      "detail": "balance $0.0519; models: ChatGPT=46, Claude=14, Gemini=12, Perplexity=3; ~0 full 6-surface probe(s) left at $0.1805 each",
-      "balance": 0.05194399999999999,
-      "per_probe_cost": 0.1805,
-      "probes_remaining": 0,
-      "spend": {
-        "total": 0.694721,
-        "calls": 44,
-        "by_day": {
-          "2026-09-01": 0.374721,
-          "2026-09-10": 0.32
-        },
-        "recent": [
-          {
-            "at": "2026-09-10T12:07:12.678Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Mintlify\" \"gold sponsor\" OR \"platinum sponsor\""
-          },
-          {
-            "at": "2026-09-10T12:07:05.307Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Mintlify\" exhibitor booth conference"
-          },
-          {
-            "at": "2026-09-10T12:06:47.270Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Mintlify\" site:youtube.com"
-          },
-          {
-            "at": "2026-09-10T12:06:39.318Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Mintlify\" \"knowledge base software\""
-          },
-          {
-            "at": "2026-09-10T12:06:31.881Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Mintlify\" case study"
-          },
-          {
-            "at": "2026-09-10T12:06:22.332Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Mintlify\" pricing"
-          },
-          {
-            "at": "2026-09-10T12:06:12.728Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Mintlify\" vs"
-          },
-          {
-            "at": "2026-09-10T12:06:05.230Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Mintlify\" alternatives"
-          },
-          {
-            "at": "2026-09-10T12:05:40.027Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Mintlify\" knowledge base site:linkedin.com"
-          },
-          {
-            "at": "2026-09-10T12:05:34.064Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Mintlify\" site:linkedin.com/pulse"
-          },
-          {
-            "at": "2026-09-10T12:05:28.126Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Mintlify\" site:linkedin.com/posts"
-          },
-          {
-            "at": "2026-09-10T12:05:17.375Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Mintlify\" site:linkedin.com"
-          },
-          {
-            "at": "2026-09-10T12:05:11.457Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Document360\" \"gold sponsor\" OR \"platinum sponsor\""
-          },
-          {
-            "at": "2026-09-10T12:05:03.904Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Document360\" exhibitor booth conference"
-          },
-          {
-            "at": "2026-09-10T12:04:47.189Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Document360\" site:youtube.com"
-          },
-          {
-            "at": "2026-09-10T12:04:40.241Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Document360\" \"knowledge base software\""
-          },
-          {
-            "at": "2026-09-10T12:04:31.554Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Document360\" case study"
-          },
-          {
-            "at": "2026-09-10T12:04:22.844Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Document360\" pricing"
-          },
-          {
-            "at": "2026-09-10T12:04:15.129Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Document360\" vs"
-          },
-          {
-            "at": "2026-09-10T12:04:06.277Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "\"Document360\" alternatives"
-          },
-          {
-            "at": "2026-09-10T12:03:51.999Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.01,
-            "keyword": "\"Document360\" site:twitter.com"
-          },
-          {
-            "at": "2026-09-10T12:03:42.758Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.01,
-            "keyword": "\"Document360\" site:twitter.com"
-          },
-          {
-            "at": "2026-09-10T12:03:23.471Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Document360\" site:x.com"
-          },
-          {
-            "at": "2026-09-10T12:03:14.898Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Document360\" documentation site:linkedin.com"
-          },
-          {
-            "at": "2026-09-10T12:03:07.648Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Document360\" knowledge base site:linkedin.com"
-          },
-          {
-            "at": "2026-09-10T12:03:01.197Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Document360\" site:linkedin.com/pulse"
-          },
-          {
-            "at": "2026-09-10T12:02:49.369Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Document360\" site:linkedin.com/posts"
-          },
-          {
-            "at": "2026-09-10T12:02:42.709Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.02,
-            "keyword": "\"Document360\" site:linkedin.com"
-          },
-          {
-            "at": "2026-09-10T11:51:24.779Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "Document360 knowledge base"
-          },
-          {
-            "at": "2026-09-01T12:41:42.408Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "Document360 vs GitBook"
-          },
-          {
-            "at": "2026-09-01T12:41:39.764Z",
-            "endpoint": "serp/google/ai_mode/live/advanced",
-            "cost": 0.004,
-            "keyword": "Document360 vs GitBook"
-          },
-          {
-            "at": "2026-09-01T12:41:30.916Z",
-            "endpoint": "perplexity/llm_responses/live",
-            "cost": 0.006151,
-            "model": "sonar",
-            "prompt": "Document360 vs GitBook"
-          },
-          {
-            "at": "2026-09-01T12:41:23.486Z",
-            "endpoint": "gemini/llm_responses/live",
-            "cost": 0.03829,
-            "model": "gemini-2.5-flash",
-            "prompt": "Document360 vs GitBook"
-          },
-          {
-            "at": "2026-09-01T12:41:13.834Z",
-            "endpoint": "claude/llm_responses/live",
-            "cost": 0.050674,
-            "model": "claude-sonnet-4-5",
-            "prompt": "Document360 vs GitBook"
-          },
-          {
-            "at": "2026-09-01T12:40:42.387Z",
-            "endpoint": "chat_gpt/llm_responses/live",
-            "cost": 0.004883,
-            "model": "gpt-4o",
-            "prompt": "Document360 vs GitBook"
-          },
-          {
-            "at": "2026-09-01T12:03:04.691Z",
-            "endpoint": "gemini/llm_responses/live",
-            "cost": 0.038077,
-            "model": "gemini-2.5-flash",
-            "prompt": "What are the best knowledge base software platforms in 2026?"
-          },
-          {
-            "at": "2026-09-01T12:02:53.473Z",
-            "endpoint": "claude/llm_responses/live",
-            "cost": 0.050206,
-            "model": "claude-sonnet-4-5",
-            "prompt": "What are the best knowledge base software platforms in 2026?"
-          },
-          {
-            "at": "2026-09-01T12:02:31.115Z",
-            "endpoint": "chat_gpt/llm_responses/live",
-            "cost": 0.07684,
-            "model": "gpt-4o",
-            "prompt": "What are the best knowledge base software platforms in 2026?"
-          },
-          {
-            "at": "2026-09-01T11:31:29.959Z",
-            "endpoint": "serp/google/organic/live/advanced",
-            "cost": 0.004,
-            "keyword": "What are the best knowledge base software platforms in 2026?"
-          },
-          {
-            "at": "2026-09-01T11:31:24.340Z",
-            "endpoint": "serp/google/ai_mode/live/advanced",
-            "cost": 0.004,
-            "keyword": "What are the best knowledge base software platforms in 2026?"
-          },
-          {
-            "at": "2026-09-01T11:31:18.679Z",
-            "endpoint": "perplexity/llm_responses/live",
-            "cost": 0.006304,
-            "model": "sonar",
-            "prompt": "What are the best knowledge base software platforms in 2026?"
-          },
-          {
-            "at": "2026-09-01T11:31:09.146Z",
-            "endpoint": "gemini/llm_responses/live",
-            "cost": 0.035844,
-            "model": "gemini-2.5-flash-lite",
-            "prompt": "What are the best knowledge base software platforms in 2026?"
-          },
-          {
-            "at": "2026-09-01T11:31:03.658Z",
-            "endpoint": "claude/llm_responses/live",
-            "cost": 0.024296,
-            "model": "claude-haiku-4-5",
-            "prompt": "What are the best knowledge base software platforms in 2026?"
-          },
-          {
-            "at": "2026-09-01T11:30:55.444Z",
-            "endpoint": "chat_gpt/llm_responses/live",
-            "cost": 0.027156,
-            "model": "gpt-4o-mini",
-            "prompt": "What are the best knowledge base software platforms in 2026?"
-          }
-        ]
-      },
-      "fix": "Top up the DataForSEO account to keep measuring AI visibility."
-    },
-    {
-      "name": "DataForSEO live call",
-      "state": "SKIPPED",
-      "detail": "billable — re-run with --paid to verify the LLM path end to end"
+      "state": "BROKEN",
+      "detail": "DATAFORSEO_B64 not set",
+      "fix": "Add DATAFORSEO_B64 to .env"
     },
     {
       "name": "Scraping chain",
-      "state": "DEGRADED",
-      "detail": "usable: direct -> scrapingbee; scrapebadger 0 credit(s) — EXHAUSTED; scrapingbee 733 credit(s) left of 1000",
+      "state": "BROKEN",
+      "detail": "usable: direct",
       "routes": {
         "direct": {
           "available": true,
           "note": "Free. Blocked by the WAF on g2, capterra, trustradius, softwareadvice and gartner."
         },
         "scrapingbee": {
-          "available": true,
-          "note": "Stealth proxy defeats the review-directory bot walls (measured: 948KB of real HTML from G2 where the default mode got a 2.5KB challenge page)."
+          "available": false,
+          "note": "SCRAPINGBEE_KEY is not set — bot-walled pages cannot be fetched."
         },
         "scrapebadger": {
-          "available": true,
-          "note": "POST /v1/web/scrape. Carries volume (998 credits, free tier). Declines hard bot walls with 422 blocking_page_detected, and is throttled to 5 requests/minute."
+          "available": false,
+          "note": "SCRAPEBADGER_KEY is not set."
         }
       },
       "usable": [
-        "direct",
-        "scrapingbee"
+        "direct"
       ],
-      "scrapingbee_credits_left": 733,
+      "scrapingbee_credits_left": null,
       "fix": "A proxy route is the only way past the review-directory bot walls and DuckDuckGo's block page. With none, those sources report unavailable rather than zero. Top up whichever is exhausted."
     },
     {
       "name": "Windsor.ai",
-      "state": "WORKING",
-      "detail": "GA4: 3363 AI-assistant session(s) of 350319 (0.96%) — ChatGPT=2615, Claude=344, Gemini=270, Perplexity=109, Copilot=25",
-      "ai_sessions": 3363,
-      "total_sessions": 350319,
-      "ai_share_pct": 0.96,
-      "surfaces": [
-        {
-          "id": "chatgpt",
-          "label": "ChatGPT",
-          "sessions": 2615
-        },
-        {
-          "id": "claude",
-          "label": "Claude",
-          "sessions": 344
-        },
-        {
-          "id": "gemini",
-          "label": "Gemini",
-          "sessions": 270
-        },
-        {
-          "id": "perplexity",
-          "label": "Perplexity",
-          "sessions": 109
-        },
-        {
-          "id": "copilot",
-          "label": "Copilot",
-          "sessions": 25
-        }
-      ],
-      "note": "First-party only — enriches Document360, says nothing about competitors. Free to query, so this layer survives an exhausted DataForSEO balance."
+      "state": "BROKEN",
+      "detail": "WINDSOR_API_KEY not set",
+      "fix": "Add WINDSOR_API_KEY to .env"
     },
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 155/1653 records (9%); queue files present",
-      "classified": 155,
-      "total": 1653,
-      "pct": 9,
+      "detail": "sentiment classified on 160/2033 records (8%); queue files absent",
+      "classified": 160,
+      "total": 2033,
+      "pct": 8,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
     {
@@ -510,7 +216,7 @@
     {
       "name": "SMTP (digest email)",
       "state": "DEGRADED",
-      "detail": "not configured (missing SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_FROM (or SMTP_USER)) — digests are stored, not sent",
+      "detail": "not configured (missing SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_FROM (or SMTP_USER), DIGEST_TO) — digests are stored, not sent",
       "fix": "Add SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_FROM to .env"
     }
   ]
