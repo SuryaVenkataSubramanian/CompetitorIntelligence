@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-22T10:30:32.325Z",
+  "checked_at": "2026-09-23T10:25:08.088Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "13/13 source(s) answered in 41s; 3 returned data, 6 candidate(s) for Document360 over 7d; 6 gap(s) reported",
+      "detail": "13/13 source(s) answered in 13s; 2 returned data, 5 candidate(s) for Document360 over 7d; 5 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -45,7 +45,7 @@
         {
           "id": "youtube_week",
           "tier": "primary",
-          "candidates": 1,
+          "candidates": 0,
           "ok": true,
           "error": null
         },
@@ -138,14 +138,9 @@
           "source": "reddit_replica",
           "brand_id": "document360",
           "reason": "no Reddit replica answered (both PullPush and Arctic Shift failed)"
-        },
-        {
-          "source": "gdelt_recent",
-          "brand_id": "document360",
-          "reason": "GDELT HTTP 429"
         }
       ],
-      "total_candidates": 6,
+      "total_candidates": 5,
       "fix": null
     },
     {
@@ -199,10 +194,10 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 160/2033 records (8%); queue files absent",
-      "classified": 160,
-      "total": 2033,
-      "pct": 8,
+      "detail": "sentiment classified on 159/2293 records (7%); queue files absent",
+      "classified": 159,
+      "total": 2293,
+      "pct": 7,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
     {
