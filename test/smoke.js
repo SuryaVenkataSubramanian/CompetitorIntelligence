@@ -463,6 +463,30 @@ setTimeout(async () => {
      * reported a false failure. These patterns only match the shapes a broken
      * template actually produces. */
     const BAD = /="undefined"|="NaN"|>undefined<|>NaN<|\[object Object\]|undefined%|NaNpx|\$\{/;
+
+    /* STRIP QUOTED USER CONTENT BEFORE APPLYING THE GUARD.
+     *
+     * BAD looks for OUR template leaking into OUR markup. It cannot tell that
+     * apart from the same characters appearing inside content we are faithfully
+     * quoting, and real mentions contain both:
+     *
+     *   github_recent  a Mintlify bug report whose body quotes TypeScript —
+     *                  "mintlify is not supported on node 25 (current version
+     *                  ${nodeVersionString})"
+     *   github_recent  a PR description discussing brace syntax in prose, with
+     *                  a literal ${VAR}
+     *
+     * Those are correct output. Failing on them trains people to ignore the
+     * test, which is worse than not having it. The evidence body, the sentiment
+     * quote and the brief bullets are all quoted source text, so they are
+     * removed before the check — leaving the guard pointed at the markup this
+     * project actually generates. The same reasoning already applies to
+     * "undefined", per the note above. */
+    const stripQuoted = html => html
+      .replace(/<p class="pm-body">[\s\S]*?<\/p>/g, "<p class=\"pm-body\"></p>")
+      .replace(/<blockquote[^>]*>[\s\S]*?<\/blockquote>/g, "<blockquote></blockquote>")
+      .replace(/<ul class="(?:op-brief|pm-brief)"[^>]*>[\s\S]*?<\/ul>/g, "<ul></ul>")
+      .replace(/<details class="pm-brief">[\s\S]*?<\/details>/g, "<details></details>");
     const STATES = [
       ["overview", {}], ["mentions", {}], ["ai", {}], ["recommendations", {}], ["sources", {}],
       // The tabs added for competitor discovery and settings must render too.
@@ -506,6 +530,7 @@ setTimeout(async () => {
           const html = els.get("views")._html;
           if (html.length < 400) bad.push(`${id}/${view} produced only ${html.length} chars`);
           if (html.includes("failed to render")) bad.push(`${id}/${view} hit the error fallback`);
+          if (BAD.test(stripQuoted(html))) bad.push(`${id}/${view} leaked a template into its markup`);
           if (!html.includes('class="view active"')) bad.push(`${id}/${view} missing the .view.active wrapper`);
         } catch (e) {
           bad.push(`${id}/${view} threw: ${e.message}`);
@@ -531,7 +556,7 @@ setTimeout(async () => {
         const n = (h.match(/class="card mention[^"]*"/g) || []).length;
         cards += n;
         if (total > 0 && n === 0) cardProblems.push(`${id} page ${p}: no cards`);
-        if (BAD.test(h)) cardProblems.push(`${id} page ${p}: literal undefined/NaN in output`);
+        if (BAD.test(stripQuoted(h))) cardProblems.push(`${id} page ${p}: literal undefined/NaN in our markup`);
       }
     }
     if (cardProblems.length) console.log("        " + cardProblems.slice(0, 5).join("\n        "));
