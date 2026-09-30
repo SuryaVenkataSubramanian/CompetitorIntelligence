@@ -331,7 +331,35 @@ async function refresh({
     });
   }
 
-  /* 3. Blog and changelog RSS. Free, first-party, exact dates — it should have
+  /* 3. Apify — X and LinkedIn, the two channels the keyless layer cannot reach.
+   *
+   *    Placed BEFORE the free LinkedIn route so that when Apify runs it is the
+   *    one whose records land first: it carries exact timestamps and real author
+   *    names, where the SerpAPI snippet carries neither. When Apify is paced off
+   *    or out of budget the SerpAPI route still runs and the channel degrades
+   *    rather than disappearing. */
+  {
+    const apifySweeps = require("./apify-sweeps");
+    const wantX = !want || want.includes("x");
+    const wantLi = !want || want.includes("linkedin");
+    if (wantX || wantLi) {
+      log("  > Apify (X + LinkedIn)");
+      const ap = await apifySweeps.sweep({ brands: ids, sinceMs: Date.now() - days * 864e5, force, log });
+      candidates = candidates.concat(ap.candidates);
+      gaps.push(...ap.gaps.map(g => Object.assign({ source: "apify" }, g)));
+      perSource.push({
+        id: "apify", label: "Apify (X + LinkedIn)", tier: "metered",
+        candidates: ap.candidates.length, gaps: ap.gaps.length,
+        // Throttled is not failed: it is the budget guard working.
+        ok: ap.ran || ap.throttled,
+        throttled: !!ap.throttled,
+        error: ap.ran ? null : ap.reason,
+      });
+      if (!ap.ran && ap.reason) gaps.push({ source: "apify", reason: ap.reason });
+    }
+  }
+
+  /* 4. Blog and changelog RSS. Free, first-party, exact dates — it should have
    *    been here from the start. Its absence is why Blog read 0 for 7 days. */
   if (!want || want.includes("blog")) {
     log("  > Brand blog / changelog RSS");
@@ -345,7 +373,7 @@ async function refresh({
     });
   }
 
-  /* 4. LinkedIn.
+  /* 5. LinkedIn (free route).
    *
    *    THE CONDITION USED TO BE `want && want.includes("linkedin")`, which is
    *    inverted: with no channel filter — the normal case, and what the cron

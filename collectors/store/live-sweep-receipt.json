@@ -1,5 +1,5 @@
 {
-  "finished_at": "2026-09-18T10:16:25.712Z",
+  "finished_at": "2026-09-30T06:54:43.572Z",
   "window_days": 7,
   "brands": [
     "document360",
@@ -11,15 +11,15 @@
     "knowledgeowl"
   ],
   "channels": "all",
-  "candidates_found": 695,
-  "records_verified": 227,
-  "added": 131,
+  "candidates_found": 729,
+  "records_verified": 319,
+  "added": 319,
   "per_source": [
     {
       "id": "googlenews_rss",
       "label": "Google News RSS",
       "tier": "primary",
-      "candidates": 111,
+      "candidates": 109,
       "gaps": 0,
       "seconds": 7.5,
       "ok": true
@@ -28,36 +28,37 @@
       "id": "hn_recent",
       "label": "Hacker News (Algolia, by date)",
       "tier": "primary",
-      "candidates": 12,
+      "candidates": 11,
       "gaps": 0,
-      "seconds": 3.5,
+      "seconds": 4,
       "ok": true
     },
     {
       "id": "duckduckgo_week",
       "label": "Web search (SearXNG, else DuckDuckGo)",
       "tier": "primary",
-      "candidates": 54,
+      "candidates": 0,
       "gaps": 0,
-      "seconds": 78.6,
-      "ok": true
+      "seconds": 45,
+      "ok": false,
+      "error": "exceeded its 45s budget"
     },
     {
       "id": "youtube_week",
       "label": "YouTube (uploaded this week)",
       "tier": "primary",
-      "candidates": 33,
+      "candidates": 17,
       "gaps": 2,
-      "seconds": 10.7,
+      "seconds": 10.3,
       "ok": true
     },
     {
       "id": "github_recent",
       "label": "GitHub issues & PRs",
       "tier": "secondary",
-      "candidates": 107,
+      "candidates": 110,
       "gaps": 0,
-      "seconds": 42.6,
+      "seconds": 42.9,
       "ok": true
     },
     {
@@ -66,16 +67,16 @@
       "tier": "secondary",
       "candidates": 0,
       "gaps": 0,
-      "seconds": 16,
+      "seconds": 16.1,
       "ok": true
     },
     {
       "id": "status_page",
       "label": "Vendor status pages",
       "tier": "secondary",
-      "candidates": 0,
+      "candidates": 1,
       "gaps": 0,
-      "seconds": 5,
+      "seconds": 7.1,
       "ok": true
     },
     {
@@ -84,7 +85,7 @@
       "tier": "secondary",
       "candidates": 0,
       "gaps": 0,
-      "seconds": 9.8,
+      "seconds": 9.6,
       "ok": true
     },
     {
@@ -93,25 +94,25 @@
       "tier": "primary",
       "candidates": 0,
       "gaps": 7,
-      "seconds": 3.4,
+      "seconds": 3.7,
       "ok": true
     },
     {
       "id": "reddit_replica",
       "label": "Reddit (PullPush / Arctic Shift replicas)",
       "tier": "secondary",
-      "candidates": 278,
-      "gaps": 4,
-      "seconds": 21.2,
+      "candidates": 336,
+      "gaps": 5,
+      "seconds": 34.1,
       "ok": true
     },
     {
       "id": "mastodon",
       "label": "Mastodon hashtag timelines",
       "tier": "bonus",
-      "candidates": 51,
+      "candidates": 43,
       "gaps": 0,
-      "seconds": 11.8,
+      "seconds": 16.9,
       "ok": true
     },
     {
@@ -119,9 +120,10 @@
       "label": "GDELT news index",
       "tier": "bonus",
       "candidates": 0,
-      "gaps": 6,
-      "seconds": 151.5,
-      "ok": true
+      "gaps": 0,
+      "seconds": 45,
+      "ok": false,
+      "error": "exceeded its 45s budget"
     },
     {
       "id": "reddit_rss",
@@ -129,7 +131,7 @@
       "tier": "bonus",
       "candidates": 0,
       "gaps": 1,
-      "seconds": 0.3,
+      "seconds": 3.3,
       "ok": true
     },
     {
@@ -139,6 +141,16 @@
       "candidates": 0,
       "gaps": 1,
       "ok": true,
+      "error": null
+    },
+    {
+      "id": "apify",
+      "label": "Apify (X + LinkedIn)",
+      "tier": "metered",
+      "candidates": 47,
+      "gaps": 0,
+      "ok": true,
+      "throttled": false,
       "error": null
     },
     {
@@ -154,7 +166,7 @@
       "id": "linkedin_serpapi",
       "label": "LinkedIn (SerpAPI)",
       "tier": "metered",
-      "candidates": 41,
+      "candidates": 47,
       "gaps": 0,
       "ok": true,
       "throttled": false,
@@ -208,6 +220,14 @@
       "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
     },
     {
+      "source": "reddit_rss",
+      "reason": "Reddit refused anonymous RSS (HTTP 429); disabled for 24h rather than retried"
+    },
+    {
+      "source": "duckduckgo_week",
+      "reason": "exceeded its 45s budget"
+    },
+    {
       "source": "reddit_replica",
       "brand_id": "document360",
       "reason": "pullpush: HTTP 429"
@@ -224,42 +244,17 @@
     },
     {
       "source": "reddit_replica",
+      "brand_id": "bloomfire",
+      "reason": "arctic-shift: HTTP 400"
+    },
+    {
+      "source": "reddit_replica",
       "brand_id": "knowledgeowl",
       "reason": "arctic-shift: HTTP 400"
     },
     {
       "source": "gdelt_recent",
-      "brand_id": "document360",
-      "reason": "GDELT HTTP 429"
-    },
-    {
-      "source": "gdelt_recent",
-      "brand_id": "mintlify",
-      "reason": "GDELT HTTP 429"
-    },
-    {
-      "source": "gdelt_recent",
-      "brand_id": "confluence",
-      "reason": "GDELT HTTP 429"
-    },
-    {
-      "source": "gdelt_recent",
-      "brand_id": "guru",
-      "reason": "GDELT HTTP 429"
-    },
-    {
-      "source": "gdelt_recent",
-      "brand_id": "bloomfire",
-      "reason": "GDELT HTTP 429"
-    },
-    {
-      "source": "gdelt_recent",
-      "brand_id": "knowledgeowl",
-      "reason": "GDELT HTTP 429"
-    },
-    {
-      "source": "reddit_rss",
-      "reason": "Reddit disabled until 2026-09-18T18:53:59.361Z — HTTP 429 on search.rss — anonymous access refused"
+      "reason": "exceeded its 45s budget"
     },
     {
       "source": "x_twitterapi",
