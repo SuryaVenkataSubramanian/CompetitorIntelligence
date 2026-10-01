@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-30T11:31:27.128Z",
+  "checked_at": "2026-10-01T11:59:41.132Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "13/13 source(s) answered in 33s; 2 returned data, 6 candidate(s) for Document360 over 7d; 7 gap(s) reported",
+      "detail": "13/13 source(s) answered in 12s; 2 returned data, 8 candidate(s) for Document360 over 7d; 5 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -45,14 +45,14 @@
         {
           "id": "youtube_week",
           "tier": "primary",
-          "candidates": 1,
+          "candidates": 2,
           "ok": true,
           "error": null
         },
         {
           "id": "github_recent",
           "tier": "secondary",
-          "candidates": 5,
+          "candidates": 6,
           "ok": true,
           "error": null
         },
@@ -125,10 +125,6 @@
           "reason": "DuckDuckGo unreachable: All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.com is known to refuse a direct fetch | scrapebadger: SCRAPEBA"
         },
         {
-          "source": "reddit_rss",
-          "reason": "Reddit disabled until 2026-10-01T06:50:10.562Z — HTTP 429 on search.rss — anonymous access refused"
-        },
-        {
           "source": "reddit_replica",
           "brand_id": "document360",
           "reason": "pullpush: HTTP 403"
@@ -142,14 +138,9 @@
           "source": "reddit_replica",
           "brand_id": "document360",
           "reason": "no Reddit replica answered (both PullPush and Arctic Shift failed)"
-        },
-        {
-          "source": "gdelt_recent",
-          "brand_id": "document360",
-          "reason": "GDELT HTTP 429"
         }
       ],
-      "total_candidates": 6,
+      "total_candidates": 8,
       "fix": null
     },
     {
@@ -203,9 +194,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 163/4038 records (4%); queue files absent",
+      "detail": "sentiment classified on 163/4145 records (4%); queue files absent",
       "classified": 163,
-      "total": 4038,
+      "total": 4145,
       "pct": 4,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
