@@ -37,8 +37,8 @@
         "youtube": 38,
         "instagram": 12,
         "facebook": 4,
-        "blog": 45,
-        "web": 178,
+        "blog": 46,
+        "web": 177,
         "event": 47
       },
       "sentiment": {
@@ -49,12 +49,12 @@
       },
       "ranges": {
         "7": {
-          "total": 17,
+          "total": 16,
           "sentiment": {
             "positive": 1,
             "negative": 0,
             "neutral": 0,
-            "unclassified": 16
+            "unclassified": 15
           },
           "by_channel": {
             "linkedin": 4,
@@ -63,14 +63,14 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 0,
-            "web": 9,
+            "web": 8,
             "event": 0
           },
           "by_basis": {
-            "published": 16,
+            "published": 15,
             "discovered": 1
           },
-          "published_only": 16
+          "published_only": 15
         },
         "30": {
           "total": 82,
@@ -86,8 +86,8 @@
             "youtube": 9,
             "instagram": 0,
             "facebook": 0,
-            "blog": 6,
-            "web": 31,
+            "blog": 7,
+            "web": 30,
             "event": 6
           },
           "by_basis": {
@@ -110,8 +110,8 @@
             "youtube": 11,
             "instagram": 12,
             "facebook": 4,
-            "blog": 25,
-            "web": 79,
+            "blog": 26,
+            "web": 78,
             "event": 30
           },
           "by_basis": {
@@ -134,8 +134,8 @@
             "youtube": 18,
             "instagram": 12,
             "facebook": 4,
-            "blog": 33,
-            "web": 120,
+            "blog": 34,
+            "web": 119,
             "event": 36
           },
           "by_basis": {
@@ -147,10 +147,10 @@
       },
       "growth": {
         "7": {
-          "current": 17,
+          "current": 16,
           "previous": 16,
-          "change_pct": 6,
-          "absolute": 1
+          "change_pct": 0,
+          "absolute": 0
         },
         "30": {
           "current": 82,
@@ -189,7 +189,7 @@
         "pricing": 1
       },
       "by_api_source": {
-        "blogfeed": 16,
+        "blogfeed": 17,
         "youtube": 1,
         "legacy-reverified": 14,
         "searxng": 453,
@@ -198,7 +198,7 @@
         "newsapi": 2,
         "brightdata": 82,
         "youtube_week": 9,
-        "github_recent": 11,
+        "github_recent": 10,
         "reddit_rss": 9,
         "duckduckgo_week": 1,
         "googlenews": 3,
@@ -364,77 +364,6 @@
         "matched_alias": "Document360",
         "match_context": null,
         "fetched_at": "2026-10-03T07:34:54.937Z",
-        "extra": {
-          "github_repo": "brettdavies/agentnative-site",
-          "github_state": "closed",
-          "github_comments": 0,
-          "is_pull_request": true,
-          "matched_alias": "document360"
-        }
-      },
-      {
-        "brand": "document360",
-        "channel": "web",
-        "url": "https://github.com/brettdavies/agentnative-site/pull/397",
-        "domain": "github.com",
-        "title": "feat(web-audit): score OAuth-protected MCP endpoints by what an agent at the audit's vantage can verify",
-        "date": "2026-10-02",
-        "date_confidence": "exact",
-        "date_method": "github:created_at",
-        "days_ago": 1,
-        "first_seen": "2026-10-03",
-        "effective_date": "2026-10-02",
-        "date_basis": "published",
-        "effective_days_ago": 1,
-        "author": "brettdavies",
-        "author_source": "collector",
-        "api_source": "github_recent",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.9,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…`, `json-errors` pass), supabase.com 80/32 to 88/35 and vercel.com 79/35 to 89/39 (`json-errors` broken to pass, `json-schemas` no longer probing the entry site), telnyx.com (`json-errors` absent to pass), and document3",
-            "why": "the full text — too short to split into sentences",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "…`, `json-errors` pass), supabase.com 80/32 to 88/35 and vercel.com 79/35 to 89/39 (`json-errors` broken to pass, `json-schemas` no longer probing the entry site), telnyx.com (`json-errors` absent to pass), and document360.com 86/38 to 67/33: its catalog declares a description that answers 401, which reads broken under the same rule the audit already applies on-origin, and its API host answers the probe with a non-JSON 401.…",
-        "evidence_source": "fetched page text",
-        "source": "github_recent",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
-        "matched_alias": "Document360",
-        "match_context": null,
-        "fetched_at": "2026-10-03T07:34:55.839Z",
         "extra": {
           "github_repo": "brettdavies/agentnative-site",
           "github_state": "closed",
@@ -2361,7 +2290,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:57.487Z",
+        "fetched_at": "2026-10-03T10:46:55.198Z",
         "extra": {}
       },
       {
@@ -2824,7 +2753,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.390Z",
+        "fetched_at": "2026-10-03T10:46:54.921Z",
         "extra": {}
       },
       {
@@ -3367,7 +3296,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.015Z",
+        "fetched_at": "2026-10-03T10:46:54.967Z",
         "extra": {}
       },
       {
@@ -4994,7 +4923,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.602Z",
+        "fetched_at": "2026-10-03T10:46:58.290Z",
         "extra": {}
       },
       {
@@ -5077,6 +5006,76 @@
           "match_context": null,
           "snippet_confirmed": false
         }
+      },
+      {
+        "brand": "document360",
+        "channel": "blog",
+        "url": "https://document360.com/blog/error-message-documentation/",
+        "domain": "document360.com",
+        "title": "How to Document Error Messages and Error Codes for Users and AI Agents",
+        "date": "2026-09-08",
+        "date_confidence": "exact",
+        "date_method": "rss:pubDate",
+        "days_ago": 25,
+        "first_seen": "2026-10-03",
+        "effective_date": "2026-09-08",
+        "date_basis": "published",
+        "effective_days_ago": 25,
+        "author": "Selvaraaju Murugesan",
+        "author_source": "collector",
+        "api_source": "blogfeed",
+        "verification_status": "verified",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.9,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "…Selvaraaju Murugesan is Senior Director of Data Science at Kovai.co, leading data science and AI across the company's SaaS platforms.",
+            "why": "opening sentence",
+            "verbatim": true
+          },
+          {
+            "text": "He led the architecture behind Eddy, Document360's AI assistant, a hybrid retrieval system built on MongoDB Atlas Search, vector search, and Voyage AI embeddings that reached 99% content retrieval accuracy and 96% baseline response accur...",
+            "why": "names the product",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "…Selvaraaju Murugesan is Senior Director of Data Science at Kovai.co, leading data science and AI across the company's SaaS platforms. He led the architecture behind Eddy, Document360's AI assistant, a hybrid retrieval system built on MongoDB Atlas Search, vector search, and Voyage AI embeddings that reached 99% content retrieval accuracy and 96% baseline response accuracy.…",
+        "evidence_source": "fetched page text",
+        "source": "blogfeed",
+        "link_ok": true,
+        "http_status": 200,
+        "verified_via": "page",
+        "matched_alias": "Document360",
+        "match_context": null,
+        "fetched_at": "2026-10-03T10:46:57.493Z",
+        "extra": {}
       },
       {
         "brand": "document360",
@@ -5613,7 +5612,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.839Z",
+        "fetched_at": "2026-10-03T10:46:57.502Z",
         "extra": {}
       },
       {
@@ -8724,7 +8723,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.692Z",
+        "fetched_at": "2026-10-03T10:46:56.946Z",
         "extra": {}
       },
       {
@@ -10234,7 +10233,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:36:53.023Z",
+        "fetched_at": "2026-10-03T10:52:01.576Z",
         "extra": {
           "publisher": "getlatka.com",
           "publisher_name": "GetLatka",
@@ -10392,7 +10391,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:01.454Z",
+        "fetched_at": "2026-10-03T10:46:56.949Z",
         "extra": {}
       },
       {
@@ -11588,7 +11587,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:01.332Z",
+        "fetched_at": "2026-10-03T10:46:57.604Z",
         "extra": {}
       },
       {
@@ -12815,7 +12814,7 @@
         "verified_via": "page",
         "matched_alias": "Document360",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:00.228Z",
+        "fetched_at": "2026-10-03T10:46:57.078Z",
         "extra": {}
       },
       {
@@ -53577,11 +53576,11 @@
       }
     },
     "stats": {
-      "total": 1287,
-      "dated": 1219,
+      "total": 1288,
+      "dated": 1220,
       "undated": 68,
-      "link_ok": 1216,
-      "link_broken": 71,
+      "link_ok": 1215,
+      "link_broken": 73,
       "by_channel": {
         "linkedin": 121,
         "x": 81,
@@ -53589,23 +53588,23 @@
         "instagram": 0,
         "facebook": 0,
         "blog": 91,
-        "web": 912,
+        "web": 913,
         "event": 43
       },
       "sentiment": {
         "positive": 26,
         "negative": 12,
         "neutral": 13,
-        "unclassified": 1236
+        "unclassified": 1237
       },
       "ranges": {
         "7": {
-          "total": 481,
+          "total": 480,
           "sentiment": {
             "positive": 0,
             "negative": 1,
             "neutral": 0,
-            "unclassified": 480
+            "unclassified": 479
           },
           "by_channel": {
             "linkedin": 4,
@@ -53614,22 +53613,22 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 2,
-            "web": 465,
+            "web": 464,
             "event": 0
           },
           "by_basis": {
-            "published": 476,
+            "published": 475,
             "discovered": 5
           },
-          "published_only": 476
+          "published_only": 475
         },
         "30": {
-          "total": 913,
+          "total": 912,
           "sentiment": {
             "positive": 2,
             "negative": 1,
             "neutral": 1,
-            "unclassified": 909
+            "unclassified": 908
           },
           "by_channel": {
             "linkedin": 26,
@@ -53638,22 +53637,22 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 11,
-            "web": 818,
+            "web": 817,
             "event": 11
           },
           "by_basis": {
-            "published": 877,
+            "published": 876,
             "discovered": 36
           },
-          "published_only": 877
+          "published_only": 876
         },
         "90": {
-          "total": 1044,
+          "total": 1045,
           "sentiment": {
             "positive": 22,
             "negative": 11,
             "neutral": 13,
-            "unclassified": 998
+            "unclassified": 999
           },
           "by_channel": {
             "linkedin": 43,
@@ -53662,22 +53661,22 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 24,
-            "web": 849,
+            "web": 850,
             "event": 38
           },
           "by_basis": {
-            "published": 976,
+            "published": 977,
             "discovered": 68
           },
-          "published_only": 976
+          "published_only": 977
         },
         "365": {
-          "total": 1247,
+          "total": 1248,
           "sentiment": {
             "positive": 25,
             "negative": 12,
             "neutral": 13,
-            "unclassified": 1197
+            "unclassified": 1198
           },
           "by_channel": {
             "linkedin": 107,
@@ -53686,40 +53685,40 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 87,
-            "web": 898,
+            "web": 899,
             "event": 43
           },
           "by_basis": {
-            "published": 1179,
+            "published": 1180,
             "discovered": 68
           },
-          "published_only": 1179
+          "published_only": 1180
         }
       },
       "growth": {
         "7": {
-          "current": 481,
+          "current": 480,
           "previous": 294,
-          "change_pct": 64,
-          "absolute": 187
+          "change_pct": 63,
+          "absolute": 186
         },
         "30": {
-          "current": 913,
-          "previous": 104,
-          "change_pct": 778,
-          "absolute": 809
+          "current": 912,
+          "previous": 105,
+          "change_pct": 769,
+          "absolute": 807
         },
         "90": {
-          "current": 1044,
+          "current": 1045,
           "previous": 96,
-          "change_pct": 988,
-          "absolute": 948
+          "change_pct": 989,
+          "absolute": 949
         },
         "365": {
-          "current": 1247,
+          "current": 1248,
           "previous": 34,
-          "change_pct": 3568,
-          "absolute": 1213
+          "change_pct": 3571,
+          "absolute": 1214
         }
       },
       "by_mention_type": {
@@ -53738,7 +53737,7 @@
       },
       "by_api_source": {
         "blogfeed": 75,
-        "hackernews": 35,
+        "hackernews": 37,
         "youtube": 15,
         "legacy-reverified": 12,
         "searxng": 165,
@@ -53748,7 +53747,7 @@
         "brightdata": 60,
         "twitterapi.io": 32,
         "youtube_week": 9,
-        "github_recent": 727,
+        "github_recent": 726,
         "reddit_rss": 7,
         "duckduckgo_week": 2,
         "reddit_replica": 61,
@@ -53758,8 +53757,8 @@
         "linkedin_apify": 7
       },
       "by_verification": {
-        "verified": 1216,
-        "provider": 71,
+        "verified": 1215,
+        "provider": 73,
         "unverified": 0
       },
       "buying_intent": 6,
@@ -54272,89 +54271,6 @@
           "github_comments": 1,
           "is_pull_request": true,
           "matched_alias": "Mintlify"
-        }
-      },
-      {
-        "brand": "mintlify",
-        "channel": "web",
-        "url": "https://github.com/cachethq/docs/pull/33",
-        "domain": "github.com",
-        "title": "Document Slack subscriptions",
-        "date": "2026-10-03",
-        "date_confidence": "exact",
-        "date_method": "github:created_at",
-        "days_ago": 0,
-        "first_seen": "2026-10-03",
-        "effective_date": "2026-10-03",
-        "date_basis": "published",
-        "effective_days_ago": 0,
-        "author": "jbrooksuk",
-        "author_source": "collector",
-        "api_source": "github_recent",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.9,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…mintlify Bot deployed to staging October 3, 2026 07:21 View deployment .",
-            "why": "names the product",
-            "verbatim": true
-          },
-          {
-            "text": "This branch was successfully deployed.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "1 active deployment . staging — c1a94a49 Deployed Oct 3, 2026 by mintlify[bot] .",
-            "why": "names the product",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 1,
-        "priority_factors": [
-          "engagement 2"
-        ],
-        "play": null,
-        "evidence": "…mintlify Bot deployed to staging October 3, 2026 07:21 View deployment . This branch was successfully deployed. 1 active deployment . staging — c1a94a49 Deployed Oct 3, 2026 by mintlify[bot] . View deployment . Sign up for free to join this conversation on GitHub . Already have an account? Sign in to comment . Add this suggestion to a batch that can be applied as a single commit.…",
-        "evidence_source": "fetched page text",
-        "source": "github_recent",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
-        "matched_alias": "Mintlify",
-        "match_context": null,
-        "fetched_at": "2026-10-03T07:34:55.151Z",
-        "extra": {
-          "github_repo": "cachethq/docs",
-          "github_state": "closed",
-          "github_comments": 1,
-          "is_pull_request": true,
-          "matched_alias": "mintlify"
         }
       },
       {
@@ -71455,7 +71371,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-03T07:35:02.993Z",
+        "fetched_at": "2026-10-03T10:46:54.183Z",
         "extra": {}
       },
       {
@@ -79091,7 +79007,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-03T07:35:03.493Z",
+        "fetched_at": "2026-10-03T10:46:54.776Z",
         "extra": {}
       },
       {
@@ -100314,7 +100230,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.021Z",
+        "fetched_at": "2026-10-03T10:46:54.830Z",
         "extra": {}
       },
       {
@@ -103435,7 +103351,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:15.522Z",
+        "fetched_at": "2026-10-03T10:47:13.212Z",
         "extra": {
           "hn_object_id": "49817462",
           "hn_points": null,
@@ -106043,7 +105959,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:09.383Z",
+        "fetched_at": "2026-10-03T10:47:06.492Z",
         "extra": {
           "channel_id": "UC0LsSxHB7zaKHcN6tiNYiFQ",
           "platform": "youtube"
@@ -112927,7 +112843,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.081Z",
+        "fetched_at": "2026-10-03T10:46:54.787Z",
         "extra": {}
       },
       {
@@ -115181,7 +115097,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.091Z",
+        "fetched_at": "2026-10-03T10:46:54.799Z",
         "extra": {}
       },
       {
@@ -115737,7 +115653,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:15.345Z",
+        "fetched_at": "2026-10-03T10:47:13.209Z",
         "extra": {
           "hn_object_id": "49766465",
           "hn_points": 6,
@@ -118004,7 +117920,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:15.890Z",
+        "fetched_at": "2026-10-03T10:47:13.784Z",
         "extra": {
           "hn_object_id": "49758495",
           "hn_points": null,
@@ -120036,7 +119952,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.070Z",
+        "fetched_at": "2026-10-03T10:46:55.698Z",
         "extra": {}
       },
       {
@@ -120413,7 +120329,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.076Z",
+        "fetched_at": "2026-10-03T10:46:55.453Z",
         "extra": {}
       },
       {
@@ -120653,86 +120569,6 @@
       },
       {
         "brand": "mintlify",
-        "channel": "web",
-        "url": "https://www.reddit.com/r/AI_Agents/comments/1wfqpn8/internal_documentation_written_for_humans_agents/p9ptbbm/",
-        "domain": "reddit.com",
-        "title": "Reddit",
-        "date": "2026-09-14T08:49:11.000Z",
-        "date_confidence": "exact",
-        "date_method": "reddit:created_utc",
-        "days_ago": 18,
-        "first_seen": "2026-09-18",
-        "effective_date": "2026-09-14T08:49:11.000Z",
-        "date_basis": "published",
-        "effective_days_ago": 18,
-        "author": "Cory_Guild-ai",
-        "author_source": "collector",
-        "api_source": "reddit_replica",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.75,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…Humans need more visual formatting than agents, while agents need minimal tokens to process (and all that human-focused structure just increases costs and shows them down).",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "If you want to just buy something that does it for you Mintlify handles this well.",
-            "why": "names the product",
-            "verbatim": true
-          },
-          {
-            "text": "It publishes both HTML (for humans) and MD (for agents) versions of your docs.",
-            "why": "opening sentence",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "…Humans need more visual formatting than agents, while agents need minimal tokens to process (and all that human-focused structure just increases costs and shows them down). If you want to just buy something that does it for you Mintlify handles this well. It publishes both HTML (for humans) and MD (for agents) versions of your docs. And the llms.txt it generates points at the MD files. If you want to go the homebrew route it should be trivial to recreate that pipeline.…",
-        "evidence_source": "source feed/api entry",
-        "source": "reddit_replica",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "feed",
-        "matched_alias": "Mintlify",
-        "match_context": null,
-        "fetched_at": "2026-09-18T10:13:25.019Z",
-        "extra": {
-          "subreddit": "AI_Agents",
-          "score": 1,
-          "replica": "pullpush",
-          "matched_alias": "Mintlify"
-        }
-      },
-      {
-        "brand": "mintlify",
         "channel": "linkedin",
         "url": "https://www.linkedin.com/posts/kinlane_mintlify-does-a-lot-with-one-openapi-extension-activity-7505366051543523329-FCty",
         "domain": "linkedin.com",
@@ -120808,6 +120644,86 @@
           "serp_position": 2,
           "matched_alias": "Mintlify",
           "matched_in": "title/snippet"
+        }
+      },
+      {
+        "brand": "mintlify",
+        "channel": "web",
+        "url": "https://www.reddit.com/r/AI_Agents/comments/1wfqpn8/internal_documentation_written_for_humans_agents/p9ptbbm/",
+        "domain": "reddit.com",
+        "title": "Reddit",
+        "date": "2026-09-14T08:49:11.000Z",
+        "date_confidence": "exact",
+        "date_method": "reddit:created_utc",
+        "days_ago": 19,
+        "first_seen": "2026-09-18",
+        "effective_date": "2026-09-14T08:49:11.000Z",
+        "date_basis": "published",
+        "effective_days_ago": 19,
+        "author": "Cory_Guild-ai",
+        "author_source": "collector",
+        "api_source": "reddit_replica",
+        "verification_status": "verified",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.75,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "…Humans need more visual formatting than agents, while agents need minimal tokens to process (and all that human-focused structure just increases costs and shows them down).",
+            "why": "opening sentence",
+            "verbatim": true
+          },
+          {
+            "text": "If you want to just buy something that does it for you Mintlify handles this well.",
+            "why": "names the product",
+            "verbatim": true
+          },
+          {
+            "text": "It publishes both HTML (for humans) and MD (for agents) versions of your docs.",
+            "why": "opening sentence",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "…Humans need more visual formatting than agents, while agents need minimal tokens to process (and all that human-focused structure just increases costs and shows them down). If you want to just buy something that does it for you Mintlify handles this well. It publishes both HTML (for humans) and MD (for agents) versions of your docs. And the llms.txt it generates points at the MD files. If you want to go the homebrew route it should be trivial to recreate that pipeline.…",
+        "evidence_source": "source feed/api entry",
+        "source": "reddit_replica",
+        "link_ok": true,
+        "http_status": 200,
+        "verified_via": "feed",
+        "matched_alias": "Mintlify",
+        "match_context": null,
+        "fetched_at": "2026-09-18T10:13:25.019Z",
+        "extra": {
+          "subreddit": "AI_Agents",
+          "score": 1,
+          "replica": "pullpush",
+          "matched_alias": "Mintlify"
         }
       },
       {
@@ -124298,7 +124214,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.645Z",
+        "fetched_at": "2026-10-03T10:46:55.393Z",
         "extra": {}
       },
       {
@@ -125104,7 +125020,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.600Z",
+        "fetched_at": "2026-10-03T10:46:55.409Z",
         "extra": {}
       },
       {
@@ -125572,7 +125488,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.643Z",
+        "fetched_at": "2026-10-03T10:46:55.429Z",
         "extra": {}
       },
       {
@@ -127103,7 +127019,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:09.312Z",
+        "fetched_at": "2026-10-03T10:47:06.497Z",
         "extra": {
           "channel_id": "UC0LsSxHB7zaKHcN6tiNYiFQ",
           "platform": "youtube"
@@ -129395,9 +129311,85 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.014Z",
+        "fetched_at": "2026-10-03T10:47:13.782Z",
         "extra": {
           "hn_object_id": "49402714",
+          "hn_points": null,
+          "hn_num_comments": null,
+          "hn_thread": "https://news.ycombinator.com/item?id=49399591",
+          "is_comment": true
+        }
+      },
+      {
+        "brand": "mintlify",
+        "channel": "web",
+        "url": "https://news.ycombinator.com/item?id=49402278",
+        "domain": "news.ycombinator.com",
+        "title": "New MCP Roadmap",
+        "date": "2026-08-22",
+        "date_confidence": "exact",
+        "date_method": "hn:created_at",
+        "days_ago": 42,
+        "first_seen": "2026-10-03",
+        "effective_date": "2026-08-22",
+        "date_basis": "published",
+        "effective_days_ago": 42,
+        "author": "davidrichards",
+        "author_source": "collector",
+        "api_source": "hackernews",
+        "verification_status": "provider",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.75,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "…st actions by tag and optional query term.",
+            "why": "opening sentence",
+            "verbatim": true
+          },
+          {
+            "text": "At most we return 10 endpoints at a time and the LLM can request more using pagination.<p>These tags also create your categories in API doc websites like swagger&#x2F;mintlify so its a win win.<p>OpenAPI spec is the single source of truth.",
+            "why": "names the product",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "…st actions by tag and optional query term. At most we return 10 endpoints at a time and the LLM can request more using pagination.<p>These tags also create your categories in API doc websites like swagger&#x2F;mintlify so its a win win.<p>OpenAPI spec is the single source of truth.",
+        "evidence_source": "source feed/api entry",
+        "source": "hackernews",
+        "link_ok": false,
+        "http_status": 419,
+        "verified_via": "feed",
+        "matched_alias": "Mintlify",
+        "match_context": null,
+        "fetched_at": "2026-10-03T10:47:13.786Z",
+        "extra": {
+          "hn_object_id": "49402278",
           "hn_points": null,
           "hn_num_comments": null,
           "hn_thread": "https://news.ycombinator.com/item?id=49399591",
@@ -129724,7 +129716,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.621Z",
+        "fetched_at": "2026-10-03T10:46:55.488Z",
         "extra": {}
       },
       {
@@ -130186,7 +130178,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.965Z",
+        "fetched_at": "2026-10-03T10:46:55.425Z",
         "extra": {}
       },
       {
@@ -130251,7 +130243,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.013Z",
+        "fetched_at": "2026-10-03T10:47:13.806Z",
         "extra": {
           "hn_object_id": "49203643",
           "hn_points": null,
@@ -130785,7 +130777,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:09.319Z",
+        "fetched_at": "2026-10-03T10:47:06.447Z",
         "extra": {
           "channel_id": "UC0LsSxHB7zaKHcN6tiNYiFQ",
           "platform": "youtube"
@@ -131262,7 +131254,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:09.239Z",
+        "fetched_at": "2026-10-03T10:47:06.452Z",
         "extra": {
           "channel_id": "UC0LsSxHB7zaKHcN6tiNYiFQ",
           "platform": "youtube"
@@ -131502,7 +131494,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.597Z",
+        "fetched_at": "2026-10-03T10:46:55.420Z",
         "extra": {}
       },
       {
@@ -132152,7 +132144,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.015Z",
+        "fetched_at": "2026-10-03T10:47:13.781Z",
         "extra": {
           "hn_object_id": "48998535",
           "hn_points": null,
@@ -132233,7 +132225,7 @@
         "verified_via": "page",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.620Z",
+        "fetched_at": "2026-10-03T10:46:55.384Z",
         "extra": {}
       },
       {
@@ -132298,7 +132290,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.011Z",
+        "fetched_at": "2026-10-03T10:47:13.805Z",
         "extra": {
           "hn_object_id": "48928954",
           "hn_points": null,
@@ -132397,9 +132389,85 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.014Z",
+        "fetched_at": "2026-10-03T10:47:13.782Z",
         "extra": {
           "hn_object_id": "48936767",
+          "hn_points": null,
+          "hn_num_comments": null,
+          "hn_thread": "https://news.ycombinator.com/item?id=48935975",
+          "is_comment": true
+        }
+      },
+      {
+        "brand": "mintlify",
+        "channel": "web",
+        "url": "https://news.ycombinator.com/item?id=48936877",
+        "domain": "news.ycombinator.com",
+        "title": "Show HN: Docs.dev Your Own Hosted Docs Platform in Minutes",
+        "date": "2026-07-16",
+        "date_confidence": "exact",
+        "date_method": "hn:created_at",
+        "days_ago": 79,
+        "first_seen": "2026-10-03",
+        "effective_date": "2026-07-16",
+        "date_basis": "published",
+        "effective_days_ago": 79,
+        "author": "YoungGato",
+        "author_source": "collector",
+        "api_source": "hackernews",
+        "verification_status": "provider",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.75,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "Show HN: Docs.dev Your Own Hosted Docs Platform in Minutes.",
+            "why": "opening sentence",
+            "verbatim": true
+          },
+          {
+            "text": "Show HN: Docs.dev Your Own Hosted Docs Platform in Minutes.",
+            "why": "opening sentence",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "Show HN: Docs.dev Your Own Hosted Docs Platform in Minutes. Show HN: Docs.dev Your Own Hosted Docs Platform in Minutes. Mintlify for free??? Sign me up!",
+        "evidence_source": "source feed/api entry",
+        "source": "hackernews",
+        "link_ok": false,
+        "http_status": 419,
+        "verified_via": "feed",
+        "matched_alias": "Mintlify",
+        "match_context": null,
+        "fetched_at": "2026-10-03T10:47:13.782Z",
+        "extra": {
+          "hn_object_id": "48936877",
           "hn_points": null,
           "hn_num_comments": null,
           "hn_thread": "https://news.ycombinator.com/item?id=48935975",
@@ -132578,7 +132646,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.010Z",
+        "fetched_at": "2026-10-03T10:47:13.781Z",
         "extra": {
           "hn_object_id": "48883181",
           "hn_points": null,
@@ -132659,7 +132727,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.012Z",
+        "fetched_at": "2026-10-03T10:47:13.804Z",
         "extra": {
           "hn_object_id": "48881839",
           "hn_points": null,
@@ -132919,7 +132987,7 @@
         "verified_via": "feed",
         "matched_alias": "Mintlify",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:09.452Z",
+        "fetched_at": "2026-10-03T10:47:06.479Z",
         "extra": {
           "channel_id": "UC0LsSxHB7zaKHcN6tiNYiFQ",
           "platform": "youtube"
@@ -158345,10 +158413,10 @@
       }
     },
     "stats": {
-      "total": 1264,
-      "dated": 1238,
-      "undated": 26,
-      "link_ok": 1223,
+      "total": 1260,
+      "dated": 1235,
+      "undated": 25,
+      "link_ok": 1219,
       "link_broken": 41,
       "by_channel": {
         "linkedin": 84,
@@ -158357,47 +158425,47 @@
         "instagram": 0,
         "facebook": 0,
         "blog": 4,
-        "web": 1110,
+        "web": 1106,
         "event": 8
       },
       "sentiment": {
         "positive": 7,
         "negative": 2,
         "neutral": 7,
-        "unclassified": 1248
+        "unclassified": 1244
       },
       "ranges": {
         "7": {
-          "total": 592,
+          "total": 587,
           "sentiment": {
             "positive": 1,
             "negative": 0,
             "neutral": 0,
-            "unclassified": 591
+            "unclassified": 586
           },
           "by_channel": {
             "linkedin": 4,
             "x": 0,
-            "youtube": 9,
+            "youtube": 8,
             "instagram": 0,
             "facebook": 0,
             "blog": 0,
-            "web": 579,
+            "web": 575,
             "event": 0
           },
           "by_basis": {
-            "published": 584,
-            "discovered": 8
+            "published": 580,
+            "discovered": 7
           },
-          "published_only": 584
+          "published_only": 580
         },
         "30": {
-          "total": 1109,
+          "total": 1105,
           "sentiment": {
             "positive": 2,
             "negative": 0,
             "neutral": 0,
-            "unclassified": 1107
+            "unclassified": 1103
           },
           "by_channel": {
             "linkedin": 24,
@@ -158406,22 +158474,22 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 2,
-            "web": 1042,
+            "web": 1038,
             "event": 0
           },
           "by_basis": {
-            "published": 1094,
-            "discovered": 15
+            "published": 1091,
+            "discovered": 14
           },
-          "published_only": 1094
+          "published_only": 1091
         },
         "90": {
-          "total": 1164,
+          "total": 1160,
           "sentiment": {
             "positive": 4,
             "negative": 2,
             "neutral": 7,
-            "unclassified": 1151
+            "unclassified": 1147
           },
           "by_channel": {
             "linkedin": 43,
@@ -158430,22 +158498,22 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 4,
-            "web": 1066,
+            "web": 1062,
             "event": 3
           },
           "by_basis": {
-            "published": 1138,
-            "discovered": 26
+            "published": 1135,
+            "discovered": 25
           },
-          "published_only": 1138
+          "published_only": 1135
         },
         "365": {
-          "total": 1250,
+          "total": 1246,
           "sentiment": {
             "positive": 6,
             "negative": 2,
             "neutral": 7,
-            "unclassified": 1235
+            "unclassified": 1231
           },
           "by_channel": {
             "linkedin": 79,
@@ -158454,40 +158522,40 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 4,
-            "web": 1102,
+            "web": 1098,
             "event": 8
           },
           "by_basis": {
-            "published": 1224,
-            "discovered": 26
+            "published": 1221,
+            "discovered": 25
           },
-          "published_only": 1224
+          "published_only": 1221
         }
       },
       "growth": {
         "7": {
-          "current": 592,
-          "previous": 411,
-          "change_pct": 44,
-          "absolute": 181
+          "current": 587,
+          "previous": 412,
+          "change_pct": 42,
+          "absolute": 175
         },
         "30": {
-          "current": 1109,
+          "current": 1105,
           "previous": 36,
-          "change_pct": 2981,
-          "absolute": 1073
+          "change_pct": 2969,
+          "absolute": 1069
         },
         "90": {
-          "current": 1164,
+          "current": 1160,
           "previous": 56,
-          "change_pct": 1979,
-          "absolute": 1108
+          "change_pct": 1971,
+          "absolute": 1104
         },
         "365": {
-          "current": 1250,
+          "current": 1246,
           "previous": 9,
-          "change_pct": 13789,
-          "absolute": 1241
+          "change_pct": 13744,
+          "absolute": 1237
         }
       },
       "by_mention_type": {
@@ -158508,7 +158576,7 @@
         "pricing": 1
       },
       "by_api_source": {
-        "youtube": 11,
+        "youtube": 13,
         "hackernews": 35,
         "searxng": 38,
         "octolens": 10,
@@ -158516,15 +158584,15 @@
         "brightdata": 56,
         "linkedin_serpapi": 23,
         "twitterapi.io": 24,
-        "youtube_week": 17,
-        "github_recent": 996,
+        "youtube_week": 15,
+        "github_recent": 992,
         "mastodon": 3,
         "duckduckgo_week": 1,
         "reddit_replica": 42,
         "linkedin_apify": 4
       },
       "by_verification": {
-        "verified": 1223,
+        "verified": 1219,
         "provider": 41,
         "unverified": 0
       },
@@ -159091,87 +159159,6 @@
           "github_repo": "OuroborosCollective/Echoes_of_Aurion",
           "github_state": "open",
           "github_comments": 1,
-          "is_pull_request": true,
-          "matched_alias": "GitBook"
-        }
-      },
-      {
-        "brand": "gitbook",
-        "channel": "web",
-        "url": "https://github.com/n8n-io/n8n-docs/pull/5522",
-        "domain": "github.com",
-        "title": "docs: update GitBook space index (DOC-2376)",
-        "date": "2026-10-03",
-        "date_confidence": "exact",
-        "date_method": "github:created_at",
-        "days_ago": 0,
-        "first_seen": "2026-10-03",
-        "effective_date": "2026-10-03",
-        "date_basis": "published",
-        "effective_days_ago": 0,
-        "author": "its-imad",
-        "author_source": "collector",
-        "api_source": "github_recent",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.9,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "Updates SPACE_INDEX.md (11 spaces, was 11): folder, space ID, title, visibility and last sync for every GitBook space wired to this repo.",
-            "why": "names the product",
-            "verbatim": true
-          },
-          {
-            "text": "Generated from each space Git Sync config, so it cannot drift the way a hand-kept table does.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Auto-generated by the DocFather Space Index workflow.…",
-            "why": "opening sentence",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "…Conversation. Copy link . Copy Markdown . Collaborator . Fixes DOC-2376. Updates SPACE_INDEX.md (11 spaces, was 11): folder, space ID, title, visibility and last sync for every GitBook space wired to this repo. Generated from each space Git Sync config, so it cannot drift the way a hand-kept table does. Auto-generated by the DocFather Space Index workflow.…",
-        "evidence_source": "fetched page text",
-        "source": "github_recent",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
-        "matched_alias": "GitBook",
-        "match_context": null,
-        "fetched_at": "2026-10-03T07:34:56.913Z",
-        "extra": {
-          "github_repo": "n8n-io/n8n-docs",
-          "github_state": "closed",
-          "github_comments": 0,
           "is_pull_request": true,
           "matched_alias": "GitBook"
         }
@@ -159901,89 +159888,6 @@
           "github_repo": "node-ts/bus",
           "github_state": "closed",
           "github_comments": 0,
-          "is_pull_request": true,
-          "matched_alias": "GitBook"
-        }
-      },
-      {
-        "brand": "gitbook",
-        "channel": "web",
-        "url": "https://github.com/snyk/cli/pull/7331",
-        "domain": "github.com",
-        "title": "chore: bump studio cli extension",
-        "date": "2026-10-03",
-        "date_confidence": "exact",
-        "date_method": "github:created_at",
-        "days_ago": 0,
-        "first_seen": "2026-10-03",
-        "effective_date": "2026-10-03",
-        "date_basis": "published",
-        "effective_days_ago": 0,
-        "author": "dan-arpino",
-        "author_source": "collector",
-        "api_source": "github_recent",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.9,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…Highlights breaking API changes (if applicable).",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Links to automated tests covering new functionality.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Updates relevant GitBook documentation (PR link: ___).",
-            "why": "names the product",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 1,
-        "priority_factors": [
-          "engagement 4"
-        ],
-        "play": null,
-        "evidence": "…Highlights breaking API changes (if applicable). Links to automated tests covering new functionality. Includes manual testing instructions (if necessary). Updates relevant GitBook documentation (PR link: ___). Includes product update to be announced in the next stable release notes. What does this PR do?. Bump the studio cli extension. Where should the reviewer start?.…",
-        "evidence_source": "fetched page text",
-        "source": "github_recent",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
-        "matched_alias": "GitBook",
-        "match_context": null,
-        "fetched_at": "2026-10-03T07:34:58.426Z",
-        "extra": {
-          "github_repo": "snyk/cli",
-          "github_state": "open",
-          "github_comments": 2,
           "is_pull_request": true,
           "matched_alias": "GitBook"
         }
@@ -166332,168 +166236,6 @@
       {
         "brand": "gitbook",
         "channel": "web",
-        "url": "https://github.com/alliecatowo/zmk-sofle/pull/9",
-        "domain": "github.com",
-        "title": "chore: repo cleanup (junk files, ignores, README accuracy)",
-        "date": "2026-10-02",
-        "date_confidence": "exact",
-        "date_method": "github:created_at",
-        "days_ago": 1,
-        "first_seen": "2026-10-03",
-        "effective_date": "2026-10-02",
-        "date_basis": "published",
-        "effective_days_ago": 1,
-        "author": "alliecatowo",
-        "author_source": "collector",
-        "api_source": "github_recent",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.9,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…There was an error while loading.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Please reload this page .",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Skipped: flattening docs/docs (GitBook layout, links). 🤖 Generated with Claude Code . chore: repo cleanup (junk files, ignores, README accuracy) .",
-            "why": "names the product",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "…There was an error while loading. Please reload this page . Copy link . Copy Markdown . Owner . docs/docs/building-firmware.md: placeholder your-username -> alliecatowo. Skipped: flattening docs/docs (GitBook layout, links). 🤖 Generated with Claude Code . chore: repo cleanup (junk files, ignores, README accuracy) . 0fafdda . Remove committed junk, fix placeholders/stale README claims.…",
-        "evidence_source": "fetched page text",
-        "source": "github_recent",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
-        "matched_alias": "GitBook",
-        "match_context": null,
-        "fetched_at": "2026-10-03T07:34:58.045Z",
-        "extra": {
-          "github_repo": "alliecatowo/zmk-sofle",
-          "github_state": "closed",
-          "github_comments": 0,
-          "is_pull_request": true,
-          "matched_alias": "GitBook"
-        }
-      },
-      {
-        "brand": "gitbook",
-        "channel": "web",
-        "url": "https://github.com/chnsz/hcbp-demo/pull/299",
-        "domain": "github.com",
-        "title": "docs(rfs): support new best practice for private provider with functiongraph",
-        "date": "2026-10-02",
-        "date_confidence": "exact",
-        "date_method": "github:created_at",
-        "days_ago": 1,
-        "first_seen": "2026-10-03",
-        "effective_date": "2026-10-02",
-        "date_basis": "published",
-        "effective_days_ago": 1,
-        "author": "Lance52259",
-        "author_source": "collector",
-        "api_source": "github_recent",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.9,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…Title matches: docs(rfs): support new best practice for private provider with functiongraph .",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Note: while this PR is open, gitbook-practice-synchronization will not open another PR for the same rfs until the next scan after merge.",
-            "why": "names the product",
-            "verbatim": true
-          },
-          {
-            "text": "Generated by gitbook-practice-synchronization.",
-            "why": "names the product",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "…Title matches: docs(rfs): support new best practice for private provider with functiongraph . Spot-check command blocks and dependency tree. Merge when ready; after merge this practice is considered synced. Note: while this PR is open, gitbook-practice-synchronization will not open another PR for the same rfs until the next scan after merge. Generated by gitbook-practice-synchronization. Please review before merge.…",
-        "evidence_source": "fetched page text",
-        "source": "github_recent",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
-        "matched_alias": "GitBook",
-        "match_context": null,
-        "fetched_at": "2026-10-03T07:34:58.630Z",
-        "extra": {
-          "github_repo": "chnsz/hcbp-demo",
-          "github_state": "open",
-          "github_comments": 0,
-          "is_pull_request": true,
-          "matched_alias": "gitbook"
-        }
-      },
-      {
-        "brand": "gitbook",
-        "channel": "web",
         "url": "https://github.com/teknokomo/universo-platformo-react/pull/912",
         "domain": "github.com",
         "title": "GH911 Complete Marketing Page migration to Entity-backed widgets",
@@ -168557,9 +168299,9 @@
         "effective_date": "2026-10-01",
         "date_basis": "published",
         "effective_days_ago": 2,
-        "author": "GitBook",
+        "author": "GitBook https://www.youtube.com/channel/UCH_gKu7HCrjF6aCVu67iMwA",
         "author_source": "collector",
-        "api_source": "youtube_week",
+        "api_source": "youtube",
         "verification_status": "verified",
         "relevance_score": null,
         "relevance_comment": null,
@@ -168587,18 +168329,18 @@
         "positive_hits": [],
         "brief": [
           {
-            "text": "GitBook Webinar: A new quality layer for documentation.",
+            "text": "…We'll show how each one works on GitBook's own docs, including the findings we haven't fixed yet, and talk about where they fit into a normal week of maintaining docs.",
             "why": "names the product",
             "verbatim": true
           },
           {
-            "text": "GitBook Webinar: A new quality layer for documentation.",
-            "why": "names the product",
-            "verbatim": true
-          },
-          {
-            "text": "Most docs teams find out about problems the slow way: a support ticket, a confused customer, a broken link someone notices ...",
+            "text": "We'll finish with where we think documentation is heading, and what that means for what we build next.",
             "why": "opening sentence",
+            "verbatim": true
+          },
+          {
+            "text": "GitBook transforms documentation into an intelligent knowledge system that connects content, context, and AI — so your docs don’t just exist, they actively learn and get better over time.…",
+            "why": "names the product",
             "verbatim": true
           }
         ],
@@ -168607,22 +168349,18 @@
         "priority_score": 0,
         "priority_factors": [],
         "play": null,
-        "evidence": "GitBook Webinar: A new quality layer for documentation. GitBook Webinar: A new quality layer for documentation. Most docs teams find out about problems the slow way: a support ticket, a confused customer, a broken link someone notices ...",
+        "evidence": "…We'll show how each one works on GitBook's own docs, including the findings we haven't fixed yet, and talk about where they fit into a normal week of maintaining docs. We'll finish with where we think documentation is heading, and what that means for what we build next. GitBook transforms documentation into an intelligent knowledge system that connects content, context, and AI — so your docs don’t just exist, they actively learn and get better over time.…",
         "evidence_source": "source feed/api entry",
-        "source": "youtube_week",
+        "source": "youtube",
         "link_ok": true,
         "http_status": 200,
         "verified_via": "feed",
         "matched_alias": "GitBook",
         "match_context": null,
-        "fetched_at": "2026-10-03T07:34:51.665Z",
+        "fetched_at": "2026-10-03T10:47:06.486Z",
         "extra": {
-          "youtube_video_id": "xxyeU0trwgg",
-          "youtube_channel": "GitBook",
-          "published_relative": "1d ago",
-          "views_text": "74 views",
-          "window": "uploaded this week",
-          "matched_alias": "GitBook"
+          "channel_id": "UCH_gKu7HCrjF6aCVu67iMwA",
+          "platform": "youtube"
         }
       },
       {
@@ -233195,6 +232933,79 @@
       },
       {
         "brand": "gitbook",
+        "channel": "youtube",
+        "url": "https://www.youtube.com/watch?v=Fj80Kl5d84I",
+        "domain": "youtube.com",
+        "title": "A code pattern and a cliche: AI and the written word | State of Docs Podcast",
+        "date": "2026-09-22",
+        "date_confidence": "exact",
+        "date_method": "atom:published",
+        "days_ago": 11,
+        "first_seen": "2026-10-03",
+        "effective_date": "2026-09-22",
+        "date_basis": "published",
+        "effective_days_ago": 11,
+        "author": "GitBook https://www.youtube.com/channel/UCH_gKu7HCrjF6aCVu67iMwA",
+        "author_source": "collector",
+        "api_source": "youtube",
+        "verification_status": "verified",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.75,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "…Read the 2026 report here: https://www.stateofdocs.com/2026 GitBook transforms documentation into an intelligent knowledge system that connects content, context, and AI — so your docs don't just exist, they actively learn and get better...",
+            "why": "names the product",
+            "verbatim": true
+          },
+          {
+            "text": "Learn more: Learn more: ✨ Get started for free: https://app.gitbook.com/join 📚 Explore the docs: https://gitbook.com/docs 🌐 Visit GitBook: https://gitbook.com",
+            "why": "names the product",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "…Read the 2026 report here: https://www.stateofdocs.com/2026 GitBook transforms documentation into an intelligent knowledge system that connects content, context, and AI — so your docs don't just exist, they actively learn and get better over time. Learn more: Learn more: ✨ Get started for free: https://app.gitbook.com/join 📚 Explore the docs: https://gitbook.com/docs 🌐 Visit GitBook: https://gitbook.com",
+        "evidence_source": "source feed/api entry",
+        "source": "youtube",
+        "link_ok": true,
+        "http_status": 200,
+        "verified_via": "feed",
+        "matched_alias": "GitBook",
+        "match_context": null,
+        "fetched_at": "2026-10-03T10:47:06.506Z",
+        "extra": {
+          "channel_id": "UCH_gKu7HCrjF6aCVu67iMwA",
+          "platform": "youtube"
+        }
+      },
+      {
+        "brand": "gitbook",
         "channel": "web",
         "url": "https://github.com/n8n-io/n8n-docs/pull/5436",
         "domain": "github.com",
@@ -242295,11 +242106,11 @@
         "date": "2026-09-16T09:54:00.000Z",
         "date_confidence": "exact",
         "date_method": "reddit:created_utc",
-        "days_ago": 16,
+        "days_ago": 17,
         "first_seen": "2026-09-18",
         "effective_date": "2026-09-16T09:54:00.000Z",
         "date_basis": "published",
-        "effective_days_ago": 16,
+        "effective_days_ago": 17,
         "author": "crabbass_",
         "author_source": "collector",
         "api_source": "reddit_replica",
@@ -244244,7 +244055,7 @@
         "verified_via": "feed",
         "matched_alias": "GitBook",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.502Z",
+        "fetched_at": "2026-10-03T10:47:14.361Z",
         "extra": {
           "hn_object_id": "49612928",
           "hn_points": null,
@@ -248299,7 +248110,7 @@
         "verified_via": "feed",
         "matched_alias": "GitBook",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:09.402Z",
+        "fetched_at": "2026-10-03T10:47:06.402Z",
         "extra": {
           "channel_id": "UCH_gKu7HCrjF6aCVu67iMwA",
           "platform": "youtube"
@@ -248367,7 +248178,7 @@
         "verified_via": "feed",
         "matched_alias": "GitBook",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.503Z",
+        "fetched_at": "2026-10-03T10:47:14.363Z",
         "extra": {
           "hn_object_id": "49160429",
           "hn_points": null,
@@ -248438,7 +248249,7 @@
         "verified_via": "feed",
         "matched_alias": "GitBook",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.504Z",
+        "fetched_at": "2026-10-03T10:47:14.363Z",
         "extra": {
           "hn_object_id": "49155229",
           "hn_points": null,
@@ -248647,7 +248458,7 @@
         "verified_via": "feed",
         "matched_alias": "GitBook",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:09.277Z",
+        "fetched_at": "2026-10-03T10:47:06.604Z",
         "extra": {
           "channel_id": "UCH_gKu7HCrjF6aCVu67iMwA",
           "platform": "youtube"
@@ -248848,7 +248659,7 @@
         "verified_via": "page",
         "matched_alias": "GitBook",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.999Z",
+        "fetched_at": "2026-10-03T10:47:14.811Z",
         "extra": {
           "hn_object_id": "49080007",
           "hn_points": 1,
@@ -249026,7 +248837,7 @@
         "verified_via": "feed",
         "matched_alias": "GitBook",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.504Z",
+        "fetched_at": "2026-10-03T10:47:14.362Z",
         "extra": {
           "hn_object_id": "48998249",
           "hn_points": null,
@@ -249456,7 +249267,7 @@
         "verified_via": "feed",
         "matched_alias": "Git Book",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:16.500Z",
+        "fetched_at": "2026-10-03T10:47:14.363Z",
         "extra": {
           "hn_object_id": "48903054",
           "hn_points": null,
@@ -260649,88 +260460,6 @@
           "window": "uploaded this week",
           "matched_alias": "gitbook"
         }
-      },
-      {
-        "brand": "gitbook",
-        "channel": "youtube",
-        "url": "https://www.youtube.com/watch?v=VYbUMTZv4M8",
-        "domain": "youtube.com",
-        "title": "Black Market | ESX/QBCore/QBox/Standalone | FiveM Script | Shift Studios",
-        "date": null,
-        "date_confidence": "unknown",
-        "date_method": null,
-        "days_ago": null,
-        "first_seen": "2026-10-03",
-        "effective_date": "2026-10-03",
-        "date_basis": "discovered",
-        "effective_days_ago": 0,
-        "author": "Shift Studios",
-        "author_source": "collector",
-        "api_source": "youtube_week",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.75,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…Market | ESX/QBCore/QBox/Standalone | FiveM Script | Shift Studios.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Black Market | ESX/QBCore/QBox/Standalone | FiveM Script | Shift Studios.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Buy - https://shift-studios.tebex.io/ Docs : https://shift-studios.gitbook.io/docs Join Discord Here - https://discord.gg/shift-studios.",
-            "why": "names the product",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "…Market | ESX/QBCore/QBox/Standalone | FiveM Script | Shift Studios. Black Market | ESX/QBCore/QBox/Standalone | FiveM Script | Shift Studios. Buy - https://shift-studios.tebex.io/ Docs : https://shift-studios.gitbook.io/docs Join Discord Here - https://discord.gg/shift-studios.",
-        "evidence_source": "source feed/api entry",
-        "source": "youtube_week",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "feed",
-        "matched_alias": "GitBook",
-        "match_context": null,
-        "fetched_at": "2026-10-03T07:34:51.607Z",
-        "extra": {
-          "youtube_video_id": "VYbUMTZv4M8",
-          "youtube_channel": "Shift Studios",
-          "published_relative": "5d ago",
-          "views_text": "68 views",
-          "window": "uploaded this week",
-          "matched_alias": "gitbook"
-        }
       }
     ]
   },
@@ -260762,18 +260491,18 @@
     },
     "stats": {
       "total": 1031,
-      "dated": 999,
-      "undated": 32,
-      "link_ok": 994,
-      "link_broken": 37,
+      "dated": 1000,
+      "undated": 31,
+      "link_ok": 991,
+      "link_broken": 40,
       "by_channel": {
         "linkedin": 43,
         "x": 9,
-        "youtube": 40,
+        "youtube": 39,
         "instagram": 0,
         "facebook": 0,
-        "blog": 30,
-        "web": 908,
+        "blog": 29,
+        "web": 910,
         "event": 1
       },
       "sentiment": {
@@ -260784,50 +260513,50 @@
       },
       "ranges": {
         "7": {
-          "total": 427,
+          "total": 425,
           "sentiment": {
             "positive": 0,
             "negative": 1,
             "neutral": 0,
-            "unclassified": 426
+            "unclassified": 424
           },
           "by_channel": {
             "linkedin": 3,
             "x": 0,
-            "youtube": 12,
+            "youtube": 11,
             "instagram": 0,
             "facebook": 0,
-            "blog": 3,
+            "blog": 2,
             "web": 409,
             "event": 0
           },
           "by_basis": {
-            "published": 415,
-            "discovered": 12
+            "published": 414,
+            "discovered": 11
           },
-          "published_only": 415
+          "published_only": 414
         },
         "30": {
-          "total": 915,
+          "total": 914,
           "sentiment": {
             "positive": 5,
             "negative": 1,
             "neutral": 0,
-            "unclassified": 909
+            "unclassified": 908
           },
           "by_channel": {
             "linkedin": 10,
             "x": 1,
-            "youtube": 30,
+            "youtube": 29,
             "instagram": 0,
             "facebook": 0,
-            "blog": 15,
-            "web": 859,
+            "blog": 14,
+            "web": 860,
             "event": 0
           },
           "by_basis": {
             "published": 893,
-            "discovered": 22
+            "discovered": 21
           },
           "published_only": 893
         },
@@ -260842,18 +260571,18 @@
           "by_channel": {
             "linkedin": 19,
             "x": 3,
-            "youtube": 31,
+            "youtube": 30,
             "instagram": 0,
             "facebook": 0,
-            "blog": 30,
-            "web": 884,
+            "blog": 29,
+            "web": 886,
             "event": 0
           },
           "by_basis": {
-            "published": 935,
-            "discovered": 32
+            "published": 936,
+            "discovered": 31
           },
-          "published_only": 935
+          "published_only": 936
         },
         "365": {
           "total": 1010,
@@ -260866,32 +260595,32 @@
           "by_channel": {
             "linkedin": 34,
             "x": 4,
-            "youtube": 37,
+            "youtube": 36,
             "instagram": 0,
             "facebook": 0,
-            "blog": 30,
-            "web": 904,
+            "blog": 29,
+            "web": 906,
             "event": 1
           },
           "by_basis": {
-            "published": 978,
-            "discovered": 32
+            "published": 979,
+            "discovered": 31
           },
-          "published_only": 978
+          "published_only": 979
         }
       },
       "growth": {
         "7": {
-          "current": 427,
-          "previous": 379,
-          "change_pct": 13,
-          "absolute": 48
+          "current": 425,
+          "previous": 378,
+          "change_pct": 12,
+          "absolute": 47
         },
         "30": {
-          "current": 915,
-          "previous": 43,
-          "change_pct": 2028,
-          "absolute": 872
+          "current": 914,
+          "previous": 44,
+          "change_pct": 1977,
+          "absolute": 870
         },
         "90": {
           "current": 967,
@@ -260918,24 +260647,23 @@
         "complaint": 1
       },
       "by_api_source": {
-        "blogfeed": 21,
+        "blogfeed": 20,
         "youtube": 3,
-        "hackernews": 43,
+        "hackernews": 49,
         "searxng": 42,
         "newsapi": 9,
         "brightdata": 16,
         "twitterapi.io": 1,
-        "youtube_week": 30,
-        "github_recent": 814,
+        "youtube_week": 29,
+        "github_recent": 813,
         "mastodon": 12,
         "linkedin_serpapi": 15,
         "reddit_replica": 19,
-        "hn_recent": 3,
         "linkedin_apify": 3
       },
       "by_verification": {
-        "verified": 994,
-        "provider": 37,
+        "verified": 991,
+        "provider": 40,
         "unverified": 0
       },
       "buying_intent": 2,
@@ -269688,7 +269416,7 @@
         "effective_days_ago": 2,
         "author": "Hollymcguigan",
         "author_source": "collector",
-        "api_source": "hn_recent",
+        "api_source": "hackernews",
         "verification_status": "provider",
         "relevance_score": null,
         "relevance_comment": null,
@@ -269716,12 +269444,12 @@
         "positive_hits": [],
         "brief": [
           {
-            "text": "…We're an AI native engineering team: engineers use Claude Code, Copilot and Cursor as daily tools for code generation, review, debugging and documentation, and we build MCP integrations that connect our AI tools directly to Jira, Conflu...",
+            "text": "…We&#x27;re an AI native engineering team: engineers use Claude Code, Copilot and Cursor as daily tools for code generation, review, debugging and documentation, and we build MCP integrations that connect our AI tools directly to Jira, C...",
             "why": "names the product",
             "verbatim": true
           },
           {
-            "text": "You'll work closely with Product, QA, and our UK engineering and data teams to shape the data strategy of a fast growing international company.…",
+            "text": "You&#x27;ll work closely with Product, QA, and our UK engineering and data teams to shape the data strategy of a fast growing international company…",
             "why": "opening sentence",
             "verbatim": true
           }
@@ -269731,21 +269459,21 @@
         "priority_score": 0,
         "priority_factors": [],
         "play": null,
-        "evidence": "…We're an AI native engineering team: engineers use Claude Code, Copilot and Cursor as daily tools for code generation, review, debugging and documentation, and we build MCP integrations that connect our AI tools directly to Jira, Confluence, Slack and internal APIs so engineers stay in flow. You'll work closely with Product, QA, and our UK engineering and data teams to shape the data strategy of a fast growing international company.…",
+        "evidence": "…We&#x27;re an AI native engineering team: engineers use Claude Code, Copilot and Cursor as daily tools for code generation, review, debugging and documentation, and we build MCP integrations that connect our AI tools directly to Jira, Confluence, Slack and internal APIs so engineers stay in flow. You&#x27;ll work closely with Product, QA, and our UK engineering and data teams to shape the data strategy of a fast growing international company…",
         "evidence_source": "source feed/api entry",
-        "source": "hn_recent",
+        "source": "hackernews",
         "link_ok": false,
         "http_status": 419,
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "documentation",
-        "fetched_at": "2026-10-03T07:34:50.640Z",
+        "fetched_at": "2026-10-03T10:47:14.963Z",
         "extra": {
           "hn_object_id": "49923163",
           "hn_points": null,
+          "hn_num_comments": null,
           "hn_thread": "https://news.ycombinator.com/item?id=49922569",
-          "is_comment": true,
-          "matched_alias": "Confluence"
+          "is_comment": true
         }
       },
       {
@@ -271559,81 +271287,6 @@
         "matched_alias": "Confluence",
         "match_context": "atlassian",
         "fetched_at": "2026-10-01T22:21:21.569Z",
-        "extra": {}
-      },
-      {
-        "brand": "confluence",
-        "channel": "blog",
-        "url": "https://www.atlassian.com/blog/ai-at-work/ai-sdlc-transformation-playbook",
-        "domain": "atlassian.com",
-        "title": "The AI SDLC transformation playbook",
-        "date": "2026-10-01",
-        "date_confidence": "exact",
-        "date_method": "rss:pubDate",
-        "days_ago": 2,
-        "first_seen": "2026-10-03",
-        "effective_date": "2026-10-01",
-        "date_basis": "published",
-        "effective_days_ago": 2,
-        "author": "Martha Fishburne",
-        "author_source": "collector",
-        "api_source": "blogfeed",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.9,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…Figure 3: Teamwork Graph Context ATLASSIAN APPROACH .",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "To tackle this problem, we’ve developed a context engine called the Teamwork Graph.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "It combines data from 50+ connected sources with Jira, Confluence, and Loom: a living map of work, code, people, decisions, and dependencies that helps agents understand not just the task, but the system around it.",
-            "why": "names the product",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "…Figure 3: Teamwork Graph Context ATLASSIAN APPROACH . To tackle this problem, we’ve developed a context engine called the Teamwork Graph. It combines data from 50+ connected sources with Jira, Confluence, and Loom: a living map of work, code, people, decisions, and dependencies that helps agents understand not just the task, but the system around it. Governance and permissions are enforced at the data layer, so what a person can see is exactly what an agent can act on.…",
-        "evidence_source": "fetched page text",
-        "source": "blogfeed",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
-        "matched_alias": "Confluence",
-        "match_context": "atlassian",
-        "fetched_at": "2026-10-03T07:35:03.238Z",
         "extra": {}
       },
       {
@@ -275263,7 +274916,7 @@
         "effective_days_ago": 3,
         "author": "vpanghal",
         "author_source": "collector",
-        "api_source": "hn_recent",
+        "api_source": "hackernews",
         "verification_status": "provider",
         "relevance_score": null,
         "relevance_comment": null,
@@ -275291,41 +274944,41 @@
         "positive_hits": [],
         "brief": [
           {
-            "text": "…Monitor: Inspect agent runs and runtime behavior.",
-            "why": "opening sentence",
+            "text": "…ine and offline evaluations.<p>Monitor: Inspect agent runs and runtime behavior.<p>Data connections include live local directories, native connectors, and MCP servers.",
+            "why": "shows buying intent",
             "verbatim": true
           },
           {
-            "text": "Data connections include live local directories, native connectors, and MCP servers.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Native connectors cover document uploads, Confluence, Jira, OneDrive, SharePoint, Google Drive, SQLite, and DuckDB, with source permission enforcement.",
+            "text": "Native connectors cover document uploads, Confluence, Jira, OneDrive, SharePoint, Google Drive, SQLite, and DuckDB, with source permission enforcement.<p>Other capabilities include guest mode, encryption with keychain integration, multi-...",
             "why": "names the product",
             "verbatim": true
           }
         ],
-        "intent_signals": [],
+        "intent_signals": [
+          {
+            "tag": "evaluating",
+            "phrase": "evaluations"
+          }
+        ],
         "priority": "LOW",
         "priority_score": 0,
         "priority_factors": [],
         "play": null,
-        "evidence": "…Monitor: Inspect agent runs and runtime behavior. Data connections include live local directories, native connectors, and MCP servers. Native connectors cover document uploads, Confluence, Jira, OneDrive, SharePoint, Google Drive, SQLite, and DuckDB, with source permission enforcement. Other capabilities include guest mode, encryption with keychain integration, multi-tenancy, and quotas.…",
+        "evidence": "…ine and offline evaluations.<p>Monitor: Inspect agent runs and runtime behavior.<p>Data connections include live local directories, native connectors, and MCP servers. Native connectors cover document uploads, Confluence, Jira, OneDrive, SharePoint, Google Drive, SQLite, and DuckDB, with source permission enforcement.<p>Other capabilities include guest mode, encryption with keychain integration, multi-tenancy, and quotas.…",
         "evidence_source": "source feed/api entry",
-        "source": "hn_recent",
+        "source": "hackernews",
         "link_ok": false,
         "http_status": 419,
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "jira",
-        "fetched_at": "2026-10-03T07:34:50.636Z",
+        "fetched_at": "2026-10-03T10:47:15.564Z",
         "extra": {
           "hn_object_id": "49910386",
           "hn_points": null,
+          "hn_num_comments": null,
           "hn_thread": "https://news.ycombinator.com/item?id=49910385",
-          "is_comment": true,
-          "matched_alias": "Confluence"
+          "is_comment": true
         }
       },
       {
@@ -279060,7 +278713,7 @@
         "effective_days_ago": 4,
         "author": "fragmede",
         "author_source": "collector",
-        "api_source": "hn_recent",
+        "api_source": "hackernews",
         "verification_status": "provider",
         "relevance_score": null,
         "relevance_comment": null,
@@ -279088,7 +278741,7 @@
         "positive_hits": [],
         "brief": [
           {
-            "text": "…What happens now if someone uses traditional search and comes across an outdated wiki or Confluence page with outdated/wrong/bad instructions, or interprets something incorrectly?",
+            "text": "…What happens now if someone uses traditional search and comes across an outdated wiki or Confluence page with outdated&#x2F;wrong&#x2F;bad instructions, or interprets something incorrectly?",
             "why": "names the product",
             "verbatim": true
           }
@@ -279098,21 +278751,21 @@
         "priority_score": 0,
         "priority_factors": [],
         "play": null,
-        "evidence": "…What happens now if someone uses traditional search and comes across an outdated wiki or Confluence page with outdated/wrong/bad instructions, or interprets something incorrectly?",
+        "evidence": "…What happens now if someone uses traditional search and comes across an outdated wiki or Confluence page with outdated&#x2F;wrong&#x2F;bad instructions, or interprets something incorrectly?",
         "evidence_source": "source feed/api entry",
-        "source": "hn_recent",
+        "source": "hackernews",
         "link_ok": false,
         "http_status": 419,
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "wiki",
-        "fetched_at": "2026-10-03T07:34:50.634Z",
+        "fetched_at": "2026-10-03T10:47:15.570Z",
         "extra": {
           "hn_object_id": "49899380",
           "hn_points": null,
+          "hn_num_comments": null,
           "hn_thread": "https://news.ycombinator.com/item?id=49893509",
-          "is_comment": true,
-          "matched_alias": "Confluence"
+          "is_comment": true
         }
       },
       {
@@ -301861,7 +301514,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "atlassian",
-        "fetched_at": "2026-10-02T11:32:18.307Z",
+        "fetched_at": "2026-10-03T10:47:15.572Z",
         "extra": {
           "hn_object_id": "49831382",
           "hn_points": null,
@@ -311016,84 +310669,6 @@
           "github_comments": 0,
           "is_pull_request": true,
           "matched_alias": "confluence"
-        }
-      },
-      {
-        "brand": "confluence",
-        "channel": "web",
-        "url": "https://github.com/luisa-sys/lyra/pull/997",
-        "domain": "github.com",
-        "title": "docs(KAN-413): staging soak run-log — 2026-09-22, all green",
-        "date": "2026-09-22",
-        "date_confidence": "exact",
-        "date_method": "github:created_at",
-        "days_ago": 11,
-        "first_seen": "2026-09-22",
-        "effective_date": "2026-09-22",
-        "date_basis": "published",
-        "effective_days_ago": 11,
-        "author": "luisa-sys",
-        "author_source": "collector",
-        "api_source": "github_recent",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.9,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…e routes succeeded 100%, matching the already-tracked BUGS-115 (Vercel Attack Challenge Mode ~20-30% probabilistic deny on the e2e-stage alias) — not a new finding, commented on BUGS-115 with today's evidence.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Confluence Ops Routines Control Room heartbeat write skipped again this run per BUGS-119 (open — the markdown-format write path corrupts unrelated pre-existing content on any resubmit); commented there noting the recurrence.…",
-            "why": "names the product",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 1,
-        "priority_factors": [
-          "engagement 2"
-        ],
-        "play": null,
-        "evidence": "…e routes succeeded 100%, matching the already-tracked BUGS-115 (Vercel Attack Challenge Mode ~20-30% probabilistic deny on the e2e-stage alias) — not a new finding, commented on BUGS-115 with today's evidence. Confluence Ops Routines Control Room heartbeat write skipped again this run per BUGS-119 (open — the markdown-format write path corrupts unrelated pre-existing content on any resubmit); commented there noting the recurrence.…",
-        "evidence_source": "fetched page text",
-        "source": "github_recent",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "page",
-        "matched_alias": "Confluence",
-        "match_context": "documentation",
-        "fetched_at": "2026-09-22T07:18:06.621Z",
-        "extra": {
-          "github_repo": "luisa-sys/lyra",
-          "github_state": "closed",
-          "github_comments": 1,
-          "is_pull_request": true,
-          "matched_alias": "Confluence"
         }
       },
       {
@@ -326974,7 +326549,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "jira",
-        "fetched_at": "2026-10-02T11:32:18.306Z",
+        "fetched_at": "2026-10-03T10:47:15.565Z",
         "extra": {
           "hn_object_id": "49736861",
           "hn_points": null,
@@ -329044,7 +328619,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "documentation",
-        "fetched_at": "2026-10-02T11:32:18.463Z",
+        "fetched_at": "2026-10-03T10:47:16.172Z",
         "extra": {
           "hn_object_id": "49698564",
           "hn_points": null,
@@ -329120,7 +328695,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "knowledge base",
-        "fetched_at": "2026-10-02T11:32:18.906Z",
+        "fetched_at": "2026-10-03T10:47:16.173Z",
         "extra": {
           "hn_object_id": "49693612",
           "hn_points": null,
@@ -329604,7 +329179,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "jira",
-        "fetched_at": "2026-10-02T11:32:18.909Z",
+        "fetched_at": "2026-10-03T10:47:16.173Z",
         "extra": {
           "hn_object_id": "49688245",
           "hn_points": null,
@@ -329750,7 +329325,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "documentation",
-        "fetched_at": "2026-10-02T11:32:18.908Z",
+        "fetched_at": "2026-10-03T10:47:16.173Z",
         "extra": {
           "hn_object_id": "49676787",
           "hn_points": null,
@@ -330899,7 +330474,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "documentation",
-        "fetched_at": "2026-10-02T11:32:18.912Z",
+        "fetched_at": "2026-10-03T10:47:16.168Z",
         "extra": {
           "hn_object_id": "49605381",
           "hn_points": null,
@@ -331056,7 +330631,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "jira",
-        "fetched_at": "2026-10-02T11:32:18.908Z",
+        "fetched_at": "2026-10-03T10:47:16.223Z",
         "extra": {
           "hn_object_id": "49579656",
           "hn_points": null,
@@ -331137,9 +330712,85 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "jira",
-        "fetched_at": "2026-10-02T11:32:18.912Z",
+        "fetched_at": "2026-10-03T10:47:16.166Z",
         "extra": {
           "hn_object_id": "49572639",
+          "hn_points": null,
+          "hn_num_comments": null,
+          "hn_thread": "https://news.ycombinator.com/item?id=49570669",
+          "is_comment": true
+        }
+      },
+      {
+        "brand": "confluence",
+        "channel": "web",
+        "url": "https://news.ycombinator.com/item?id=49572529",
+        "domain": "news.ycombinator.com",
+        "title": "Actively exploited sandbox RCE in all Chromium versions",
+        "date": "2026-09-05",
+        "date_confidence": "exact",
+        "date_method": "hn:created_at",
+        "days_ago": 28,
+        "first_seen": "2026-10-03",
+        "effective_date": "2026-09-05",
+        "date_basis": "published",
+        "effective_days_ago": 28,
+        "author": "andrekandre",
+        "author_source": "collector",
+        "api_source": "hackernews",
+        "verification_status": "provider",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.75,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "Actively exploited sandbox RCE in all Chromium versions.",
+            "why": "opening sentence",
+            "verbatim": true
+          },
+          {
+            "text": "Actively exploited sandbox RCE in all Chromium versions. jira and confluence come to mind...",
+            "why": "names the product",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "Actively exploited sandbox RCE in all Chromium versions. Actively exploited sandbox RCE in all Chromium versions. jira and confluence come to mind...",
+        "evidence_source": "source feed/api entry",
+        "source": "hackernews",
+        "link_ok": false,
+        "http_status": 419,
+        "verified_via": "feed",
+        "matched_alias": "Confluence",
+        "match_context": "jira",
+        "fetched_at": "2026-10-03T10:47:16.165Z",
+        "extra": {
+          "hn_object_id": "49572529",
           "hn_points": null,
           "hn_num_comments": null,
           "hn_thread": "https://news.ycombinator.com/item?id=49570669",
@@ -331355,7 +331006,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "atlassian",
-        "fetched_at": "2026-10-02T11:32:18.908Z",
+        "fetched_at": "2026-10-03T10:47:16.166Z",
         "extra": {
           "hn_object_id": "49571049",
           "hn_points": null,
@@ -331436,9 +331087,90 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "jira",
-        "fetched_at": "2026-10-02T11:32:18.910Z",
+        "fetched_at": "2026-10-03T10:47:16.774Z",
         "extra": {
           "hn_object_id": "49563240",
+          "hn_points": null,
+          "hn_num_comments": null,
+          "hn_thread": "https://news.ycombinator.com/item?id=49548600",
+          "is_comment": true
+        }
+      },
+      {
+        "brand": "confluence",
+        "channel": "web",
+        "url": "https://news.ycombinator.com/item?id=49561923",
+        "domain": "news.ycombinator.com",
+        "title": "Ask HN: Who is using MCP in production?",
+        "date": "2026-09-04",
+        "date_confidence": "exact",
+        "date_method": "hn:created_at",
+        "days_ago": 29,
+        "first_seen": "2026-10-03",
+        "effective_date": "2026-09-04",
+        "date_basis": "published",
+        "effective_days_ago": 29,
+        "author": "steammaho",
+        "author_source": "collector",
+        "api_source": "hackernews",
+        "verification_status": "provider",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.75,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "…Ask HN: Who is using MCP in production?.",
+            "why": "opening sentence",
+            "verbatim": true
+          },
+          {
+            "text": "We use for jira, confluence, excel.",
+            "why": "names the product",
+            "verbatim": true
+          },
+          {
+            "text": "Attlassian projects require Rovio and this is additional payments.",
+            "why": "opening sentence",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "…Ask HN: Who is using MCP in production?. We use for jira, confluence, excel. Attlassian projects require Rovio and this is additional payments. So we wrote our mcp to connect and work with them",
+        "evidence_source": "source feed/api entry",
+        "source": "hackernews",
+        "link_ok": false,
+        "http_status": 419,
+        "verified_via": "feed",
+        "matched_alias": "Confluence",
+        "match_context": "jira",
+        "fetched_at": "2026-10-03T10:47:16.773Z",
+        "extra": {
+          "hn_object_id": "49561923",
           "hn_points": null,
           "hn_num_comments": null,
           "hn_thread": "https://news.ycombinator.com/item?id=49548600",
@@ -331744,7 +331476,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "jira",
-        "fetched_at": "2026-10-02T11:32:19.511Z",
+        "fetched_at": "2026-10-03T10:47:16.775Z",
         "extra": {
           "hn_object_id": "49526831",
           "hn_points": null,
@@ -331815,7 +331547,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "jira",
-        "fetched_at": "2026-10-02T11:32:19.512Z",
+        "fetched_at": "2026-10-03T10:47:16.784Z",
         "extra": {
           "hn_object_id": "49523025",
           "hn_points": null,
@@ -331898,7 +331630,7 @@
         "verified_via": "page",
         "matched_alias": "Confluence",
         "match_context": "wiki",
-        "fetched_at": "2026-10-02T11:32:17.532Z",
+        "fetched_at": "2026-10-03T10:47:14.842Z",
         "extra": {
           "hn_object_id": "49506940",
           "hn_points": 3,
@@ -332360,13 +332092,94 @@
         "verified_via": "page",
         "matched_alias": "Confluence",
         "match_context": "atlassian",
-        "fetched_at": "2026-10-02T11:32:17.767Z",
+        "fetched_at": "2026-10-03T10:47:15.127Z",
         "extra": {
           "hn_object_id": "49459708",
           "hn_points": 5,
           "hn_num_comments": 3,
           "hn_thread": "https://news.ycombinator.com/item?id=49459708",
           "is_comment": false
+        }
+      },
+      {
+        "brand": "confluence",
+        "channel": "web",
+        "url": "https://news.ycombinator.com/item?id=49459822",
+        "domain": "news.ycombinator.com",
+        "title": "Jira and Confluence Are Both Down",
+        "date": "2026-08-27",
+        "date_confidence": "exact",
+        "date_method": "hn:created_at",
+        "days_ago": 37,
+        "first_seen": "2026-10-03",
+        "effective_date": "2026-08-27",
+        "date_basis": "published",
+        "effective_days_ago": 37,
+        "author": "mjcarden",
+        "author_source": "collector",
+        "api_source": "hackernews",
+        "verification_status": "provider",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.75,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "…Jira and Confluence Are Both Down.",
+            "why": "names the product",
+            "verbatim": true
+          },
+          {
+            "text": "Ten minutes ago from Atlassian: &quot;Our teams have identified a possible fix for the issues impacting Jira Cloud, Jira Service Management and Confluence.",
+            "why": "names the product",
+            "verbatim": true
+          },
+          {
+            "text": "This is now being rolled out to impacted regions and we will update within one hour, or sooner if further information is available.&quot;",
+            "why": "opening sentence",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "…Jira and Confluence Are Both Down. Ten minutes ago from Atlassian: &quot;Our teams have identified a possible fix for the issues impacting Jira Cloud, Jira Service Management and Confluence. This is now being rolled out to impacted regions and we will update within one hour, or sooner if further information is available.&quot;",
+        "evidence_source": "source feed/api entry",
+        "source": "hackernews",
+        "link_ok": false,
+        "http_status": 419,
+        "verified_via": "feed",
+        "matched_alias": "Confluence",
+        "match_context": "atlassian",
+        "fetched_at": "2026-10-03T10:47:16.775Z",
+        "extra": {
+          "hn_object_id": "49459822",
+          "hn_points": null,
+          "hn_num_comments": null,
+          "hn_thread": "https://news.ycombinator.com/item?id=49459708",
+          "is_comment": true
         }
       },
       {
@@ -334437,7 +334250,7 @@
         "verified_via": "page",
         "matched_alias": "Confluence",
         "match_context": "wiki",
-        "fetched_at": "2026-10-02T11:32:17.472Z",
+        "fetched_at": "2026-10-03T10:47:15.558Z",
         "extra": {
           "hn_object_id": "49144929",
           "hn_points": 3,
@@ -334594,7 +334407,7 @@
         "verified_via": "feed",
         "matched_alias": "Confluence",
         "match_context": "atlassian",
-        "fetched_at": "2026-10-02T11:32:09.181Z",
+        "fetched_at": "2026-10-03T10:47:06.421Z",
         "extra": {
           "channel_id": "UCmM5yxBJKu-JMJ3Js2wE6vw",
           "platform": "youtube"
@@ -343078,88 +342891,6 @@
       {
         "brand": "confluence",
         "channel": "youtube",
-        "url": "https://www.youtube.com/watch?v=rZE0_kxZOFw",
-        "domain": "youtube.com",
-        "title": "Integrating Confluence and Jira Service Management | Explained in 1 hour (or less!)",
-        "date": null,
-        "date_confidence": "unknown",
-        "date_method": null,
-        "days_ago": null,
-        "first_seen": "2026-10-03",
-        "effective_date": "2026-10-03",
-        "date_basis": "discovered",
-        "effective_days_ago": 0,
-        "author": "Hean Tech",
-        "author_source": "collector",
-        "api_source": "youtube_week",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.75,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "Integrating Confluence and Jira Service Management | Explained in 1 hour (or less!).",
-            "why": "names the product",
-            "verbatim": true
-          },
-          {
-            "text": "Integrating Confluence and Jira Service Management | Explained in 1 hour (or less!).",
-            "why": "names the product",
-            "verbatim": true
-          },
-          {
-            "text": "Unlocking Confluence inside JSM: Access, Behaviors, and Roles Explained Tired of permissions confusion between Jira Service ...",
-            "why": "names the product",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "Integrating Confluence and Jira Service Management | Explained in 1 hour (or less!). Integrating Confluence and Jira Service Management | Explained in 1 hour (or less!). Unlocking Confluence inside JSM: Access, Behaviors, and Roles Explained Tired of permissions confusion between Jira Service ...",
-        "evidence_source": "source feed/api entry",
-        "source": "youtube_week",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "feed",
-        "matched_alias": "Confluence",
-        "match_context": "jira",
-        "fetched_at": "2026-10-03T07:34:51.701Z",
-        "extra": {
-          "youtube_video_id": "rZE0_kxZOFw",
-          "youtube_channel": "Hean Tech",
-          "published_relative": "Streamed 3d ago",
-          "views_text": "176 views",
-          "window": "uploaded this week",
-          "matched_alias": "Confluence"
-        }
-      },
-      {
-        "brand": "confluence",
-        "channel": "youtube",
         "url": "https://www.youtube.com/watch?v=p-tb3_qSwA8",
         "domain": "youtube.com",
         "title": "Employee Onboarding Hub in Confluence | Meridian Knowledge Structure for Confluence",
@@ -343390,9 +343121,9 @@
       "growth": {
         "7": {
           "current": 67,
-          "previous": 46,
-          "change_pct": 46,
-          "absolute": 21
+          "previous": 44,
+          "change_pct": 52,
+          "absolute": 23
         },
         "30": {
           "current": 117,
@@ -352170,161 +351901,6 @@
       {
         "brand": "guru",
         "channel": "web",
-        "url": "https://www.reddit.com/r/hinduism/comments/1wjlmue/i_have_a_question_about_the_story_of_the_marriage/pajg91j/",
-        "domain": "reddit.com",
-        "title": "Reddit - Prove your humanity",
-        "date": "2026-09-18T09:39:46.000Z",
-        "date_confidence": "exact",
-        "date_method": "reddit:created_utc",
-        "days_ago": 14,
-        "first_seen": "2026-09-18",
-        "effective_date": "2026-09-18T09:39:46.000Z",
-        "date_basis": "published",
-        "effective_days_ago": 14,
-        "author": "AutoModerator",
-        "author_source": "collector",
-        "api_source": "reddit_replica",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.75,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…Although r/TheVedasAndUpanishads might seem alluring to start with, this is NOT recommended, as the knowledge of the Vedas & Upaniṣads can be quite subtle, and ideally should be approached under the guidance of a Guru or someone who can...",
-            "why": "names the product",
-            "verbatim": true
-          },
-          {
-            "text": "In terms of [spiritual practices](https://www.reddit.com/r/hinduism/comments/7643rp/a_thread_on_introductory_rescources_on_basis_of/), there are many you can try and see what works for you such as Yoga (Aṣṭāṅga Yoga), Dhāraṇā, Dhyāna (Me...",
-            "why": "opening sentence",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "…Although r/TheVedasAndUpanishads might seem alluring to start with, this is NOT recommended, as the knowledge of the Vedas & Upaniṣads can be quite subtle, and ideally should be approached under the guidance of a Guru or someone who can guide you around the correct interpretation. In terms of [spiritual practices](https://www.reddit.com/r/hinduism/comments/7643rp/a_thread_on_introductory_rescources_on_basis_of/), there are many you can try and see what works for you such as Yoga (Aṣṭāṅga Yoga), Dhāraṇā, Dhyāna (Meditation) or r/bhajan.…",
-        "evidence_source": "source feed/api entry",
-        "source": "reddit_replica",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "feed",
-        "matched_alias": "Guru",
-        "match_context": "wiki",
-        "fetched_at": "2026-09-18T10:14:52.988Z",
-        "extra": {
-          "subreddit": "hinduism",
-          "score": 1,
-          "replica": "pullpush",
-          "matched_alias": "Guru"
-        }
-      },
-      {
-        "brand": "guru",
-        "channel": "web",
-        "url": "https://www.reddit.com/r/IndianHistory/comments/1wji7lu/funnier_battles_in_indian_subcontinent/paj3qal/",
-        "domain": "reddit.com",
-        "title": "Reddit",
-        "date": "2026-09-18T07:52:04.000Z",
-        "date_confidence": "exact",
-        "date_method": "reddit:created_utc",
-        "days_ago": 14,
-        "first_seen": "2026-09-18",
-        "effective_date": "2026-09-18T07:52:04.000Z",
-        "date_basis": "published",
-        "effective_days_ago": 14,
-        "author": "theb00kmancometh",
-        "author_source": "collector",
-        "api_source": "reddit_replica",
-        "verification_status": "verified",
-        "relevance_score": null,
-        "relevance_comment": null,
-        "confidence_score": 0.75,
-        "mention_type": null,
-        "mention_type_basis": null,
-        "buying_intent": false,
-        "buying_intent_basis": null,
-        "comparison_products": [],
-        "is_event": false,
-        "is_sponsorship": false,
-        "event_basis": null,
-        "engagement": null,
-        "provider_tags": [],
-        "also_seen_in": [],
-        "sentiment": null,
-        "sentiment_method": null,
-        "sentiment_grade": null,
-        "sentiment_quote": null,
-        "sentiment_phrase": null,
-        "sentiment_confidence": null,
-        "sentiment_rationale": null,
-        "themes": [],
-        "negative_hits": [],
-        "positive_hits": [],
-        "brief": [
-          {
-            "text": "…Guru Gobind Singh possessed a magnificent white elephant called *Prasadi*.",
-            "why": "names the product",
-            "verbatim": true
-          },
-          {
-            "text": "Raja Bhim Chand of Bilaspur wanted to borrow it for his son's wedding, presumably as a spectacular display of royal wealth.",
-            "why": "opening sentence",
-            "verbatim": true
-          },
-          {
-            "text": "Guru Gobind Singh refused, and Bhim Chand repeatedly sent emissaries asking for the elephant.",
-            "why": "names the product",
-            "verbatim": true
-          }
-        ],
-        "intent_signals": [],
-        "priority": "LOW",
-        "priority_score": 0,
-        "priority_factors": [],
-        "play": null,
-        "evidence": "…Guru Gobind Singh possessed a magnificent white elephant called *Prasadi*. Raja Bhim Chand of Bilaspur wanted to borrow it for his son's wedding, presumably as a spectacular display of royal wealth. Guru Gobind Singh refused, and Bhim Chand repeatedly sent emissaries asking for the elephant. The dispute over the elephant became one of the immediate causes of the conflict that eventually led to the Battle of Bhangani.…",
-        "evidence_source": "source feed/api entry",
-        "source": "reddit_replica",
-        "link_ok": true,
-        "http_status": 200,
-        "verified_via": "feed",
-        "matched_alias": "Guru",
-        "match_context": "wiki",
-        "fetched_at": "2026-09-18T10:15:01.075Z",
-        "extra": {
-          "subreddit": "IndianHistory",
-          "score": 1,
-          "replica": "pullpush",
-          "matched_alias": "Guru"
-        }
-      },
-      {
-        "brand": "guru",
-        "channel": "web",
         "url": "https://github.com/amhyer/cms-monsa/pull/15",
         "domain": "github.com",
         "title": "fix: review-code fixes — Dapodik archive guard, deploy-DB fail-loud, client-IP trust, source maps",
@@ -352468,6 +352044,161 @@
           "github_state": "open",
           "github_comments": 0,
           "is_pull_request": false,
+          "matched_alias": "Guru"
+        }
+      },
+      {
+        "brand": "guru",
+        "channel": "web",
+        "url": "https://www.reddit.com/r/hinduism/comments/1wjlmue/i_have_a_question_about_the_story_of_the_marriage/pajg91j/",
+        "domain": "reddit.com",
+        "title": "Reddit - Prove your humanity",
+        "date": "2026-09-18T09:39:46.000Z",
+        "date_confidence": "exact",
+        "date_method": "reddit:created_utc",
+        "days_ago": 15,
+        "first_seen": "2026-09-18",
+        "effective_date": "2026-09-18T09:39:46.000Z",
+        "date_basis": "published",
+        "effective_days_ago": 15,
+        "author": "AutoModerator",
+        "author_source": "collector",
+        "api_source": "reddit_replica",
+        "verification_status": "verified",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.75,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "…Although r/TheVedasAndUpanishads might seem alluring to start with, this is NOT recommended, as the knowledge of the Vedas & Upaniṣads can be quite subtle, and ideally should be approached under the guidance of a Guru or someone who can...",
+            "why": "names the product",
+            "verbatim": true
+          },
+          {
+            "text": "In terms of [spiritual practices](https://www.reddit.com/r/hinduism/comments/7643rp/a_thread_on_introductory_rescources_on_basis_of/), there are many you can try and see what works for you such as Yoga (Aṣṭāṅga Yoga), Dhāraṇā, Dhyāna (Me...",
+            "why": "opening sentence",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "…Although r/TheVedasAndUpanishads might seem alluring to start with, this is NOT recommended, as the knowledge of the Vedas & Upaniṣads can be quite subtle, and ideally should be approached under the guidance of a Guru or someone who can guide you around the correct interpretation. In terms of [spiritual practices](https://www.reddit.com/r/hinduism/comments/7643rp/a_thread_on_introductory_rescources_on_basis_of/), there are many you can try and see what works for you such as Yoga (Aṣṭāṅga Yoga), Dhāraṇā, Dhyāna (Meditation) or r/bhajan.…",
+        "evidence_source": "source feed/api entry",
+        "source": "reddit_replica",
+        "link_ok": true,
+        "http_status": 200,
+        "verified_via": "feed",
+        "matched_alias": "Guru",
+        "match_context": "wiki",
+        "fetched_at": "2026-09-18T10:14:52.988Z",
+        "extra": {
+          "subreddit": "hinduism",
+          "score": 1,
+          "replica": "pullpush",
+          "matched_alias": "Guru"
+        }
+      },
+      {
+        "brand": "guru",
+        "channel": "web",
+        "url": "https://www.reddit.com/r/IndianHistory/comments/1wji7lu/funnier_battles_in_indian_subcontinent/paj3qal/",
+        "domain": "reddit.com",
+        "title": "Reddit",
+        "date": "2026-09-18T07:52:04.000Z",
+        "date_confidence": "exact",
+        "date_method": "reddit:created_utc",
+        "days_ago": 15,
+        "first_seen": "2026-09-18",
+        "effective_date": "2026-09-18T07:52:04.000Z",
+        "date_basis": "published",
+        "effective_days_ago": 15,
+        "author": "theb00kmancometh",
+        "author_source": "collector",
+        "api_source": "reddit_replica",
+        "verification_status": "verified",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.75,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "…Guru Gobind Singh possessed a magnificent white elephant called *Prasadi*.",
+            "why": "names the product",
+            "verbatim": true
+          },
+          {
+            "text": "Raja Bhim Chand of Bilaspur wanted to borrow it for his son's wedding, presumably as a spectacular display of royal wealth.",
+            "why": "opening sentence",
+            "verbatim": true
+          },
+          {
+            "text": "Guru Gobind Singh refused, and Bhim Chand repeatedly sent emissaries asking for the elephant.",
+            "why": "names the product",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [],
+        "priority": "LOW",
+        "priority_score": 0,
+        "priority_factors": [],
+        "play": null,
+        "evidence": "…Guru Gobind Singh possessed a magnificent white elephant called *Prasadi*. Raja Bhim Chand of Bilaspur wanted to borrow it for his son's wedding, presumably as a spectacular display of royal wealth. Guru Gobind Singh refused, and Bhim Chand repeatedly sent emissaries asking for the elephant. The dispute over the elephant became one of the immediate causes of the conflict that eventually led to the Battle of Bhangani.…",
+        "evidence_source": "source feed/api entry",
+        "source": "reddit_replica",
+        "link_ok": true,
+        "http_status": 200,
+        "verified_via": "feed",
+        "matched_alias": "Guru",
+        "match_context": "wiki",
+        "fetched_at": "2026-09-18T10:15:01.075Z",
+        "extra": {
+          "subreddit": "IndianHistory",
+          "score": 1,
+          "replica": "pullpush",
           "matched_alias": "Guru"
         }
       },
@@ -352956,7 +352687,7 @@
         "verified_via": "feed",
         "matched_alias": "Guru",
         "match_context": "wiki",
-        "fetched_at": "2026-10-02T11:32:21.320Z",
+        "fetched_at": "2026-10-03T10:47:18.574Z",
         "extra": {
           "hn_object_id": "49421099",
           "hn_points": null,
@@ -353027,7 +352758,7 @@
         "verified_via": "feed",
         "matched_alias": "Guru",
         "match_context": "getguru",
-        "fetched_at": "2026-10-02T11:32:09.363Z",
+        "fetched_at": "2026-10-03T10:47:06.441Z",
         "extra": {
           "channel_id": "UCo7YCbKTdp1zvEV-SfTpLZQ",
           "platform": "youtube"
@@ -356988,7 +356719,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:58.754Z",
+        "fetched_at": "2026-10-03T10:46:55.780Z",
         "extra": {}
       },
       {
@@ -357142,7 +356873,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.459Z",
+        "fetched_at": "2026-10-03T10:46:56.374Z",
         "extra": {}
       },
       {
@@ -357306,7 +357037,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.429Z",
+        "fetched_at": "2026-10-03T10:47:06.860Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -357384,7 +357115,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.318Z",
+        "fetched_at": "2026-10-03T10:47:07.142Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -357640,7 +357371,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:09.445Z",
+        "fetched_at": "2026-10-03T10:47:06.613Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -357815,7 +357546,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.347Z",
+        "fetched_at": "2026-10-03T10:46:56.436Z",
         "extra": {}
       },
       {
@@ -358088,7 +357819,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:09.961Z",
+        "fetched_at": "2026-10-03T10:47:07.074Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -358255,7 +357986,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.517Z",
+        "fetched_at": "2026-10-03T10:46:56.439Z",
         "extra": {}
       },
       {
@@ -358325,7 +358056,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.529Z",
+        "fetched_at": "2026-10-03T10:46:56.473Z",
         "extra": {}
       },
       {
@@ -358395,7 +358126,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.456Z",
+        "fetched_at": "2026-10-03T10:46:56.415Z",
         "extra": {}
       },
       {
@@ -358470,7 +358201,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.596Z",
+        "fetched_at": "2026-10-03T10:46:56.463Z",
         "extra": {}
       },
       {
@@ -358540,7 +358271,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.900Z",
+        "fetched_at": "2026-10-03T10:47:07.847Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -358949,7 +358680,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.101Z",
+        "fetched_at": "2026-10-03T10:47:07.261Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -359150,7 +358881,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.600Z",
+        "fetched_at": "2026-10-03T10:46:56.425Z",
         "extra": {}
       },
       {
@@ -359225,7 +358956,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.980Z",
+        "fetched_at": "2026-10-03T10:46:56.634Z",
         "extra": {}
       },
       {
@@ -359300,7 +359031,7 @@
         "verified_via": "page",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:31:59.964Z",
+        "fetched_at": "2026-10-03T10:46:56.495Z",
         "extra": {}
       },
       {
@@ -359365,7 +359096,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.260Z",
+        "fetched_at": "2026-10-03T10:47:07.442Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -359433,7 +359164,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.088Z",
+        "fetched_at": "2026-10-03T10:47:07.428Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -359501,7 +359232,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.141Z",
+        "fetched_at": "2026-10-03T10:47:07.315Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -359569,7 +359300,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.117Z",
+        "fetched_at": "2026-10-03T10:47:07.204Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -359637,7 +359368,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.080Z",
+        "fetched_at": "2026-10-03T10:47:07.268Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -359710,7 +359441,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.094Z",
+        "fetched_at": "2026-10-03T10:47:07.372Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -359888,7 +359619,7 @@
         "verified_via": "feed",
         "matched_alias": "Bloomfire",
         "match_context": null,
-        "fetched_at": "2026-10-02T11:32:10.353Z",
+        "fetched_at": "2026-10-03T10:47:07.185Z",
         "extra": {
           "channel_id": "UCMM30a-zh0zRYdzvCsCo6Qw",
           "platform": "youtube"
@@ -365608,10 +365339,10 @@
       }
     },
     "stats": {
-      "total": 68,
-      "dated": 62,
+      "total": 69,
+      "dated": 63,
       "undated": 6,
-      "link_ok": 68,
+      "link_ok": 69,
       "link_broken": 0,
       "by_channel": {
         "linkedin": 47,
@@ -365620,14 +365351,14 @@
         "instagram": 0,
         "facebook": 0,
         "blog": 7,
-        "web": 13,
+        "web": 14,
         "event": 0
       },
       "sentiment": {
         "positive": 5,
         "negative": 1,
         "neutral": 0,
-        "unclassified": 62
+        "unclassified": 63
       },
       "ranges": {
         "7": {
@@ -365679,12 +365410,12 @@
           "published_only": 4
         },
         "90": {
-          "total": 17,
+          "total": 18,
           "sentiment": {
             "positive": 1,
             "negative": 0,
             "neutral": 0,
-            "unclassified": 16
+            "unclassified": 17
           },
           "by_channel": {
             "linkedin": 8,
@@ -365693,22 +365424,22 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 1,
-            "web": 7,
+            "web": 8,
             "event": 0
           },
           "by_basis": {
-            "published": 11,
+            "published": 12,
             "discovered": 6
           },
-          "published_only": 11
+          "published_only": 12
         },
         "365": {
-          "total": 60,
+          "total": 61,
           "sentiment": {
             "positive": 2,
             "negative": 1,
             "neutral": 0,
-            "unclassified": 57
+            "unclassified": 58
           },
           "by_channel": {
             "linkedin": 40,
@@ -365717,14 +365448,14 @@
             "instagram": 0,
             "facebook": 0,
             "blog": 6,
-            "web": 13,
+            "web": 14,
             "event": 0
           },
           "by_basis": {
-            "published": 54,
+            "published": 55,
             "discovered": 6
           },
-          "published_only": 54
+          "published_only": 55
         }
       },
       "growth": {
@@ -365736,21 +365467,21 @@
         },
         "30": {
           "current": 4,
-          "previous": 10,
-          "change_pct": -60,
-          "absolute": -6
+          "previous": 11,
+          "change_pct": -64,
+          "absolute": -7
         },
         "90": {
-          "current": 17,
+          "current": 18,
           "previous": 8,
-          "change_pct": 113,
-          "absolute": 9
+          "change_pct": 125,
+          "absolute": 10
         },
         "365": {
-          "current": 60,
+          "current": 61,
           "previous": 3,
-          "change_pct": 1900,
-          "absolute": 57
+          "change_pct": 1933,
+          "absolute": 58
         }
       },
       "by_mention_type": {
@@ -365763,7 +365494,7 @@
         "recommendation": 2
       },
       "by_api_source": {
-        "hackernews": 1,
+        "hackernews": 2,
         "legacy-reverified": 10,
         "searxng": 14,
         "linkedin_serpapi": 7,
@@ -365772,7 +365503,7 @@
         "linkedin_apify": 1
       },
       "by_verification": {
-        "verified": 68,
+        "verified": 69,
         "provider": 0,
         "unverified": 0
       },
@@ -366359,6 +366090,94 @@
         "extra": {
           "serp_position": null,
           "matched_alias": "KnowledgeOwl"
+        }
+      },
+      {
+        "brand": "knowledgeowl",
+        "channel": "web",
+        "url": "https://www.knowledgeowl.com/blog/posts/support-queue-as-docs-audit",
+        "domain": "knowledgeowl.com",
+        "title": "Support queue is a documentation audit; here's how to read it.",
+        "date": "2026-08-06",
+        "date_confidence": "exact",
+        "date_method": "hn:created_at",
+        "days_ago": 58,
+        "first_seen": "2026-10-03",
+        "effective_date": "2026-08-06",
+        "date_basis": "published",
+        "effective_days_ago": 58,
+        "author": "eigenBasis",
+        "author_source": "collector",
+        "api_source": "hackernews",
+        "verification_status": "verified",
+        "relevance_score": null,
+        "relevance_comment": null,
+        "confidence_score": 0.9,
+        "mention_type": null,
+        "mention_type_basis": null,
+        "buying_intent": false,
+        "buying_intent_basis": null,
+        "comparison_products": [],
+        "is_event": false,
+        "is_sponsorship": false,
+        "event_basis": null,
+        "engagement": null,
+        "provider_tags": [],
+        "also_seen_in": [],
+        "sentiment": null,
+        "sentiment_method": null,
+        "sentiment_grade": null,
+        "sentiment_quote": null,
+        "sentiment_phrase": null,
+        "sentiment_confidence": null,
+        "sentiment_rationale": null,
+        "themes": [],
+        "negative_hits": [],
+        "positive_hits": [],
+        "brief": [
+          {
+            "text": "…Easily update and share your docs with your team and customers .",
+            "why": "opening sentence",
+            "verbatim": true
+          },
+          {
+            "text": "Get started with KnowledgeOwl in 3 easy steps.",
+            "why": "names the product",
+            "verbatim": true
+          },
+          {
+            "text": "Migrate your articles with 1:1 help from the KnowledgeOwl team .",
+            "why": "names the product",
+            "verbatim": true
+          }
+        ],
+        "intent_signals": [
+          {
+            "tag": "commercial",
+            "phrase": "demo"
+          }
+        ],
+        "priority": "LOW",
+        "priority_score": 1,
+        "priority_factors": [
+          "engagement 1"
+        ],
+        "play": null,
+        "evidence": "…Easily update and share your docs with your team and customers . Start for free. Request demo. Extend your trial for free - no card required. Free 1:1 migration support from. maker. Get started with KnowledgeOwl in 3 easy steps. 1. Create your knowledge base for free in just a few minutes . 2. Migrate your articles with 1:1 help from the KnowledgeOwl team . 3. Easily update and share your docs with your team and customers .…",
+        "evidence_source": "fetched page text",
+        "source": "hackernews",
+        "link_ok": true,
+        "http_status": 200,
+        "verified_via": "page",
+        "matched_alias": "KnowledgeOwl",
+        "match_context": null,
+        "fetched_at": "2026-10-03T10:47:18.329Z",
+        "extra": {
+          "hn_object_id": "49190966",
+          "hn_points": 1,
+          "hn_num_comments": 0,
+          "hn_thread": "https://news.ycombinator.com/item?id=49190966",
+          "is_comment": false
         }
       },
       {

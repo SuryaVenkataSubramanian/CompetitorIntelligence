@@ -1,39 +1,39 @@
 {
-  "scanned_at": "2026-10-02T11:45:44.533Z",
+  "scanned_at": "2026-10-03T11:01:30.700Z",
   "status": "scanned",
   "provider": "Built-in Node metasearch (DuckDuckGo + Bing)",
   "keywords_total": 233,
   "keywords_this_run": [
-    "documentation RAG",
-    "documentation retrieval augmented generation",
-    "knowledge base RAG",
-    "documentation MCP",
-    "MCP documentation",
-    "documentation MCP server",
-    "SOP software",
-    "SOP documentation",
-    "SOP platform",
-    "SOP generator",
-    "AI SOP generator",
-    "AI SOP documentation",
-    "automated SOP creation",
-    "SOP from video",
-    "SOP from screen recording",
-    "process documentation software",
-    "process documentation platform",
-    "process documentation automation",
-    "workflow documentation",
-    "workflow documentation software",
-    "procedure documentation",
-    "employee documentation",
-    "operational documentation",
-    "training documentation"
+    "onboarding documentation",
+    "AI process documentation",
+    "AI documentation search",
+    "AI knowledge search",
+    "AI search for documentation",
+    "AI search knowledge base",
+    "AI-powered knowledge search",
+    "AI answers from documentation",
+    "AI answers from knowledge base",
+    "grounded AI answers",
+    "cited AI answers",
+    "documentation chatbot",
+    "AI documentation chatbot",
+    "knowledge base chatbot",
+    "AI knowledge assistant",
+    "AI knowledge agent",
+    "documentation AI agent",
+    "customer AI assistant",
+    "AI support assistant",
+    "AI self-service support",
+    "documentation platform",
+    "documentation software",
+    "documentation tool",
+    "documentation management"
   ],
   "recent_mode": true,
-  "cursor_index": 133,
+  "cursor_index": 157,
   "sweeps_completed": 1,
-  "runs": 21,
-  "candidates_examined": 10,
+  "runs": 22,
+  "candidates_examined": 14,
   "verified_count": 26,
   "new_this_run": 0,
   "new_domains_this_run": [],
@@ -47,6 +47,22 @@
   "high_threat_count": 0,
   "rejected_this_run": [
     {
+      "host": "grounded.fandom.com",
+      "reason": "homepage returned HTTP no response"
+    },
+    {
+      "host": "store.steampowered.com",
+      "reason": "only 1 product signal(s); needs 2"
+    },
+    {
+      "host": "grounded.wiki.gg",
+      "reason": "own title/description does not place it in this category: \"Grounded Wiki. Welcome to the Grounded Wiki, a collaborative wiki resource that is open fo\""
+    },
+    {
+      "host": "herothemes.com",
+      "reason": "only 1 product signal(s); needs 2"
+    },
+    {
       "host": "dictionary.cambridge.org",
       "reason": "only 0 product signal(s); needs 2"
     },
@@ -55,19 +71,15 @@
       "reason": "only 0 product signal(s); needs 2"
     },
     {
-      "host": "herothemes.com",
-      "reason": "only 1 product signal(s); needs 2"
-    },
-    {
       "host": "merriam-webster.com",
       "reason": "homepage returned HTTP no response"
     },
     {
-      "host": "geeksforgeeks.org",
+      "host": "dictionary.com",
       "reason": "only 0 product signal(s); needs 2"
     },
     {
-      "host": "dictionary.com",
+      "host": "mimo.org",
       "reason": "only 0 product signal(s); needs 2"
     },
     {
@@ -75,11 +87,15 @@
       "reason": "own title/description does not place it in this category: \"Find out how strong your vocabulary is and learn new words at Vocabulary.com.. Vocabulary.\""
     },
     {
-      "host": "thefreedictionary.com",
-      "reason": "homepage returned HTTP no response"
+      "host": "xbox.com",
+      "reason": "only 0 product signal(s); needs 2"
     },
     {
-      "host": "askdifference.com",
+      "host": "grounded2.obsidian.net",
+      "reason": "only 0 product signal(s); needs 2"
+    },
+    {
+      "host": "grounded.obsidian.net",
       "reason": "only 0 product signal(s); needs 2"
     },
     {
@@ -89,76 +105,68 @@
   ],
   "search_gaps": [
     {
-      "keyword": "MCP documentation launch 2026",
+      "keyword": "onboarding documentation new AI",
       "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "SOP software launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"software\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
-    },
-    {
-      "keyword": "SOP documentation launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 1/10 results mention \"documentation\" (10%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
-    },
-    {
-      "keyword": "SOP platform launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"launch\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
-    },
-    {
-      "keyword": "SOP generator launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"generat\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
-    },
-    {
-      "keyword": "AI SOP generator launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 1/10 results mention \"generat\" (10%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
-    },
-    {
-      "keyword": "AI SOP documentation launch 2026",
+      "keyword": "AI process documentation new AI",
       "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "SOP from video launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"launch\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
-    },
-    {
-      "keyword": "SOP from screen recording launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"screen\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
-    },
-    {
-      "keyword": "process documentation software launch 2026",
+      "keyword": "AI documentation search new AI",
       "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "process documentation platform launch 2026",
+      "keyword": "AI knowledge search new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 1/10 results mention \"knowledge\" (10%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+    },
+    {
+      "keyword": "AI search for documentation new AI",
       "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "process documentation automation launch 2026",
+      "keyword": "AI search knowledge base new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 1/10 results mention \"knowledge\" (10%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+    },
+    {
+      "keyword": "AI-powered knowledge search new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 1/10 results mention \"knowledge\" (10%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+    },
+    {
+      "keyword": "AI answers from documentation new AI",
       "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "workflow documentation launch 2026",
+      "keyword": "AI answers from knowledge base new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 1/10 results mention \"knowledge\" (10%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+    },
+    {
+      "keyword": "cited AI answers new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"answers\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+    },
+    {
+      "keyword": "AI documentation chatbot new AI",
       "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "workflow documentation software launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+      "keyword": "AI knowledge assistant new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 1/10 results mention \"knowledge\" (10%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "procedure documentation launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+      "keyword": "AI knowledge agent new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 1/10 results mention \"knowledge\" (10%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "employee documentation launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+      "keyword": "customer AI assistant new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"assistant\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "operational documentation launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+      "keyword": "AI support assistant new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 1/10 results mention \"assistant\" (10%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     },
     {
-      "keyword": "training documentation launch 2026",
-      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"documentation\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
+      "keyword": "AI self-service support new AI",
+      "error": "all built-in engines failed: duckduckgo=bot challenge served (HTTP 202) and the proxy route could not get past it either (All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.co) — this engine has blocked us; bing=only 0/10 results mention \"service\" (0%) — engine is returning largely unrelated content (soft bot-throttling). Discarded rather than treated as findings."
     }
   ],
   "method": "Keyword-driven web discovery. Every entrant is a fetched homepage; name and description come from that page's own metadata. Listicles and articles are excluded, as are the 7 tracked products and 92 known incumbents. Classification and threat score are derived ONLY from what each product publishes about itself — never from the keyword that surfaced it — and every signal records the phrase it matched.",
