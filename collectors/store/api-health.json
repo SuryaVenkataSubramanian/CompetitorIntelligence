@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-05T12:54:50.406Z",
+  "checked_at": "2026-10-06T12:22:18.255Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "13/13 source(s) answered in 27s; 3 returned data, 13 candidate(s) for Document360 over 7d; 6 gap(s) reported",
+      "detail": "13/13 source(s) answered in 31s; 3 returned data, 12 candidate(s) for Document360 over 7d; 6 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -52,7 +52,7 @@
         {
           "id": "github_recent",
           "tier": "secondary",
-          "candidates": 11,
+          "candidates": 9,
           "ok": true,
           "error": null
         },
@@ -108,7 +108,7 @@
         {
           "id": "reddit_rss",
           "tier": "bonus",
-          "candidates": 1,
+          "candidates": 2,
           "ok": true,
           "error": null
         }
@@ -145,7 +145,7 @@
           "reason": "GDELT HTTP 429"
         }
       ],
-      "total_candidates": 13,
+      "total_candidates": 12,
       "fix": null
     },
     {
@@ -199,9 +199,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 163/5048 records (3%); queue files absent",
-      "classified": 163,
-      "total": 5048,
+      "detail": "sentiment classified on 164/5233 records (3%); queue files absent",
+      "classified": 164,
+      "total": 5233,
       "pct": 3,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
