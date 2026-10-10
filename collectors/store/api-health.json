@@ -1,11 +1,10 @@
 {
-  "checked_at": "2026-10-09T12:14:16.727Z",
+  "checked_at": "2026-10-10T11:32:01.512Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
-    "WORKING": 1,
-    "BROKEN": 5,
-    "DEGRADED": 2
+    "DEGRADED": 3,
+    "BROKEN": 5
   },
   "sources": [
     {
@@ -18,8 +17,8 @@
     },
     {
       "name": "Keyless sources",
-      "state": "WORKING",
-      "detail": "13/13 source(s) answered in 27s; 2 returned data, 13 candidate(s) for Document360 over 7d; 6 gap(s) reported",
+      "state": "DEGRADED",
+      "detail": "12/13 source(s) answered in 45s; 2 returned data, 11 candidate(s) for Document360 over 7d; 3 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -52,7 +51,7 @@
         {
           "id": "github_recent",
           "tier": "secondary",
-          "candidates": 11,
+          "candidates": 9,
           "ok": true,
           "error": null
         },
@@ -88,8 +87,8 @@
           "id": "reddit_replica",
           "tier": "secondary",
           "candidates": 0,
-          "ok": true,
-          "error": null
+          "ok": false,
+          "error": "exceeded its 45s budget"
         },
         {
           "id": "mastodon",
@@ -126,27 +125,11 @@
         },
         {
           "source": "reddit_replica",
-          "brand_id": "document360",
-          "reason": "pullpush: HTTP 403"
-        },
-        {
-          "source": "reddit_replica",
-          "brand_id": "document360",
-          "reason": "arctic-shift: HTTP 400"
-        },
-        {
-          "source": "reddit_replica",
-          "brand_id": "document360",
-          "reason": "no Reddit replica answered (both PullPush and Arctic Shift failed)"
-        },
-        {
-          "source": "gdelt_recent",
-          "brand_id": "document360",
-          "reason": "GDELT HTTP 429"
+          "reason": "exceeded its 45s budget"
         }
       ],
-      "total_candidates": 13,
-      "fix": null
+      "total_candidates": 11,
+      "fix": "Failing: reddit_replica. These need no key, so a failure is a network or markup change, not a billing problem."
     },
     {
       "name": "SerpAPI",
@@ -199,9 +182,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 165/5870 records (3%); queue files absent",
+      "detail": "sentiment classified on 165/6118 records (3%); queue files absent",
       "classified": 165,
-      "total": 5870,
+      "total": 6118,
       "pct": 3,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
