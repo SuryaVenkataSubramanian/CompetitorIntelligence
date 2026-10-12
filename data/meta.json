@@ -1,6 +1,6 @@
 {
-  "built_at": "2026-10-12T00:58:28.232Z",
-  "store_updated_at": "2026-10-12T00:58:27.603Z",
+  "built_at": "2026-10-12T08:36:09.914Z",
+  "store_updated_at": "2026-10-12T08:36:09.717Z",
   "brand_order": [
     "document360",
     "mintlify",
@@ -126,19 +126,19 @@
   "data_window": {
     "earliest_dated_mention": "2004-01-01",
     "latest_dated_mention": "2026-10-12",
-    "note": "Range filters operate only on records with a verified publication date. 272 of 6644 verified records have no provable date and are excluded from every range bucket (shown separately as \"undated\")."
+    "note": "Range filters operate only on records with a verified publication date. 273 of 6723 verified records have no provable date and are excluded from every range bucket (shown separately as \"undated\")."
   },
   "integrity": {
-    "verified_records": 6644,
+    "verified_records": 6723,
     "unverified_excluded": 0,
-    "with_exact_date": 6372,
-    "without_date": 272,
-    "links_verified_working": 6471,
+    "with_exact_date": 6450,
+    "without_date": 273,
+    "links_verified_working": 6550,
     "links_broken": 173,
     "sentiment_classified": 166,
     "sentiment_classified_by_claude": 103,
     "sentiment_classified_by_lexicon": 63,
-    "sentiment_unclassified": 6478,
+    "sentiment_unclassified": 6557,
     "classification_engine": "Two grades, counted separately: claude-code with a grounded quote verified against the evidence excerpt, and a phrase lexicon anchored to a sentence that names the brand. Records neither can reach stay unclassified and are shown under the Unclassified filter — never folded into neutral.",
     "rule": "No field in this dataset was produced without either fetched bytes or a mechanically verified Claude judgement."
   },
@@ -208,149 +208,149 @@
     }
   },
   "totals": {
-    "total": 6644,
-    "dated": 6372,
-    "undated": 272,
-    "link_ok": 6471,
+    "total": 6723,
+    "dated": 6450,
+    "undated": 273,
+    "link_ok": 6550,
     "link_broken": 173,
     "by_channel": {
       "linkedin": 651,
       "x": 157,
-      "youtube": 213,
+      "youtube": 214,
       "instagram": 12,
       "facebook": 4,
-      "blog": 201,
-      "web": 5299,
+      "blog": 202,
+      "web": 5376,
       "event": 107
     },
     "sentiment": {
       "positive": 97,
       "negative": 32,
       "neutral": 37,
-      "unclassified": 6478
+      "unclassified": 6557
     },
     "ranges": {
       "7": {
-        "total": 1684,
+        "total": 1763,
         "sentiment": {
           "positive": 2,
           "negative": 1,
           "neutral": 0,
-          "unclassified": 1681
+          "unclassified": 1760
         },
         "by_channel": {
           "linkedin": 0,
           "x": 0,
-          "youtube": 42,
+          "youtube": 43,
           "instagram": 0,
           "facebook": 0,
-          "blog": 6,
-          "web": 1636,
+          "blog": 7,
+          "web": 1713,
           "event": 0
         },
         "by_basis": {
-          "published": 1645,
-          "discovered": 39
+          "published": 1723,
+          "discovered": 40
         },
-        "published_only": 1645
+        "published_only": 1723
       },
       "30": {
-        "total": 5098,
+        "total": 5177,
         "sentiment": {
           "positive": 8,
           "negative": 4,
           "neutral": 0,
-          "unclassified": 5086
+          "unclassified": 5165
         },
         "by_channel": {
           "linkedin": 89,
           "x": 10,
-          "youtube": 97,
+          "youtube": 98,
           "instagram": 0,
           "facebook": 0,
-          "blog": 24,
-          "web": 4878,
+          "blog": 25,
+          "web": 4955,
           "event": 0
         },
         "by_basis": {
-          "published": 5012,
-          "discovered": 86
+          "published": 5090,
+          "discovered": 87
         },
-        "published_only": 5012
+        "published_only": 5090
       },
       "90": {
-        "total": 5731,
+        "total": 5810,
         "sentiment": {
           "positive": 49,
           "negative": 20,
           "neutral": 29,
-          "unclassified": 5633
+          "unclassified": 5712
         },
         "by_channel": {
           "linkedin": 231,
           "x": 128,
-          "youtube": 131,
+          "youtube": 132,
           "instagram": 12,
           "facebook": 4,
-          "blog": 99,
-          "web": 5052,
+          "blog": 100,
+          "web": 5129,
           "event": 74
         },
         "by_basis": {
-          "published": 5459,
-          "discovered": 272
+          "published": 5537,
+          "discovered": 273
         },
-        "published_only": 5459
+        "published_only": 5537
       },
       "365": {
-        "total": 6362,
+        "total": 6441,
         "sentiment": {
           "positive": 71,
           "negative": 29,
           "neutral": 34,
-          "unclassified": 6228
+          "unclassified": 6307
         },
         "by_channel": {
           "linkedin": 536,
           "x": 143,
-          "youtube": 177,
+          "youtube": 178,
           "instagram": 12,
           "facebook": 4,
-          "blog": 181,
-          "web": 5214,
+          "blog": 182,
+          "web": 5291,
           "event": 95
         },
         "by_basis": {
-          "published": 6090,
-          "discovered": 272
+          "published": 6168,
+          "discovered": 273
         },
-        "published_only": 6090
+        "published_only": 6168
       }
     },
     "growth": {
       "7": {
-        "current": 1684,
+        "current": 1763,
         "previous": 1533,
-        "change_pct": 10,
-        "absolute": 151
+        "change_pct": 15,
+        "absolute": 230
       },
       "30": {
-        "current": 5098,
+        "current": 5177,
         "previous": 352,
-        "change_pct": 1348,
-        "absolute": 4746
+        "change_pct": 1371,
+        "absolute": 4825
       },
       "90": {
-        "current": 5731,
+        "current": 5810,
         "previous": 276,
-        "change_pct": 1976,
-        "absolute": 5455
+        "change_pct": 2005,
+        "absolute": 5534
       },
       "365": {
-        "current": 6362,
+        "current": 6441,
         "previous": 136,
-        "change_pct": 4578,
-        "absolute": 6226
+        "change_pct": 4636,
+        "absolute": 6305
       }
     },
     "by_mention_type": {
@@ -374,7 +374,7 @@
       "recommendation": 2
     },
     "by_api_source": {
-      "blogfeed": 127,
+      "blogfeed": 128,
       "hackernews": 120,
       "youtube": 54,
       "legacy-reverified": 43,
@@ -384,8 +384,8 @@
       "newsapi": 24,
       "brightdata": 311,
       "twitterapi.io": 61,
-      "youtube_week": 107,
-      "github_recent": 4666,
+      "youtube_week": 108,
+      "github_recent": 4743,
       "reddit_rss": 21,
       "duckduckgo_week": 4,
       "mastodon": 47,
@@ -397,7 +397,7 @@
       "hn_recent": 3
     },
     "by_verification": {
-      "verified": 6471,
+      "verified": 6550,
       "provider": 173,
       "unverified": 0
     },
@@ -417,27 +417,27 @@
   },
   "share_of_voice": {
     "7": {
-      "total": 1684,
+      "total": 1763,
       "by_brand": {
         "document360": {
-          "mentions": 10,
+          "mentions": 11,
           "share_pct": 0.6
         },
         "mintlify": {
-          "mentions": 350,
-          "share_pct": 20.8
+          "mentions": 368,
+          "share_pct": 20.9
         },
         "gitbook": {
-          "mentions": 723,
+          "mentions": 757,
           "share_pct": 42.9
         },
         "confluence": {
-          "mentions": 523,
-          "share_pct": 31.1
+          "mentions": 546,
+          "share_pct": 31
         },
         "guru": {
-          "mentions": 77,
-          "share_pct": 4.6
+          "mentions": 80,
+          "share_pct": 4.5
         },
         "bloomfire": {
           "mentions": 0,
@@ -450,26 +450,26 @@
       }
     },
     "30": {
-      "total": 5098,
+      "total": 5177,
       "by_brand": {
         "document360": {
-          "mentions": 67,
+          "mentions": 68,
           "share_pct": 1.3
         },
         "mintlify": {
-          "mentions": 1355,
-          "share_pct": 26.6
+          "mentions": 1373,
+          "share_pct": 26.5
         },
         "gitbook": {
-          "mentions": 1886,
-          "share_pct": 37
+          "mentions": 1920,
+          "share_pct": 37.1
         },
         "confluence": {
-          "mentions": 1564,
+          "mentions": 1587,
           "share_pct": 30.7
         },
         "guru": {
-          "mentions": 209,
+          "mentions": 212,
           "share_pct": 4.1
         },
         "bloomfire": {
@@ -483,26 +483,26 @@
       }
     },
     "90": {
-      "total": 5731,
+      "total": 5810,
       "by_brand": {
         "document360": {
-          "mentions": 290,
-          "share_pct": 5.1
+          "mentions": 291,
+          "share_pct": 5
         },
         "mintlify": {
-          "mentions": 1548,
+          "mentions": 1566,
           "share_pct": 27
         },
         "gitbook": {
-          "mentions": 1966,
-          "share_pct": 34.3
+          "mentions": 2000,
+          "share_pct": 34.4
         },
         "confluence": {
-          "mentions": 1637,
+          "mentions": 1660,
           "share_pct": 28.6
         },
         "guru": {
-          "mentions": 222,
+          "mentions": 225,
           "share_pct": 3.9
         },
         "bloomfire": {
@@ -516,26 +516,26 @@
       }
     },
     "365": {
-      "total": 6362,
+      "total": 6441,
       "by_brand": {
         "document360": {
-          "mentions": 464,
-          "share_pct": 7.3
+          "mentions": 465,
+          "share_pct": 7.2
         },
         "mintlify": {
-          "mentions": 1757,
+          "mentions": 1775,
           "share_pct": 27.6
         },
         "gitbook": {
-          "mentions": 2056,
-          "share_pct": 32.3
+          "mentions": 2090,
+          "share_pct": 32.4
         },
         "confluence": {
-          "mentions": 1680,
+          "mentions": 1703,
           "share_pct": 26.4
         },
         "guru": {
-          "mentions": 236,
+          "mentions": 239,
           "share_pct": 3.7
         },
         "bloomfire": {
@@ -544,17 +544,17 @@
         },
         "knowledgeowl": {
           "mentions": 61,
-          "share_pct": 1
+          "share_pct": 0.9
         }
       }
     }
   },
   "data_quality": {
-    "records_retrieved": 6644,
-    "records_verified": 6471,
+    "records_retrieved": 6723,
+    "records_verified": 6550,
     "records_provider_only": 173,
     "records_ai_classified": 166,
-    "records_unclassified": 6478,
+    "records_unclassified": 6557,
     "duplicates_removed": 109,
     "duplicates_by_reason": {
       "same normalised title (syndicated copy)": 76,
@@ -564,7 +564,7 @@
     "low_relevance_records": 0,
     "missing_urls": 0,
     "uncertain_classifications": 13,
-    "links_verified_working": 6471,
+    "links_verified_working": 6550,
     "links_broken": 173,
     "rejected_this_run": 133,
     "rejected_by_reason": {
@@ -575,7 +575,7 @@
     },
     "api_errors": [],
     "by_api_source": {
-      "blogfeed": 127,
+      "blogfeed": 128,
       "hackernews": 120,
       "youtube": 54,
       "legacy-reverified": 43,
@@ -585,8 +585,8 @@
       "newsapi": 24,
       "brightdata": 311,
       "twitterapi.io": 61,
-      "youtube_week": 107,
-      "github_recent": 4666,
+      "youtube_week": 108,
+      "github_recent": 4743,
       "reddit_rss": 21,
       "duckduckgo_week": 4,
       "mastodon": 47,
@@ -598,13 +598,13 @@
       "hn_recent": 3
     },
     "by_verification": {
-      "verified": 6471,
+      "verified": 6550,
       "provider": 173,
       "unverified": 0
     },
     "last_successful_sync": "2026-09-18T03:09:35.218Z",
     "last_sync_window_days": 7,
-    "total_runs_logged": 120,
+    "total_runs_logged": 121,
     "provider_stats": {},
     "credentials": [
       {
@@ -619,23 +619,23 @@
       }
     ]
   },
-  "last_updated": "2026-10-12T00:58:28.910Z",
+  "last_updated": "2026-10-12T08:36:10.553Z",
   "data_freshness": {
     "newest_published": "2026-10-12",
     "newest_published_age_days": 0,
-    "store_updated_at": "2026-10-12T00:58:27.603Z",
+    "store_updated_at": "2026-10-12T08:36:09.717Z",
     "last_collector_run": "2026-09-18T03:09:35.218Z",
-    "last_live_sweep": "2026-10-12T00:58:28.072Z",
+    "last_live_sweep": "2026-10-12T08:36:09.796Z",
     "panels": {
       "ai_visibility": {
         "file": "ai.json",
         "as_of": "2026-08-10T13:04:59.763Z",
-        "age_days": 62
+        "age_days": 63
       },
       "recommendations": {
         "file": "recommendations.json",
         "as_of": "2026-08-10T13:09:22.114Z",
-        "age_days": 62
+        "age_days": 63
       },
       "competitors": {
         "file": "competitors.json",
@@ -645,7 +645,7 @@
       "directories": {
         "file": "directory-listings.json",
         "as_of": "2026-09-02T16:42:18.397Z",
-        "age_days": 39
+        "age_days": 40
       },
       "ai_history": {
         "file": "ai-history.json",
