@@ -1,11 +1,10 @@
 {
-  "checked_at": "2026-10-14T10:47:43.860Z",
+  "checked_at": "2026-10-15T10:30:57.491Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
-    "WORKING": 1,
-    "BROKEN": 5,
-    "DEGRADED": 2
+    "DEGRADED": 3,
+    "BROKEN": 5
   },
   "sources": [
     {
@@ -18,8 +17,8 @@
     },
     {
       "name": "Keyless sources",
-      "state": "WORKING",
-      "detail": "13/13 source(s) answered in 27s; 2 returned data, 5 candidate(s) for Document360 over 7d; 6 gap(s) reported",
+      "state": "DEGRADED",
+      "detail": "12/13 source(s) answered in 46s; 2 returned data, 4 candidate(s) for Document360 over 7d; 6 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -52,7 +51,7 @@
         {
           "id": "github_recent",
           "tier": "secondary",
-          "candidates": 3,
+          "candidates": 2,
           "ok": true,
           "error": null
         },
@@ -102,8 +101,8 @@
           "id": "gdelt_recent",
           "tier": "bonus",
           "candidates": 0,
-          "ok": true,
-          "error": null
+          "ok": false,
+          "error": "exceeded its 45s budget"
         },
         {
           "id": "reddit_rss",
@@ -141,12 +140,11 @@
         },
         {
           "source": "gdelt_recent",
-          "brand_id": "document360",
-          "reason": "GDELT HTTP 429"
+          "reason": "exceeded its 45s budget"
         }
       ],
-      "total_candidates": 5,
-      "fix": null
+      "total_candidates": 4,
+      "fix": "Failing: gdelt_recent. These need no key, so a failure is a network or markup change, not a billing problem."
     },
     {
       "name": "SerpAPI",
@@ -199,9 +197,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 166/7154 records (2%); queue files absent",
+      "detail": "sentiment classified on 166/7447 records (2%); queue files absent",
       "classified": 166,
-      "total": 7154,
+      "total": 7447,
       "pct": 2,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
