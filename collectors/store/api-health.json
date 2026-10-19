@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-18T10:03:21.737Z",
+  "checked_at": "2026-10-19T11:27:49.260Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "13/13 source(s) answered in 31s; 3 returned data, 5 candidate(s) for Document360 over 7d; 4 gap(s) reported",
+      "detail": "13/13 source(s) answered in 28s; 3 returned data, 3 candidate(s) for Document360 over 7d; 3 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -52,7 +52,7 @@
         {
           "id": "github_recent",
           "tier": "secondary",
-          "candidates": 2,
+          "candidates": 1,
           "ok": true,
           "error": null
         },
@@ -108,7 +108,7 @@
         {
           "id": "reddit_rss",
           "tier": "bonus",
-          "candidates": 2,
+          "candidates": 1,
           "ok": true,
           "error": null
         }
@@ -128,14 +128,9 @@
           "source": "reddit_replica",
           "brand_id": "document360",
           "reason": "arctic-shift: HTTP 400"
-        },
-        {
-          "source": "gdelt_recent",
-          "brand_id": "document360",
-          "reason": "GDELT HTTP 429"
         }
       ],
-      "total_candidates": 5,
+      "total_candidates": 3,
       "fix": null
     },
     {
@@ -189,9 +184,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 168/8321 records (2%); queue files absent",
+      "detail": "sentiment classified on 168/8639 records (2%); queue files absent",
       "classified": 168,
-      "total": 8321,
+      "total": 8639,
       "pct": 2,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
