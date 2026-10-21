@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-20T10:34:08.282Z",
+  "checked_at": "2026-10-21T10:46:34.409Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -52,7 +52,7 @@
         {
           "id": "github_recent",
           "tier": "secondary",
-          "candidates": 1,
+          "candidates": 2,
           "ok": true,
           "error": null
         },
@@ -108,16 +108,16 @@
         {
           "id": "reddit_rss",
           "tier": "bonus",
-          "candidates": 2,
+          "candidates": 1,
           "ok": true,
           "error": null
         }
       ],
       "gaps": [
         {
-          "source": "bluesky",
+          "source": "duckduckgo_week",
           "brand_id": "document360",
-          "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+          "reason": "DuckDuckGo unreachable: All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.com is known to refuse a direct fetch | scrapebadger: SCRAPEBA"
         },
         {
           "source": "reddit_replica",
@@ -125,9 +125,9 @@
           "reason": "arctic-shift: HTTP 400"
         },
         {
-          "source": "duckduckgo_week",
+          "source": "bluesky",
           "brand_id": "document360",
-          "reason": "DuckDuckGo unreachable: All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.com is known to refuse a direct fetch | scrapebadger: SCRAPEBA"
+          "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
         },
         {
           "source": "gdelt_recent",
@@ -189,9 +189,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 168/8882 records (2%); queue files absent",
+      "detail": "sentiment classified on 168/9177 records (2%); queue files absent",
       "classified": 168,
-      "total": 8882,
+      "total": 9177,
       "pct": 2,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
