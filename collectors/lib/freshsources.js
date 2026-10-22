@@ -1344,6 +1344,114 @@ async function alternativesPages({ brands, sinceMs, log }) {
   return { candidates, gaps };
 }
 
+/* ================================================= X owned timelines (free) */
+
+/**
+ * X via its own syndication endpoint — keyless, and the only free route left.
+ *
+ *   GET https://syndication.twitter.com/srv/timeline-profile/screen-name/<handle>
+ *
+ * This is what X serves to embedded-timeline widgets, so it needs no account,
+ * no token and no proxy. MEASURED: 20 tweets for @document360 with exact
+ * created_at timestamps, current to the day.
+ *
+ * WHAT IT CANNOT DO, STATED PLAINLY: it is PROFILE-ONLY. There is no keyword
+ * search, so it sees what the seven tracked companies POST and is blind to a
+ * stranger complaining about any of them — which is the half of social
+ * listening that actually matters competitively. That half still needs a paid
+ * route (Apify) or a logged-in account (twscrape/Twikit), and nothing keyless
+ * provides it.
+ *
+ * Checked and rejected on the way here:
+ *   nitter.net        answers HTTP 200 with "nitter.net is offline."
+ *   nitter.poast.org  no response
+ *   lightbrd.com      HTTP 403
+ *   x.com/search      the JS shell, no results without auth
+ *
+ * Nitter is dead as a route; this is what replaced it.
+ */
+const X_HANDLES = {
+  document360: "document360",
+  mintlify: "mintlify",
+  gitbook: "GitBook",
+  confluence: "Atlassian",
+  guru: "guru_HQ",
+  bloomfire: "Bloomfire",
+  knowledgeowl: "KnowledgeOwl",
+};
+
+async function xSyndication({ brands, sinceMs, log }) {
+  const candidates = [];
+  const gaps = [];
+
+  for (const id of brands) {
+    const handle = X_HANDLES[id];
+    if (!handle) continue;
+
+    const url = "https://syndication.twitter.com/srv/timeline-profile/screen-name/" + encodeURIComponent(handle);
+    const r = await fetchUrl(url, { retries: 1, timeout: 30000, maxBytes: 8 * 1024 * 1024 });
+    if (!r.ok) { gaps.push({ brand_id: id, reason: "X syndication HTTP " + r.status }); continue; }
+
+    const m = /<script id="__NEXT_DATA__" type="application\/json">([\s\S]*?)<\/script>/.exec(String(r.body));
+    if (!m) { gaps.push({ brand_id: id, reason: "X syndication markup changed — __NEXT_DATA__ not found" }); continue; }
+
+    let data = null;
+    try { data = JSON.parse(m[1]); } catch (e) {
+      gaps.push({ brand_id: id, reason: "X syndication payload did not parse" });
+      continue;
+    }
+
+    const entries = (((data.props || {}).pageProps || {}).timeline || {}).entries || [];
+    let kept = 0;
+    for (const entry of entries) {
+      const t = entry && entry.content && entry.content.tweet;
+      if (!t) continue;
+
+      const text = decodeEntities(t.full_text || t.text || "");
+      if (!text) continue;
+
+      const screen = (t.user && t.user.screen_name) || handle;
+      const tweetUrl = t.id_str ? "https://x.com/" + screen + "/status/" + t.id_str : null;
+      if (!tweetUrl) continue;
+
+      const published = toIsoDate(t.created_at);
+      if (published && sinceMs && Date.parse(published) < sinceMs) continue;
+
+      // The company posting its own name is still a mention of it, but the
+      // alias must actually appear — a product tweet that never names the
+      // product is not evidence of a mention.
+      const matched = firstAliasIn(text, id);
+      if (!matched) continue;
+
+      candidates.push({
+        brand_id: id,
+        channel: "x",
+        url: tweetUrl,
+        title: null,
+        published_at: published,
+        date_method: published ? "x-syndication:created_at" : null,
+        source_text: text,
+        source_verified: true,
+        source_adapter: "x_syndication",
+        discovered_via: url,
+        author: (t.user && (t.user.name || t.user.screen_name)) || null,
+        extra: {
+          matched_alias: matched,
+          author_handle: screen,
+          favorites: t.favorite_count == null ? null : t.favorite_count,
+          retweets: t.retweet_count == null ? null : t.retweet_count,
+          // Said on the record: this route sees owned posts only.
+          coverage: "owned timeline only - no keyword search on this route",
+        },
+      });
+      kept++;
+    }
+    log("      x syndication: " + brand(id).name + " — " + kept + " own post(s)");
+  }
+
+  return { candidates, gaps };
+}
+
 /* ================================================================ registry */
 
 const SOURCES = [
@@ -1356,6 +1464,7 @@ const SOURCES = [
   { id: "status_page", label: "Vendor status pages", run: statusPages, tier: "secondary" },
   { id: "alternatives_page", label: "Alternatives aggregators", run: alternativesPages, tier: "secondary" },
   { id: "bluesky", label: "Bluesky (AT Protocol)", run: bluesky, tier: "primary" },
+  { id: "x_syndication", label: "X owned timelines (syndication, keyless)", run: xSyndication, tier: "secondary" },
   { id: "reddit_replica", label: "Reddit (PullPush / Arctic Shift replicas)", run: redditReplicas, tier: "secondary" },
   { id: "mastodon", label: "Mastodon hashtag timelines", run: mastodon, tier: "bonus" },
   { id: "gdelt_recent", label: "GDELT news index", run: gdeltRecent, tier: "bonus" },

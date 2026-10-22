@@ -15,7 +15,10 @@
       "Bash(node collectors/build.js)",
       "Bash(curl -s -o /dev/null -m 5 -w \" existing server: HTTP %{http_code}\\\\n\" http://localhost:3000/)",
       "Bash(curl -s -o /dev/null -m 8 -w \" SearXNG \\(:8888\\) HTTP %{http_code}\\\\n\" http://127.0.0.1:8888/)",
-      "Bash(npm test *)"
+      "Bash(npm test *)",
+      "Bash(python -)",
+      "Bash(node --check collectors/lib/freshsources.js)",
+      "Bash(timeout 300 node -e ' *)"
     ]
   }
 }

@@ -197,9 +197,18 @@ async function sweep({ brands = null, sinceMs = null, force = false, log = () =>
   out.candidates.push(...x.candidates);
   out.gaps.push(...x.gaps);
 
-  const li = await sweepLinkedIn({ brands: ids, sinceMs, log });
-  out.candidates.push(...li.candidates);
-  out.gaps.push(...li.gaps);
+  /* LINKEDIN IS NO LONGER ROUTED THROUGH APIFY.
+   *
+   * It was bought for exact dates and real author names, which the free
+   * SerpAPI route could not supply. lib/linkedin-public.js now reads both
+   * straight off LinkedIn's own authwalled page, keyless — MEASURED 20/20 on
+   * date, author and body text across 20 posts.
+   *
+   * Paying $0.0020 a post for data the page gives away is not a trade worth
+   * making, and the saving goes to X, where no keyless route to keyword search
+   * exists at any price. sweepLinkedIn is kept and exported so the comparison
+   * can be re-run, but it is not called. */
+  const li = { candidates: [], gaps: [] };
 
   apify.markSweep();
   out.ran = true;

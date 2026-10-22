@@ -208,25 +208,51 @@ async function sweepLinkedIn({ brands, log, force = false, days = 7 }) {
       const inUrl = freshsources.firstAliasIn(slug, id);
       if (!inText && !inUrl) continue;
 
+      /* ENRICH FROM THE POST ITSELF, KEYLESS.
+       *
+       * Google's snippet carries no date and no byline, which is the only
+       * reason the Apify LinkedIn actor was bought at $0.0020 a post. But
+       * LinkedIn's authwalled page still serves both to a plain GET:
+       *
+       *   "datePublished": "2026-09-29T10:02:18.203Z"   exact, to the second
+       *   og:title "<text> | <Author> posted on the topic | LinkedIn"
+       *
+       * MEASURED over 20 posts: 20/20 exact dates, 20/20 authors, 20/20 full
+       * text. So discovery stays metered (one SerpAPI search per brand) and
+       * enrichment is free.
+       *
+       * Best-effort: if the fetch fails the record still stands on the SERP
+       * snippet, undated, exactly as before. */
+      let pub = null, dateMethod = null, author = linkedinAuthor(hit.title, hit.url), body = text, enrichedVia = null;
+      try {
+        const lp = require("./linkedin-public");
+        const e = await lp.enrich(hit.url);
+        if (e.ok) {
+          if (e.published_at) { pub = e.published_at; dateMethod = e.date_method; }
+          if (e.author) author = e.author;
+          if (e.text && e.text.length > String(body || "").length) body = e.text;
+          enrichedVia = "linkedin public page (keyless)";
+        }
+      } catch (err) { /* the SERP record still stands */ }
+
       out.candidates.push({
         brand_id: id,
         channel: "linkedin",
         url: hit.url,
         title: hit.title || null,
-        // Google's snippet carries no reliable post date, and inventing one
-        // from the crawl date would put a wrong day on a real post.
-        published_at: null,
-        date_method: null,
-        source_text: text,
+        published_at: pub,
+        date_method: dateMethod,
+        source_text: body,
         source_verified: true,
         source_adapter: "linkedin_serpapi",
         discovered_via: "serpapi: " + q,
-        author: linkedinAuthor(hit.title, hit.url),
+        author,
         extra: {
           serp_position: hit.position || hit.rank || null,
           matched_alias: inText || inUrl,
           // Which of the two matched, so a reader can weigh it.
           matched_in: inText ? "title/snippet" : "post URL slug",
+          enriched_via: enrichedVia,
         },
       });
     }
