@@ -50,6 +50,28 @@ const ACTORS = {
     usd_per_item: 0.0004,
     channel: "x",
   },
+  /* The X keyword-search chain. Ordered and priced in lib/apify-x-actors.js,
+   * which also holds each actor's input shape and output normaliser. */
+  x_simoit: {
+    id: "simoit~x-twitter-search-tweets-scrapper",
+    label: "X search (simoit)",
+    usd_per_item: 0.0006,
+    channel: "x",
+  },
+  x_apidojo: {
+    id: "apidojo~tweet-scraper",
+    label: "X search (apidojo)",
+    usd_per_item: 0.0008,
+    channel: "x",
+  },
+  x_khadinakbar: {
+    id: "khadinakbar~x-tweet-scraper",
+    // MEASURED at 29x simoit for identical results - it bills compute, not
+    // results. Last resort only; see apify-x-actors.js.
+    usd_per_item: 0.0232,
+    label: "X search (khadinakbar)",
+    channel: "x",
+  },
   linkedin: {
     id: "harvestapi~linkedin-post-search",
     label: "LinkedIn posts (harvestapi/linkedin-post-search)",

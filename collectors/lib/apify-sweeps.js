@@ -26,65 +26,88 @@ const apify = require("./apify");
 async function sweepX({ brands, sinceMs, maxPerBrand = 20, log = () => {} }) {
   const candidates = [];
   const gaps = [];
+  const { ACTORS: X_ACTORS, normaliseAll } = require("./apify-x-actors");
 
   for (const id of brands) {
     const b = brand(id);
     const alias = b.aliases[0];
 
-    const r = await apify.runActor("x", {
-      searchTerms: [alias],
-      maxItems: maxPerBrand,
-      sort: "Latest",
-    }, { maxItems: maxPerBrand, log });
+    /* TRY EACH ACTOR UNTIL ONE ANSWERS, cheapest first.
+     *
+     * Every X scraper breaks when X rotates its GraphQL ids, and it breaks
+     * SILENTLY - an empty result set, not an error. One actor is therefore a
+     * single point of quiet failure on the only channel with no keyless route.
+     * A chain turns a rotation into one wasted call. */
+    let tweets = [];
+    let usedActor = null;
+    let lastReason = null;
 
-    if (!r.ok) {
-      gaps.push({ brand_id: id, reason: r.reason, budget_stop: !!r.budget_stop });
-      // A budget stop applies to the whole account, so continuing would just
-      // produce the same refusal six more times.
-      if (r.budget_stop || r.skipped === "not_configured") break;
+    for (const actor of X_ACTORS) {
+      // khadinakbar is 29x the cost of simoit for identical output, so it is
+      // reached only when the cheap routes have actually failed - never as a
+      // top-up when they merely returned few results.
+      if (actor.last_resort && (usedActor || tweets.length)) break;
+
+      const cap = actor.last_resort ? Math.min(maxPerBrand, 10) : maxPerBrand;
+      const r = await apify.runActor(actor.key, actor.input(alias, cap), { maxItems: cap, log });
+
+      if (!r.ok) {
+        lastReason = r.reason;
+        // A budget stop is account-wide: the next actor would refuse too.
+        if (r.budget_stop || r.skipped === "not_configured") { tweets = []; usedActor = null; break; }
+        continue;
+      }
+      const norm = normaliseAll(actor, r.items);
+      if (norm.length) { tweets = norm; usedActor = actor; break; }
+      // A genuine empty result is an answer, not a failure - record it and
+      // stop, rather than paying a second actor to confirm a real zero.
+      if (r.empty_result) { usedActor = actor; break; }
+    }
+
+    if (!usedActor) {
+      if (lastReason) gaps.push({ brand_id: id, reason: lastReason, budget_stop: /budget/i.test(String(lastReason)) });
+      if (lastReason && /budget|not configured/i.test(String(lastReason))) break;
       continue;
     }
 
     let kept = 0;
-    for (const t of r.items) {
-      // Tweets arrive HTML-escaped ("&amp;", "&gt;"). The evidence excerpt is
-      // quoted verbatim in the UI, so it must read as the author wrote it.
-      const text = decodeEntities(t.text || t.full_text || "");
-      const url = t.twitterUrl || t.url ||
-        (t.author && t.author.userName && t.id ? `https://x.com/${t.author.userName}/status/${t.id}` : null);
-      if (!text || !url) continue;
-
+    for (const t of tweets) {
+      const text = decodeEntities(t.text);
       const matched = firstAliasIn(text, id);
       if (!matched) continue;
 
-      const published = toIsoDate(t.createdAt || t.created_at);
+      const published = toIsoDate(t.created_at);
       if (published && sinceMs && Date.parse(published) < sinceMs) continue;
 
       candidates.push({
         brand_id: id,
         channel: "x",
-        url,
+        url: t.url,
         title: null,
         published_at: published,
-        date_method: published ? "apify:tweet createdAt" : null,
+        date_method: published ? `apify:${usedActor.key} created_at` : null,
         source_text: text,
         source_verified: true,
         source_adapter: "x_apify",
-        discovered_via: `apify:${apify.ACTORS.x.id} "${alias}"`,
-        author: (t.author && (t.author.name || t.author.userName)) || null,
+        discovered_via: `apify:${usedActor.id} "${alias}"`,
+        author: t.name || t.handle || null,
         extra: {
           matched_alias: matched,
-          author_handle: (t.author && t.author.userName) || null,
-          likes: t.likeCount ?? null,
-          retweets: t.retweetCount ?? null,
-          replies: t.replyCount ?? null,
-          views: t.viewCount ?? null,
+          author_handle: t.handle,
+          author_followers: t.author_followers,
+          likes: t.likes,
+          retweets: t.retweets,
+          replies: t.replies,
+          views: t.views,
           paid_source: "apify",
+          // Which actor actually served this, so a shift in the chain is
+          // visible in the data rather than only in a log.
+          actor: usedActor.key,
         },
       });
       kept++;
     }
-    log(`      apify x: ${b.name} — ${kept} tweet(s)`);
+    log(`      apify x: ${b.name} — ${kept} tweet(s) via ${usedActor.label}`);
   }
 
   return { candidates, gaps };
