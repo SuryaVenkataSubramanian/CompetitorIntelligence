@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-21T10:46:34.409Z",
+  "checked_at": "2026-10-23T10:39:30.970Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "13/13 source(s) answered in 28s; 3 returned data, 4 candidate(s) for Document360 over 7d; 4 gap(s) reported",
+      "detail": "14/14 source(s) answered in 27s; 2 returned data, 4 candidate(s) for Document360 over 7d; 6 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -52,7 +52,7 @@
         {
           "id": "github_recent",
           "tier": "secondary",
-          "candidates": 2,
+          "candidates": 3,
           "ok": true,
           "error": null
         },
@@ -85,6 +85,13 @@
           "error": null
         },
         {
+          "id": "x_syndication",
+          "tier": "secondary",
+          "candidates": 0,
+          "ok": true,
+          "error": null
+        },
+        {
           "id": "reddit_replica",
           "tier": "secondary",
           "candidates": 0,
@@ -108,16 +115,25 @@
         {
           "id": "reddit_rss",
           "tier": "bonus",
-          "candidates": 1,
+          "candidates": 0,
           "ok": true,
           "error": null
         }
       ],
       "gaps": [
         {
+          "source": "bluesky",
+          "brand_id": "document360",
+          "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+        },
+        {
           "source": "duckduckgo_week",
           "brand_id": "document360",
           "reason": "DuckDuckGo unreachable: All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.com is known to refuse a direct fetch | scrapebadger: SCRAPEBA"
+        },
+        {
+          "source": "reddit_rss",
+          "reason": "Reddit disabled until 2026-10-23T12:50:45.113Z — HTTP 429 on search.rss — anonymous access refused"
         },
         {
           "source": "reddit_replica",
@@ -125,9 +141,9 @@
           "reason": "arctic-shift: HTTP 400"
         },
         {
-          "source": "bluesky",
+          "source": "x_syndication",
           "brand_id": "document360",
-          "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
+          "reason": "X syndication HTTP 429"
         },
         {
           "source": "gdelt_recent",
@@ -189,9 +205,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 168/9177 records (2%); queue files absent",
-      "classified": 168,
-      "total": 9177,
+      "detail": "sentiment classified on 170/9726 records (2%); queue files absent",
+      "classified": 170,
+      "total": 9726,
       "pct": 2,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
