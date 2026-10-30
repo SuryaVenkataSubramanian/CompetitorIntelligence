@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-29T11:55:27.128Z",
+  "checked_at": "2026-10-30T11:49:09.215Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "14/14 source(s) answered in 30s; 3 returned data, 13 candidate(s) for Document360 over 7d; 3 gap(s) reported",
+      "detail": "14/14 source(s) answered in 16s; 3 returned data, 13 candidate(s) for Document360 over 7d; 3 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -45,7 +45,7 @@
         {
           "id": "youtube_week",
           "tier": "primary",
-          "candidates": 2,
+          "candidates": 3,
           "ok": true,
           "error": null
         },
@@ -87,7 +87,7 @@
         {
           "id": "x_syndication",
           "tier": "secondary",
-          "candidates": 5,
+          "candidates": 4,
           "ok": true,
           "error": null
         },
@@ -191,9 +191,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 172/11153 records (2%); queue files absent",
+      "detail": "sentiment classified on 172/11365 records (2%); queue files absent",
       "classified": 172,
-      "total": 11153,
+      "total": 11365,
       "pct": 2,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
