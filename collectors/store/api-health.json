@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-01T12:14:11.062Z",
+  "checked_at": "2026-11-02T14:03:23.016Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "14/14 source(s) answered in 25s; 2 returned data, 10 candidate(s) for Document360 over 7d; 7 gap(s) reported",
+      "detail": "14/14 source(s) answered in 42s; 2 returned data, 9 candidate(s) for Document360 over 7d; 6 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -45,7 +45,7 @@
         {
           "id": "youtube_week",
           "tier": "primary",
-          "candidates": 2,
+          "candidates": 1,
           "ok": true,
           "error": null
         },
@@ -127,21 +127,6 @@
           "reason": "Bluesky returned an HTML 403 interstitial — this egress is blocked at the network level, not by the API. The adapter is fine; run it from a different IP (the scheduled runner) to confirm."
         },
         {
-          "source": "reddit_replica",
-          "brand_id": "document360",
-          "reason": "pullpush: HTTP 403"
-        },
-        {
-          "source": "reddit_replica",
-          "brand_id": "document360",
-          "reason": "arctic-shift: HTTP 400"
-        },
-        {
-          "source": "reddit_replica",
-          "brand_id": "document360",
-          "reason": "no Reddit replica answered (both PullPush and Arctic Shift failed)"
-        },
-        {
           "source": "duckduckgo_week",
           "brand_id": "document360",
           "reason": "DuckDuckGo unreachable: All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.com is known to refuse a direct fetch | scrapebadger: SCRAPEBA"
@@ -152,12 +137,22 @@
           "reason": "X syndication HTTP 429"
         },
         {
-          "source": "gdelt_recent",
+          "source": "reddit_replica",
           "brand_id": "document360",
-          "reason": "GDELT HTTP 429"
+          "reason": "pullpush: HTTP 522"
+        },
+        {
+          "source": "reddit_replica",
+          "brand_id": "document360",
+          "reason": "arctic-shift: HTTP 400"
+        },
+        {
+          "source": "reddit_replica",
+          "brand_id": "document360",
+          "reason": "no Reddit replica answered (both PullPush and Arctic Shift failed)"
         }
       ],
-      "total_candidates": 10,
+      "total_candidates": 9,
       "fix": null
     },
     {
@@ -211,9 +206,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 172/11717 records (1%); queue files absent",
+      "detail": "sentiment classified on 172/11880 records (1%); queue files absent",
       "classified": 172,
-      "total": 11717,
+      "total": 11880,
       "pct": 1,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
