@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-02T14:03:23.016Z",
+  "checked_at": "2026-11-03T13:11:20.724Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "14/14 source(s) answered in 42s; 2 returned data, 9 candidate(s) for Document360 over 7d; 6 gap(s) reported",
+      "detail": "14/14 source(s) answered in 42s; 2 returned data, 11 candidate(s) for Document360 over 7d; 6 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -45,14 +45,14 @@
         {
           "id": "youtube_week",
           "tier": "primary",
-          "candidates": 1,
+          "candidates": 2,
           "ok": true,
           "error": null
         },
         {
           "id": "github_recent",
           "tier": "secondary",
-          "candidates": 8,
+          "candidates": 9,
           "ok": true,
           "error": null
         },
@@ -152,7 +152,7 @@
           "reason": "no Reddit replica answered (both PullPush and Arctic Shift failed)"
         }
       ],
-      "total_candidates": 9,
+      "total_candidates": 11,
       "fix": null
     },
     {
@@ -206,9 +206,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 172/11880 records (1%); queue files absent",
-      "classified": 172,
-      "total": 11880,
+      "detail": "sentiment classified on 173/12079 records (1%); queue files absent",
+      "classified": 173,
+      "total": 12079,
       "pct": 1,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
