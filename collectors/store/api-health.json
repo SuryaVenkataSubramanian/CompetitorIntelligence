@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-09T14:35:39.670Z",
+  "checked_at": "2026-11-10T13:54:48.578Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "14/14 source(s) answered in 31s; 3 returned data, 14 candidate(s) for Document360 over 7d; 7 gap(s) reported",
+      "detail": "14/14 source(s) answered in 29s; 3 returned data, 13 candidate(s) for Document360 over 7d; 7 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -52,7 +52,7 @@
         {
           "id": "github_recent",
           "tier": "secondary",
-          "candidates": 7,
+          "candidates": 6,
           "ok": true,
           "error": null
         },
@@ -132,6 +132,11 @@
           "reason": "DuckDuckGo unreachable: All 3 scraping routes failed for html.duckduckgo.com. direct: html.duckduckgo.com is known to refuse a direct fetch | scrapebadger: SCRAPEBA"
         },
         {
+          "source": "x_syndication",
+          "brand_id": "document360",
+          "reason": "X syndication HTTP 429"
+        },
+        {
           "source": "reddit_replica",
           "brand_id": "document360",
           "reason": "pullpush: HTTP 526"
@@ -147,17 +152,12 @@
           "reason": "no Reddit replica answered (both PullPush and Arctic Shift failed)"
         },
         {
-          "source": "x_syndication",
-          "brand_id": "document360",
-          "reason": "X syndication HTTP 429"
-        },
-        {
           "source": "gdelt_recent",
           "brand_id": "document360",
           "reason": "GDELT HTTP 429"
         }
       ],
-      "total_candidates": 14,
+      "total_candidates": 13,
       "fix": null
     },
     {
@@ -211,9 +211,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 176/13212 records (1%); queue files absent",
+      "detail": "sentiment classified on 176/13421 records (1%); queue files absent",
       "classified": 176,
-      "total": 13212,
+      "total": 13421,
       "pct": 1,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
