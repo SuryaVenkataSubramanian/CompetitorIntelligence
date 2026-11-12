@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-11T13:07:18.566Z",
+  "checked_at": "2026-11-12T14:10:08.141Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "14/14 source(s) answered in 18s; 2 returned data, 9 candidate(s) for Document360 over 7d; 7 gap(s) reported",
+      "detail": "14/14 source(s) answered in 30s; 2 returned data, 8 candidate(s) for Document360 over 7d; 8 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -45,7 +45,7 @@
         {
           "id": "youtube_week",
           "tier": "primary",
-          "candidates": 2,
+          "candidates": 1,
           "ok": true,
           "error": null
         },
@@ -154,9 +154,14 @@
           "source": "x_syndication",
           "brand_id": "document360",
           "reason": "X syndication HTTP 429"
+        },
+        {
+          "source": "gdelt_recent",
+          "brand_id": "document360",
+          "reason": "GDELT HTTP 429"
         }
       ],
-      "total_candidates": 9,
+      "total_candidates": 8,
       "fix": null
     },
     {
@@ -210,9 +215,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 175/13552 records (1%); queue files absent",
+      "detail": "sentiment classified on 175/13717 records (1%); queue files absent",
       "classified": 175,
-      "total": 13552,
+      "total": 13717,
       "pct": 1,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
