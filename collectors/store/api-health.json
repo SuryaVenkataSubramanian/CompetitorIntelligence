@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-14T12:39:49.182Z",
+  "checked_at": "2026-11-15T13:06:19.287Z",
   "paid_calls": false,
   "summary": {
     "SKIPPED": 2,
@@ -19,7 +19,7 @@
     {
       "name": "Keyless sources",
       "state": "WORKING",
-      "detail": "14/14 source(s) answered in 29s; 2 returned data, 8 candidate(s) for Document360 over 7d; 8 gap(s) reported",
+      "detail": "14/14 source(s) answered in 32s; 2 returned data, 8 candidate(s) for Document360 over 7d; 8 gap(s) reported",
       "sources": [
         {
           "id": "googlenews_rss",
@@ -138,7 +138,7 @@
         {
           "source": "reddit_replica",
           "brand_id": "document360",
-          "reason": "pullpush: HTTP 526"
+          "reason": "pullpush: HTTP 403"
         },
         {
           "source": "reddit_replica",
@@ -215,9 +215,9 @@
     {
       "name": "Claude (local runtime)",
       "state": "DEGRADED",
-      "detail": "sentiment classified on 176/14088 records (1%); queue files absent",
+      "detail": "sentiment classified on 176/14279 records (1%); queue files absent",
       "classified": 176,
-      "total": 14088,
+      "total": 14279,
       "pct": 1,
       "fix": "Run: npm run queue:sentiment, classify in Claude Code, then npm run apply:sentiment"
     },
